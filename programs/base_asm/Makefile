@@ -1,0 +1,38 @@
+AS=/opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-as 
+LD=/opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-ld
+STFLASH=/opt/stlink/bin/st-flash
+CHIPS=/opt/stlink/config/chips/
+OBJCOPY=/opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-objcopy
+GDB=/opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gdb
+VI=vi
+
+SRC=src/prog1.asm
+TARGET=bin/prog1
+OBJ=$(TARGET).o
+ELF=$(TARGET).elf
+BIN=$(TARGET).bin
+
+ASFLAGS=-g -I ../inc -I inc/
+
+build: $(ELF)
+
+$(BIN): $(ELF)
+	$(OBJCOPY) -O binary $< $@
+
+$(ELF): $(OBJ)
+	$(LD) $(OBJ) -o $(ELF) -Ttext=0x08000000
+
+$(OBJ):
+	$(AS) $(ASFLAGS) $(SRC) -o $(OBJ)
+
+flash: $(BIN)
+	$(STFLASH) --reset write $< 0x08000000
+
+debug:
+	$(GDB) $(ELF)
+
+edit:
+	$(VI) src/*.asm
+
+clean:
+	rm -f bin/*

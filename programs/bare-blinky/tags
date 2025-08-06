@@ -1,0 +1,59 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AFRH	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+AFRL	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+AHBENR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+AHBRSTR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+APB1ENR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+APB1RSTR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+APB2ENR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+APB2RSTR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+BDCR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+BIN	Makefile	/^BIN=bin\/bare_blinky.bin$/;"	m
+BIT	src/main.c	33;"	d	file:
+BRR	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+BSRR	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+CC	Makefile	/^CC = \/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gcc$/;"	m
+CFGR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+CFGR2	src/main.c	/^			 			CFGR2, CFGR3; $/;"	m	struct:rcc	file:
+CFGR3	src/main.c	/^			 			CFGR2, CFGR3; $/;"	m	struct:rcc	file:
+CFLAGS	Makefile	/^CFLAGS = -mcpu=cortex-m4 -mthumb -Wall -Wextra -Wshadow -Werror -Wundef -Wfloat-equal$/;"	m
+CHIPS	Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
+CIR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+CR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+CSR	src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+ELF	Makefile	/^ELF=bin\/main.elf$/;"	m
+GPIO	src/main.c	34;"	d	file:
+GPIO_AF_MODE	src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
+GPIO_ANALOG_MODE	src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
+GPIO_INPUT_MODE	src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
+GPIO_OUTPUT_MODE	src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
+IDR	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+LCKR	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+LDFLAGS	Makefile	/^LDFLAGS = -T src\/link.ld -nostdlib$/;"	m
+LIBS	Makefile	/^LIBS = -lc -lm -lgcc$/;"	m
+MODER	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+OBJ	Makefile	/^OBJ=bin\/main.o$/;"	m
+OBJCOPY	Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
+ODR	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+OSPEEDR	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+OTYPER	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+PIN	src/main.c	35;"	d	file:
+PINBANK	src/main.c	37;"	d	file:
+PINNO	src/main.c	36;"	d	file:
+PUPDR	src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+RCC	src/main.c	55;"	d	file:
+SRC	Makefile	/^SRC=src\/main.c$/;"	m
+STFLASH	Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
+_reset	src/main.c	/^__attribute__((naked, noreturn)) void _reset(void){$/;"	f
+delay	src/main.c	/^static inline void delay(volatile uint32_t counter){$/;"	f	file:
+gpio	src/main.c	/^struct gpio$/;"	s	file:
+gpio_set_mode	src/main.c	/^static inline void gpio_set_mode(uint16_t pin, uint8_t mode)$/;"	f	file:
+gpio_write	src/main.c	/^static inline void gpio_write(uint16_t pin, bool val){$/;"	f	file:
+main	src/main.c	/^int main(void)$/;"	f
+rcc	src/main.c	/^struct rcc{$/;"	s	file:
+tab	src/main.c	/^__attribute__((section(".vectors"))) void(*const tab[16 + 91])(void) = {$/;"	v

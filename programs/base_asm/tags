@@ -1,0 +1,36 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AS	Makefile	/^AS=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as $/;"	m
+ASFLAGS	Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
+BIN	Makefile	/^BIN=$(TARGET).bin$/;"	m
+CHIPS	Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
+ELF	Makefile	/^ELF=$(TARGET).elf$/;"	m
+GDB	Makefile	/^GDB=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
+LD	Makefile	/^LD=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
+OBJ	Makefile	/^OBJ=$(TARGET).o$/;"	m
+OBJCOPY	Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
+SRC	Makefile	/^SRC=src\/prog1.asm$/;"	m
+STFLASH	Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
+TARGET	Makefile	/^TARGET=bin\/prog1$/;"	m
+VI	Makefile	/^VI=vi$/;"	m
+b	src/prog1.asm	/^b turn_led_on$/;"	l
+eor	src/prog1.asm	/^eor r2, r2, 0x80		@ reverse bit$/;"	l
+ldr	src/prog1.asm	/^ldr 	r0, [r1]$/;"	l
+ldr	src/prog1.asm	/^ldr 	r1,	=0x40021014		$/;"	l
+ldr	src/prog1.asm	/^ldr     r0, [r1]$/;"	l
+ldr	src/prog1.asm	/^ldr r0, [r1]$/;"	l
+ldr	src/prog1.asm	/^ldr r1, =0x48000414$/;"	l
+ldr	src/prog1.asm	/^ldr r1, =GPIOA_MODER $/;"	l
+ldr	src/prog1.asm	/^ldr r1, =RCC + 0x00$/;"	l
+ldr	src/prog1.asm	/^ldr r2, [r1]$/;"	l
+orr	src/prog1.asm	/^orr 	r0,	0x00040000$/;"	l
+orr	src/prog1.asm	/^orr r0, 0x00004000$/;"	l
+orr	src/prog1.asm	/^orr r0, 0x01$/;"	l
+str	src/prog1.asm	/^str		r0,	[r1]$/;"	l
+str	src/prog1.asm	/^str r0, [r1]$/;"	l
+str	src/prog1.asm	/^str r2, [r1]$/;"	l
+turn_led_on	src/prog1.asm	/^turn_led_on:$/;"	l
