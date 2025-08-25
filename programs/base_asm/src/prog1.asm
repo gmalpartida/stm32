@@ -9,30 +9,58 @@
 
 .include "stm32f303xDE.inc"
 
-@ enable system clock
-ldr r1, =RCC + 0x00
-ldr r0, [r1]
-orr r0, 0x01
-str r0, [r1]
+@ enable system clock, HSI 8Mhz
+	ldr r1, =RCC + 0x00
+	ldr r0, [r1]
+	orr r0, 0x01
+	str r0, [r1]
 
 @ enable GPIOB clock
-ldr 	r1,	=0x40021014		
-ldr 	r0, [r1]
-orr 	r0,	0x00040000
-str		r0,	[r1]
+	ldr 	r1,	=0x40021014		
+	ldr 	r0, [r1]
+	orr 	r0,	0x00040000
+	str		r0,	[r1]
 
 @ set GPIOB to output mode
-ldr r1, =GPIOA_MODER 
-ldr     r0, [r1]
-orr r0, 0x00004000
-str r0, [r1]
+	ldr r1, =GPIOB_MODER 
+	ldr     r0, [r1]
+	orr r0, 0x00004000
+	str r0, [r1]
 
 @ set GPIOB pin 7 to high
-ldr r1, =0x48000414
+	ldr r1, =0x48000414
 turn_led_on:
-ldr r2, [r1]
-@ orr r0, 0x0080
-@mvn r0, r0 			@ reverse all bits
-eor r2, r2, 0x80		@ reverse bit
-str r2, [r1]
-b turn_led_on
+	ldr r2, [r1]
+	eor r2, r2, 0x80		@ reverse bit
+	str r2, [r1]
+	ldr r0, =1000
+	bl delay_ms
+	b turn_led_on
+
+delay_ms:
+    @ Input: R0 = delay in milliseconds
+    @ clk_freq = core clock frequency in Hz
+    @ Loop takes 3 clock cycles per iteration
+    @ Example:
+    @   - Core clock = 16 MHz
+    @   - Delay = 1 ms
+    @   - Cycles = 16000 (16 MHz * 0.001 s)
+    @   - Iterations = Cycles / 3 = 5333.33...  (approx 5333)
+    @   - Initialize R1 with (5333 * 3) / 2 = 7999.5, round up to 8000
+    @       Because the loop takes 2 cycles per iteration (SUBS, BNE)
+
+    @ Calculate loop iterations
+    movs  r1, r0         @ R1 = delay (milliseconds)
+    ldr   r2, =8000     @ R2 = core clock frequency (8 MHz, example)
+    mul   r1, r1, r2     @ R1 = delay * clock frequency (cycles)
+    lsrs  r1, r1, #1     @ R1 = (delay * clock frequency) / 2 (approximate)
+    
+    @ Initialize loop counter
+    movs  r2, r1         @ R2 = loop counter
+    
+delay_loop:
+    subs  r2, #1          @ Subtract 1 from the counter
+    bne   delay_loop      @ Branch back if not zero
+    
+    @ Return
+    bx lr	

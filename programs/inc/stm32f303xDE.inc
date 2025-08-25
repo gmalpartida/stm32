@@ -57,7 +57,7 @@ TIM20				= APB2 + 0x5000
 DMA1				= AHB1 + 0x0000
 DMA2				= AHB1 + 0x0400
 RCC 				= AHB1 + 0x1000
-FLASH_INTF			= AHB1 + 0x2000
+FLASH   			= AHB1 + 0x2000
 CRC					= AHB1 + 0x3000
 TSC					= AHB1 + 0x4000
 
@@ -81,7 +81,7 @@ FMC_BANK3			= AHB4_2 + 0x0400
 FMC_BANK4			= AHB4_2 + 0x0400
 FMC_CR				= AHB4_3 + 0x0400
 
-@ REGISTERS
+@ GPIO REGISTERS
 
 GPIOA_MODER    = GPIOA + 0x0000
 GPIOA_OTYPER   = GPIOA + 0x0004
@@ -179,4 +179,457 @@ GPIOH_AFRL     = GPIOH + 0x0020
 GPIOH_AFRH     = GPIOH + 0x0024
 GPIOH_BRR      = GPIOH + 0x0028
 
+@ ADVANCED TIMER REGISTERS
+
+TIM1_CR1        =   TIM1 + 0x0000
+TIM1_CR2        =   TIM1 + 0x0004
+TIM1_SMCR       =   TIM1 + 0x0008
+TIM1_DIER       =   TIM1 + 0x000C
+TIM1_SR         =   TIM1 + 0x0010
+TIM1_EGR        =   TIM1 + 0x0014
+TIM1_CCMR1      =   TIM1 + 0x0018
+TIM1_CCMR2      =   TIM1 + 0x001C
+TIM1_CCER       =   TIM1 + 0x0020
+TIM1_CNT        =   TIM1 + 0x0024
+TIM1_PSC        =   TIM1 + 0x0028
+TIM1_ARR        =   TIM1 + 0x002C
+TIM1_RCR        =   TIM1 + 0x0030
+TIM1_CCR1       =   TIM1 + 0x0034
+TIM1_CCR2       =   TIM1 + 0x0038
+TIM1_CCR3       =   TIM1 + 0x003C
+TIM1_CCR4       =   TIM1 + 0x0040
+TIM1_BDTR       =   TIM1 + 0x0044
+TIM1_DCR        =   TIM1 + 0x0048
+TIM1_DMAR       =   TIM1 + 0x004C
+TIM1_OR         =   TIM1 + 0x0050
+TIM1_CCMR3      =   TIM1 + 0x0054
+TIM1_CCR5       =   TIM1 + 0x0058
+TIM1_CCR6       =   TIM1 + 0x005C
+
+TIM8_CR1        =   TIM8 + 0x0000
+TIM8_CR2        =   TIM8 + 0x0004
+TIM8_SMCR       =   TIM8 + 0x0008
+TIM8_DIER       =   TIM8 + 0x000C
+TIM8_SR         =   TIM8 + 0x0010
+TIM8_EGR        =   TIM8 + 0x0014
+TIM8_CCMR1      =   TIM8 + 0x0018
+TIM8_CCMR2      =   TIM8 + 0x001C
+TIM8_CCER       =   TIM8 + 0x0020
+TIM8_CNT        =   TIM8 + 0x0024
+TIM8_PSC        =   TIM8 + 0x0028
+TIM8_ARR        =   TIM8 + 0x002C
+TIM8_RCR        =   TIM8 + 0x0030
+TIM8_CCR1       =   TIM8 + 0x0034
+TIM8_CCR2       =   TIM8 + 0x0038
+TIM8_CCR3       =   TIM8 + 0x003C
+TIM8_CCR4       =   TIM8 + 0x0040
+TIM8_BDTR       =   TIM8 + 0x0044
+TIM8_DCR        =   TIM8 + 0x0048
+TIM8_DMAR       =   TIM8 + 0x004C
+TIM8_OR         =   TIM8 + 0x0050
+TIM8_CCMR3      =   TIM8 + 0x0054
+TIM8_CCR5       =   TIM8 + 0x0058
+TIM8_CCR6       =   TIM8 + 0x005C
+
+TIM20_CR1        =   TIM20 + 0x0000
+TIM20_CR2        =   TIM20 + 0x0004
+TIM20_SMCR       =   TIM20 + 0x0008
+TIM20_DIER       =   TIM20 + 0x000C
+TIM20_SR         =   TIM20 + 0x0010
+TIM20_EGR        =   TIM20 + 0x0014
+TIM20_CCMR1      =   TIM20 + 0x0018
+TIM20_CCMR2      =   TIM20 + 0x001C
+TIM20_CCER       =   TIM20 + 0x0020
+TIM20_CNT        =   TIM20 + 0x0024
+TIM20_PSC        =   TIM20 + 0x0028
+TIM20_ARR        =   TIM20 + 0x002C
+TIM20_RCR        =   TIM20 + 0x0030
+TIM20_CCR1       =   TIM20 + 0x0034
+TIM20_CCR2       =   TIM20 + 0x0038
+TIM20_CCR3       =   TIM20 + 0x003C
+TIM20_CCR4       =   TIM20 + 0x0040
+TIM20_BDTR       =   TIM20 + 0x0044
+TIM20_DCR        =   TIM20 + 0x0048
+TIM20_DMAR       =   TIM20 + 0x004C
+TIM20_OR         =   TIM20 + 0x0050
+TIM20_CCMR3      =   TIM20 + 0x0054
+TIM20_CCR5       =   TIM20 + 0x0058
+TIM20_CCR6       =   TIM20 + 0x005C
+
+@ GENERAL PURPOSE TIMER REGISTERS
+
+TIM2_CR1        =   TIM2 + 0x0000
+TIM2_CR2        =   TIM2 + 0x0004
+TIM2_SMCR       =   TIM2 + 0x0008
+TIM2_DIER       =   TIM2 + 0x000C
+TIM2_SR         =   TIM2 + 0x0010
+TIM2_EGR        =   TIM2 + 0x0014
+TIM2_CCMR1      =   TIM2 + 0x0018
+TIM2_CCMR2      =   TIM2 + 0x001C
+TIM2_CCER       =   TIM2 + 0x0020
+TIM2_CNT        =   TIM2 + 0x0024
+TIM2_PSC        =   TIM2 + 0x0028
+TIM2_ARR        =   TIM2 + 0x002C
+TIM2_RCR        =   TIM2 + 0x0030
+TIM2_CCR1       =   TIM2 + 0x0034
+TIM2_CCR2       =   TIM2 + 0x0038
+TIM2_CCR3       =   TIM2 + 0x003C
+TIM2_CCR4       =   TIM2 + 0x0040
+TIM2_DCR        =   TIM2 + 0x0048
+TIM2_DMAR       =   TIM2 + 0x004C
+
+TIM3_CR1        =   TIM3 + 0x0000
+TIM3_CR2        =   TIM3 + 0x0004
+TIM3_SMCR       =   TIM3 + 0x0008
+TIM3_DIER       =   TIM3 + 0x000C
+TIM3_SR         =   TIM3 + 0x0010
+TIM3_EGR        =   TIM3 + 0x0014
+TIM3_CCMR1      =   TIM3 + 0x0018
+TIM3_CCMR2      =   TIM3 + 0x001C
+TIM3_CCER       =   TIM3 + 0x0020
+TIM3_CNT        =   TIM3 + 0x0024
+TIM3_PSC        =   TIM3 + 0x0028
+TIM3_ARR        =   TIM3 + 0x002C
+TIM3_RCR        =   TIM3 + 0x0030
+TIM3_CCR1       =   TIM3 + 0x0034
+TIM3_CCR2       =   TIM3 + 0x0038
+TIM3_CCR3       =   TIM3 + 0x003C
+TIM3_CCR4       =   TIM3 + 0x0040
+TIM3_DCR        =   TIM3 + 0x0048
+TIM3_DMAR       =   TIM3 + 0x004C
+
+TIM4_CR1        =   TIM4 + 0x0000
+TIM4_CR2        =   TIM4 + 0x0004
+TIM4_SMCR       =   TIM4 + 0x0008
+TIM4_DIER       =   TIM4 + 0x000C
+TIM4_SR         =   TIM4 + 0x0010
+TIM4_EGR        =   TIM4 + 0x0014
+TIM4_CCMR1      =   TIM4 + 0x0018
+TIM4_CCMR2      =   TIM4 + 0x001C
+TIM4_CCER       =   TIM4 + 0x0020
+TIM4_CNT        =   TIM4 + 0x0024
+TIM4_PSC        =   TIM4 + 0x0028
+TIM4_ARR        =   TIM4 + 0x002C
+TIM4_RCR        =   TIM4 + 0x0030
+TIM4_CCR1       =   TIM4 + 0x0034
+TIM4_CCR2       =   TIM4 + 0x0038
+TIM4_CCR3       =   TIM4 + 0x003C
+TIM4_CCR4       =   TIM4 + 0x0040
+TIM4_DCR        =   TIM4 + 0x0048
+TIM4_DMAR       =   TIM4 + 0x004C
+
+@ BASIC TIMER REGISTERS
+
+TIM6_CR1        =   TIM6 + 0x0000
+TIM6_CR2        =   TIM6 + 0x0004
+TIM6_DIER       =   TIM6 + 0x000C
+TIM6_SR         =   TIM6 + 0x0010
+TIM6_EGR        =   TIM6 + 0x0014
+TIM6_CNT        =   TIM6 + 0x0024
+TIM6_PSC        =   TIM6 + 0x0028
+TIM6_ARR        =   TIM6 + 0x002C
+
+TIM7_CR1        =   TIM7 + 0x0000
+TIM7_CR2        =   TIM7 + 0x0004
+TIM7_DIER       =   TIM7 + 0x000C
+TIM7_SR         =   TIM7 + 0x0010
+TIM7_EGR        =   TIM7 + 0x0014
+TIM7_CNT        =   TIM7 + 0x0024
+TIM7_PSC        =   TIM7 + 0x0028
+TIM7_ARR        =   TIM7 + 0x002C
+
+@ GENERAL PURPOSE TIMER REGISTERS
+
+TIM15_CR1        =   TIM15 + 0x0000
+TIM15_CR2        =   TIM15 + 0x0004
+TIM15_SMCR       =   TIM15 + 0x0008
+TIM15_DIER       =   TIM15 + 0x000C
+TIM15_SR         =   TIM15 + 0x0010
+TIM15_EGR        =   TIM15 + 0x0014
+TIM15_CCMR1      =   TIM15 + 0x0018
+TIM15_CCER       =   TIM15 + 0x0020
+TIM15_CNT        =   TIM15 + 0x0024
+TIM15_PSC        =   TIM15 + 0x0028
+TIM15_ARR        =   TIM15 + 0x002C
+TIM15_RCR        =   TIM15 + 0x0030
+TIM15_CCR1       =   TIM15 + 0x0034
+TIM15_CCR2       =   TIM15 + 0x0038
+TIM15_BDTR       =   TIM15 + 0x0044
+TIM15_DCR        =   TIM15 + 0x0048
+TIM15_DMAR       =   TIM15 + 0x004C
+
+TIM16_CR1        =   TIM16 + 0x0000
+TIM16_CR2        =   TIM16 + 0x0004
+TIM16_DIER       =   TIM16 + 0x000C
+TIM16_SR         =   TIM16 + 0x0010
+TIM16_EGR        =   TIM16 + 0x0014
+TIM16_CCMR1      =   TIM16 + 0x0018
+TIM16_CCER       =   TIM16 + 0x0020
+TIM16_CNT        =   TIM16 + 0x0024
+TIM16_PSC        =   TIM16 + 0x0028
+TIM16_ARR        =   TIM16 + 0x002C
+TIM16_RCR        =   TIM16 + 0x0030
+TIM16_CCR1       =   TIM16 + 0x0034
+TIM16_BDTR       =   TIM16 + 0x0044
+TIM16_DCR        =   TIM16 + 0x0048
+TIM16_DMAR       =   TIM16 + 0x004C
+TIM16_OR         =   TIM16 + 0x0050
+
+TIM17_CR1        =   TIM17 + 0x0000
+TIM17_CR2        =   TIM17 + 0x0004
+TIM17_DIER       =   TIM17 + 0x000C
+TIM17_SR         =   TIM17 + 0x0010
+TIM17_EGR        =   TIM17 + 0x0014
+TIM17_CCMR1      =   TIM17 + 0x0018
+TIM17_CCER       =   TIM17 + 0x0020
+TIM17_CNT        =   TIM17 + 0x0024
+TIM17_PSC        =   TIM17 + 0x0028
+TIM17_ARR        =   TIM17 + 0x002C
+TIM17_RCR        =   TIM17 + 0x0030
+TIM17_CCR1       =   TIM17 + 0x0034
+TIM17_BDTR       =   TIM17 + 0x0044
+TIM17_DCR        =   TIM17 + 0x0048
+TIM17_DMAR       =   TIM17 + 0x004C
+TIM17_OR         =   TIM17 + 0x0050
+
+@ MASTER ADC REGISTERS
+
+ADC1_ISR        =   ADC1 + 0x0000
+ADC1_IER        =   ADC1 + 0x0004
+ADC1_CR         =   ADC1 + 0x0008
+ADC1_CFGR       =   ADC1 + 0x000C
+ADC1_SMPR1      =   ADC1 + 0x0014
+ADC1_SMPR2      =   ADC1 + 0x0018
+ADC1_TR1        =   ADC1 + 0x0020
+ADC1_TR2        =   ADC1 + 0x0024
+ADC1_TR3        =   ADC1 + 0x0028
+ADC1_SQR1       =   ADC1 + 0x0030
+ADC1_SQR2       =   ADC1 + 0x0034
+ADC1_SQR3       =   ADC1 + 0x0038
+ADC1_SQR4       =   ADC1 + 0x003C
+ADC1_DR         =   ADC1 + 0x0040
+ADC1_JSQR       =   ADC1 + 0x004C
+ADC1_OFR1       =   ADC1 + 0x0060
+ADC1_OFR2       =   ADC1 + 0x0064
+ADC1_OFR3       =   ADC1 + 0x0068
+ADC1_OFR4       =   ADC1 + 0x006C
+ADC1_JDR1       =   ADC1 + 0x0080
+ADC1_JDR2       =   ADC1 + 0x0084
+ADC1_JDR3       =   ADC1 + 0x0088
+ADC1_JDR4       =   ADC1 + 0x008C
+ADC1_AWD2CR     =   ADC1 + 0x00A0
+ADC1_AWD3CR     =   ADC1 + 0x00A4
+ADC1_DIFSEL     =   ADC1 + 0x00B0
+ADC1_CALFACT    =   ADC1 + 0x00B4
+ADC1_CSR        =   ADC1 + 0x0300
+ADC1_CCR        =   ADC1 + 0x0308
+ADC1_CDR        =   ADC1 + 0x030C
+
+ADC3_ISR        =   ADC3 + 0x0000
+ADC3_IER        =   ADC3 + 0x0004
+ADC3_CR         =   ADC3 + 0x0008
+ADC3_CFGR       =   ADC3 + 0x000C
+ADC3_SMPR1      =   ADC3 + 0x0014
+ADC3_SMPR2      =   ADC3 + 0x0018
+ADC3_TR1        =   ADC3 + 0x0020
+ADC3_TR2        =   ADC3 + 0x0024
+ADC3_TR3        =   ADC3 + 0x0028
+ADC3_SQR1       =   ADC3 + 0x0030
+ADC3_SQR2       =   ADC3 + 0x0034
+ADC3_SQR3       =   ADC3 + 0x0038
+ADC3_SQR4       =   ADC3 + 0x003C
+ADC3_DR         =   ADC3 + 0x0040
+ADC3_JSQR       =   ADC3 + 0x004C
+ADC3_OFR1       =   ADC3 + 0x0060
+ADC3_OFR2       =   ADC3 + 0x0064
+ADC3_OFR3       =   ADC3 + 0x0068
+ADC3_OFR4       =   ADC3 + 0x006C
+ADC3_JDR1       =   ADC3 + 0x0080
+ADC3_JDR2       =   ADC3 + 0x0084
+ADC3_JDR3       =   ADC3 + 0x0088
+ADC3_JDR4       =   ADC3 + 0x008C
+ADC3_AWD2CR     =   ADC3 + 0x00A0
+ADC3_AWD3CR     =   ADC3 + 0x00A4
+ADC3_DIFSEL     =   ADC3 + 0x00B0
+ADC3_CALFACT    =   ADC3 + 0x00B4
+ADC3_CSR        =   ADC3 + 0x0300
+ADC3_CCR        =   ADC3 + 0x0308
+ADC3_CDR        =   ADC3 + 0x030C
+
+@ SLAVE ADC REGISTERS
+
+ADC2_ISR        =   ADC2 + 0x0100
+ADC2_IER        =   ADC2 + 0x0104
+ADC2_CR         =   ADC2 + 0x0108
+ADC2_CFGR       =   ADC2 + 0x010C
+ADC2_SMPR1      =   ADC2 + 0x0114
+ADC2_SMPR2      =   ADC2 + 0x0118
+ADC2_TR1        =   ADC2 + 0x0120
+ADC2_TR2        =   ADC2 + 0x0124
+ADC2_TR3        =   ADC2 + 0x0128
+ADC2_SQR1       =   ADC2 + 0x0130
+ADC2_SQR2       =   ADC2 + 0x0134
+ADC2_SQR3       =   ADC2 + 0x0138
+ADC2_SQR4       =   ADC2 + 0x013C
+ADC2_DR         =   ADC2 + 0x0140
+ADC2_JSQR       =   ADC2 + 0x014C
+ADC2_OFR1       =   ADC2 + 0x0160
+ADC2_OFR2       =   ADC2 + 0x0164
+ADC2_OFR3       =   ADC2 + 0x0168
+ADC2_OFR4       =   ADC2 + 0x016C
+ADC2_JDR1       =   ADC2 + 0x0180
+ADC2_JDR2       =   ADC2 + 0x0184
+ADC2_JDR3       =   ADC2 + 0x0188
+ADC2_JDR4       =   ADC2 + 0x018C
+ADC2_AWD2CR     =   ADC2 + 0x01A0
+ADC2_AWD3CR     =   ADC2 + 0x01A4
+ADC2_DIFSEL     =   ADC2 + 0x01B0
+ADC2_CALFACT    =   ADC2 + 0x01B4
+ADC2_CSR        =   ADC2 + 0x0300
+ADC2_CCR        =   ADC2 + 0x0308
+ADC2_CDR        =   ADC2 + 0x030C
+
+ADC4_ISR        =   ADC4 + 0x0100
+ADC4_IER        =   ADC4 + 0x0104
+ADC4_CR         =   ADC4 + 0x0108
+ADC4_CFGR       =   ADC4 + 0x010C
+ADC4_SMPR1      =   ADC4 + 0x0114
+ADC4_SMPR2      =   ADC4 + 0x0118
+ADC4_TR1        =   ADC4 + 0x0120
+ADC4_TR2        =   ADC4 + 0x0124
+ADC4_TR3        =   ADC4 + 0x0128
+ADC4_SQR1       =   ADC4 + 0x0130
+ADC4_SQR2       =   ADC4 + 0x0134
+ADC4_SQR3       =   ADC4 + 0x0138
+ADC4_SQR4       =   ADC4 + 0x013C
+ADC4_DR         =   ADC4 + 0x0140
+ADC4_JSQR       =   ADC4 + 0x014C
+ADC4_OFR1       =   ADC4 + 0x0160
+ADC4_OFR2       =   ADC4 + 0x0164
+ADC4_OFR3       =   ADC4 + 0x0168
+ADC4_OFR4       =   ADC4 + 0x016C
+ADC4_JDR1       =   ADC4 + 0x0180
+ADC4_JDR2       =   ADC4 + 0x0184
+ADC4_JDR3       =   ADC4 + 0x0188
+ADC4_JDR4       =   ADC4 + 0x018C
+ADC4_AWD2CR     =   ADC4 + 0x01A0
+ADC4_AWD3CR     =   ADC4 + 0x01A4
+ADC4_DIFSEL     =   ADC4 + 0x01B0
+ADC4_CALFACT    =   ADC4 + 0x01B4
+ADC4_CSR        =   ADC4 + 0x0300
+ADC4_CCR        =   ADC4 + 0x0308
+ADC4_CDR        =   ADC4 + 0x030C
+
+@ TSC REGISTERS
+
+TSC_CR          =   TSC + 0x0000
+TSC_IER         =   TSC + 0x0004
+TSC_ICR         =   TSC + 0x0008
+TSC_ISR         =   TSC + 0x000C
+TSC_IOHCR       =   TSC + 0x0010
+TSC_IOASCR      =   TSC + 0x0018
+TSC_IOSCR       =   TSC + 0x0020
+TSC_IOCCR       =   TSC + 0x0028
+TSC_IOGCSR      =   TSC + 0x0030
+TSC_IOG1CR      =   TSC + 0x0034
+TSC_IOG2CR      =   TSC + 0x0038
+TSC_IOG3CR      =   TSC + 0x003C
+TSC_IOG4CR      =   TSC + 0x0040
+TSC_IOG5CR      =   TSC + 0x0044
+TSC_IOG6CR      =   TSC + 0x0048
+TSC_IOG7CR      =   TSC + 0x004C
+TSC_IOG8CR      =   TSC + 0x0050
+
+@ CRC REGISTERS
+
+CRC_DR          =   CRC + 0x0000
+CRC_IDR         =   CRC + 0x0004
+CRC_CR          =   CRC + 0x0008
+CRC_INIT        =   CRC + 0x0010
+CRC_POL         =   CRC + 0x0014
+
+@ FLASH INTERFACE REGISTERS
+
+FLASH_ACR       =   FLASH + 0x0000
+FLASH_KEYR      =   FLASH + 0x0004
+FLASH_OPTKEYR   =   FLASH + 0x0008
+FLASH_SR        =   FLASH + 0x000C
+FLASH_CR        =   FLASH + 0x0010
+FLASH_AR        =   FLASH + 0x0014
+FLASH_OBR       =   FLASH + 0x001C
+FLASH_WRPR      =   FLASH + 0x0020
+
+@ RCC REGISTERS
+
+RCC_CR          =   RCC + 0x0000
+RCC_CFGR        =   RCC + 0x0004
+RCC_CIR         =   RCC + 0x0008
+RCC_APB2RSTR    =   RCC + 0x000C
+RCC_APB1RSTR    =   RCC + 0x0010
+RCC_AHBENR      =   RCC + 0x0014
+RCC_APB2ENR     =   RCC + 0x0018
+RCC_APB1ENR     =   RCC + 0x001C
+RCC_BDCR        =   RCC + 0x0020
+RCC_CSR         =   RCC + 0x0024
+RCC_AHBRSTR     =   RCC + 0x0028
+RCC_CFGR2       =   RCC + 0x002C
+RCC_CFGR3       =   RCC + 0x0030
+
+@ DMA REGISTERS
+
+DMA1_ISR        =   DMA1 + 0x0000
+DMA1_IFCR       =   DMA1 + 0x0004
+DMA1_CCR1       =   DMA1 + 0x0008
+DMA1_CNDTR1     =   DMA1 + 0x000C
+DMA1_CPAR1      =   DMA1 + 0x0010
+DMA1_CMAR1      =   DMA1 + 0x0014
+DMA1_CCR2       =   DMA1 + 0x001C
+DMA1_CNDTR2     =   DMA1 + 0x0020
+DMA1_CPAR2      =   DMA1 + 0x0024
+DMA1_CMAR2      =   DMA1 + 0x0028
+DMA1_CCR3       =   DMA1 + 0x0030
+DMA1_CNDTR3     =   DMA1 + 0x0034
+DMA1_CPAR3      =   DMA1 + 0x0038
+DMA1_CMAR3      =   DMA1 + 0x003C
+DMA1_CCR4       =   DMA1 + 0x0044
+DMA1_CNDTR4     =   DMA1 + 0x0048
+DMA1_CPAR4      =   DMA1 + 0x004C
+DMA1_CMAR4      =   DMA1 + 0x0050
+DMA1_CCR5       =   DMA1 + 0x0058
+DMA1_CNDTR5     =   DMA1 + 0x005C
+DMA1_CPAR5      =   DMA1 + 0x0060
+DMA1_CMAR5      =   DMA1 + 0x0064
+DMA1_CCR6       =   DMA1 + 0x006C
+DMA1_CNDTR6     =   DMA1 + 0x0070
+DMA1_CPAR6      =   DMA1 + 0x0074
+DMA1_CMAR6      =   DMA1 + 0x0078
+DMA1_CCR7       =   DMA1 + 0x0080
+DMA1_CNDTR7     =   DMA1 + 0x0084
+DMA1_CPAR7      =   DMA1 + 0x0088
+DMA1_CMAR7      =   DMA1 + 0x008C
+
+@ DMA2 ONLY HAS 5 CHANNELS
+
+DMA2_ISR        =   DMA2 + 0x0000
+DMA2_IFCR       =   DMA2 + 0x0004
+DMA2_CCR1       =   DMA2 + 0x0008
+DMA2_CNDTR1     =   DMA2 + 0x000C
+DMA2_CPAR1      =   DMA2 + 0x0010
+DMA2_CMAR1      =   DMA2 + 0x0014
+DMA2_CCR2       =   DMA2 + 0x001C
+DMA2_CNDTR2     =   DMA2 + 0x0020
+DMA2_CPAR2      =   DMA2 + 0x0024
+DMA2_CMAR2      =   DMA2 + 0x0028
+DMA2_CCR3       =   DMA2 + 0x0030
+DMA2_CNDTR3     =   DMA2 + 0x0034
+DMA2_CPAR3      =   DMA2 + 0x0038
+DMA2_CMAR3      =   DMA2 + 0x003C
+DMA2_CCR4       =   DMA2 + 0x0044
+DMA2_CNDTR4     =   DMA2 + 0x0048
+DMA2_CPAR4      =   DMA2 + 0x004C
+DMA2_CMAR4      =   DMA2 + 0x0050
+DMA2_CCR5       =   DMA2 + 0x0058
+DMA2_CNDTR5     =   DMA2 + 0x005C
+DMA2_CPAR5      =   DMA2 + 0x0060
+DMA2_CMAR5      =   DMA2 + 0x0064
 

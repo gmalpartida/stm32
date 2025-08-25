@@ -13,24 +13,11 @@ GDB	Makefile	/^GDB=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\
 LD	Makefile	/^LD=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
 OBJ	Makefile	/^OBJ=$(TARGET).o$/;"	m
 OBJCOPY	Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
+OPENOCD	Makefile	/^OPENOCD=openocd$/;"	m
 SRC	Makefile	/^SRC=src\/prog1.asm$/;"	m
 STFLASH	Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
 TARGET	Makefile	/^TARGET=bin\/prog1$/;"	m
 VI	Makefile	/^VI=vi$/;"	m
-b	src/prog1.asm	/^b turn_led_on$/;"	l
-eor	src/prog1.asm	/^eor r2, r2, 0x80		@ reverse bit$/;"	l
-ldr	src/prog1.asm	/^ldr 	r0, [r1]$/;"	l
-ldr	src/prog1.asm	/^ldr 	r1,	=0x40021014		$/;"	l
-ldr	src/prog1.asm	/^ldr     r0, [r1]$/;"	l
-ldr	src/prog1.asm	/^ldr r0, [r1]$/;"	l
-ldr	src/prog1.asm	/^ldr r1, =0x48000414$/;"	l
-ldr	src/prog1.asm	/^ldr r1, =GPIOA_MODER $/;"	l
-ldr	src/prog1.asm	/^ldr r1, =RCC + 0x00$/;"	l
-ldr	src/prog1.asm	/^ldr r2, [r1]$/;"	l
-orr	src/prog1.asm	/^orr 	r0,	0x00040000$/;"	l
-orr	src/prog1.asm	/^orr r0, 0x00004000$/;"	l
-orr	src/prog1.asm	/^orr r0, 0x01$/;"	l
-str	src/prog1.asm	/^str		r0,	[r1]$/;"	l
-str	src/prog1.asm	/^str r0, [r1]$/;"	l
-str	src/prog1.asm	/^str r2, [r1]$/;"	l
+delay_loop	src/prog1.asm	/^delay_loop:$/;"	l
+delay_ms	src/prog1.asm	/^delay_ms:$/;"	l
 turn_led_on	src/prog1.asm	/^turn_led_on:$/;"	l

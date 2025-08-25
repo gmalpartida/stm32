@@ -5,6 +5,7 @@ CHIPS=/opt/stlink/config/chips/
 OBJCOPY=/opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-objcopy
 GDB=/opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gdb
 VI=vi
+OPENOCD=openocd
 
 SRC=src/prog1.asm
 TARGET=bin/prog1
@@ -28,11 +29,14 @@ $(OBJ):
 flash: $(BIN)
 	$(STFLASH) --reset write $< 0x08000000
 
-debug:
+openocd:
+	$(OPENOCD) -f interface/stlink-v2.cfg -f target/stm32f3x.cfg 
+
+debug: $(BIN)
 	$(GDB) $(ELF)
 
 edit:
-	$(VI) src/*.asm
+	$(VI) $(SRC)
 
 clean:
 	rm -f bin/*
