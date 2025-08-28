@@ -9,15 +9,19 @@ ASFLAGS	Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
 BIN	Makefile	/^BIN=$(TARGET).bin$/;"	m
 CHIPS	Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
 ELF	Makefile	/^ELF=$(TARGET).elf$/;"	m
+FLASH_FLAGS	Makefile	/^FLASH_FLAGS= --reset write $< 0x08000000$/;"	m
 GDB	Makefile	/^GDB=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
 LD	Makefile	/^LD=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
 OBJ	Makefile	/^OBJ=$(TARGET).o$/;"	m
 OBJCOPY	Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
 OPENOCD	Makefile	/^OPENOCD=openocd$/;"	m
+OPENOCD_FLAGS	Makefile	/^OPENOCD_FLAGS=-f interface\/stlink-v2.cfg -f target\/stm32f3x.cfg $/;"	m
 SRC	Makefile	/^SRC=src\/prog1.asm$/;"	m
 STFLASH	Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
 TARGET	Makefile	/^TARGET=bin\/prog1$/;"	m
 VI	Makefile	/^VI=vi$/;"	m
 delay_loop	src/prog1.asm	/^delay_loop:$/;"	l
 delay_ms	src/prog1.asm	/^delay_ms:$/;"	l
+hsi_not_ready	src/prog1.asm	/^hsi_not_ready:				@ wait for HSI to be ready$/;"	l
+sysclk_not_ready	src/prog1.asm	/^sysclk_not_ready:$/;"	l
 turn_led_on	src/prog1.asm	/^turn_led_on:$/;"	l

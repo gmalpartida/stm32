@@ -15,6 +15,25 @@
 	orr r0, 0x01
 	str r0, [r1]
 
+hsi_not_ready:				@ wait for HSI to be ready
+	ldr r0, [r1]
+	tst r1, 1 << 1
+	beq hsi_not_ready
+
+
+	@ select HSI as system clock source
+	ldr r1, =RCC_CFGR
+	ldr r0, [r1]
+	bic	r0, r0, #0b11
+	str r0, [r1]
+
+	@ wait for system clock ready
+
+sysclk_not_ready:
+	ldr r0, [r1]
+	tst r0, #0b1100
+	bne sysclk_not_ready	
+
 @ enable GPIOB clock
 	ldr 	r1,	=RCC_AHBENR		
 	ldr 	r0, [r1]
@@ -25,7 +44,7 @@
 	ldr 	r1, =RCC_APB1ENR
 	ldr 	r0, [r1]
 	orr 	r0, 0x00040000   @ 00000000000001000000000000000000 
-	str 	rp, [r1]
+	str 	r0, [r1]
 
 @ set GPIOB to output mode
 	ldr r1, =GPIOB_MODER 

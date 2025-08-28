@@ -14,7 +14,8 @@ ELF=$(TARGET).elf
 BIN=$(TARGET).bin
 
 ASFLAGS=-g -I ../inc -I inc/
-
+OPENOCD_FLAGS=-f interface/stlink-v2.cfg -f target/stm32f3x.cfg 
+FLASH_FLAGS= --reset write $< 0x08000000
 build: $(ELF)
 
 $(BIN): $(ELF)
@@ -27,11 +28,10 @@ $(OBJ):
 	$(AS) $(ASFLAGS) $(SRC) -o $(OBJ)
 
 flash: $(BIN)
-	$(STFLASH) --reset write $< 0x08000000
+	$(STFLASH) $(FLASH_FLAGS)
 
 openocd:
-	$(OPENOCD) -f interface/stlink-v2.cfg -f target/stm32f3x.cfg 
-
+	$(OPENOCD) $(OPENOCD_FLAGS) 
 debug: $(BIN)
 	$(GDB) $(ELF)
 
