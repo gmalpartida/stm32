@@ -9,7 +9,7 @@
 
 .include "stm32f303xDE.inc"
 
-@ enable system clock, HSI 8Mhz
+@ enable default system clock, HSI 8Mhz
 	ldr r1, =RCC_CR
 	ldr r0, [r1]
 	orr r0, 0x01
@@ -19,7 +19,6 @@ hsi_not_ready:				@ wait for HSI to be ready
 	ldr r0, [r1]
 	tst r1, 1 << 1
 	beq hsi_not_ready
-
 
 	@ select HSI as system clock source
 	ldr r1, =RCC_CFGR

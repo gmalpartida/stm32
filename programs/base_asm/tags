@@ -4,16 +4,16 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-AS	Makefile	/^AS=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as $/;"	m
+AS	Makefile	/^AS=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as$/;"	m
 ASFLAGS	Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
 BIN	Makefile	/^BIN=$(TARGET).bin$/;"	m
 CHIPS	Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
 ELF	Makefile	/^ELF=$(TARGET).elf$/;"	m
 FLASH_FLAGS	Makefile	/^FLASH_FLAGS= --reset write $< 0x08000000$/;"	m
-GDB	Makefile	/^GDB=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
-LD	Makefile	/^LD=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
+GDB	Makefile	/^GDB=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
+LD	Makefile	/^LD=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
 OBJ	Makefile	/^OBJ=$(TARGET).o$/;"	m
-OBJCOPY	Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
+OBJCOPY	Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
 OPENOCD	Makefile	/^OPENOCD=openocd$/;"	m
 OPENOCD_FLAGS	Makefile	/^OPENOCD_FLAGS=-f interface\/stlink-v2.cfg -f target\/stm32f3x.cfg $/;"	m
 SRC	Makefile	/^SRC=src\/prog1.asm$/;"	m

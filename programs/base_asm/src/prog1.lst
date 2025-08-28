@@ -1,0 +1,467 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	src/prog1.asm
+	Object File:	src/prog1.hex
+	List File:	src/prog1.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:				.syntax unified
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+    2:				.cpu cortex-m4
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+    3:				.thumb
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+    4:
+    5:				@ definition of vector table
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+    6:				.word 0x20000400	@ initialize stack pointer
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+    7:				.word 0x080000ed	@ jump to start of program
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+    8:				.space 0xe4			@ reserve this area for remaining of vector table
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+    9:
+   10:				.include "stm32f303xDE.inc"
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+   11:
+   12:				@ enable system clock, HSI 8Mhz
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+   13:					ldr r1, =RCC_CR
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   14:					ldr r0, [r1]
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   15:					orr r0, 0x01
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   16:					str r0, [r1]
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   17:
+   18:	  0000			hsi_not_ready:				@ wait for HSI to be ready
+									^
+			  @@@@@ illegal statement syntax @@@@@
+
+   19:					ldr r0, [r1]
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   20:					tst r1, 1 << 1
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   21:					beq hsi_not_ready
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   22:
+   23:
+   24:					@ select HSI as system clock source
+					^
+			  @@@@@ illegal statement syntax @@@@@
+
+   25:					ldr r1, =RCC_CFGR
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   26:					ldr r0, [r1]
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   27:					bic	r0, r0, #0b11
+						^
+			  @@@@@ illegal statement syntax @@@@@
+
+   28:					str r0, [r1]
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   29:
+   30:					@ wait for system clock ready
+					^
+			  @@@@@ illegal statement syntax @@@@@
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+   31:
+   32:	  0000			sysclk_not_ready:
+   33:					ldr r0, [r1]
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   34:					tst r0, #0b1100
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   35:					bne sysclk_not_ready
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   36:
+   37:				@ enable GPIOB clock
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+   38:					ldr 	r1,	=RCC_AHBENR
+						^
+			  @@@@@ illegal statement syntax @@@@@
+
+   39:					ldr 	r0, [r1]
+						^
+			  @@@@@ illegal statement syntax @@@@@
+
+   40:					orr 	r0,	0x00040000
+						^
+			  @@@@@ illegal statement syntax @@@@@
+
+   41:					str		r0,	[r1]
+							^
+			  @@@@@ illegal statement syntax @@@@@
+
+   42:
+   43:				@ enable uart4 clock
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+   44:					ldr 	r1, =RCC_APB1ENR
+						^
+			  @@@@@ illegal statement syntax @@@@@
+
+   45:					ldr 	r0, [r1]
+						^
+			  @@@@@ illegal statement syntax @@@@@
+
+   46:					orr 	r0, 0x00040000   @ 00000000000001000000000000000000
+						^
+			  @@@@@ illegal statement syntax @@@@@
+
+   47:					str 	r0, [r1]
+						^
+			  @@@@@ illegal statement syntax @@@@@
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+ Line  I  Addr  Code            Source
+
+   48:
+   49:				@ set GPIOB to output mode
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+   50:					ldr r1, =GPIOB_MODER
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   51:					ldr     r0, [r1]
+						^
+			  @@@@@ illegal statement syntax @@@@@
+
+   52:					orr r0, 0x00004000
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   53:					str r0, [r1]
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   54:
+   55:				@ set GPIOB pin 7 to high
+				^
+			  @@@@@ illegal statement syntax @@@@@
+
+   56:					ldr r1, =GPIOB_ODR
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   57:	  0000			turn_led_on:
+   58:					ldr r2, [r1]
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   59:					eor r2, r2, 0x80		@ reverse bit
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   60:					str r2, [r1]
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   61:					ldr r0, =1000
+					    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   62:					bl delay_ms
+					   ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   63:					b turn_led_on
+					  ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   64:
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+ Line  I  Addr  Code            Source
+
+   65:	  0000			delay_ms:
+   66:				    @ Input: R0 = delay in milliseconds
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   67:				    @ clk_freq = core clock frequency in Hz
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   68:				    @ Loop takes 3 clock cycles per iteration
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   69:				    @ Example:
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   70:				    @   - Core clock = 8 MHz
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   71:				    @   - Delay = 1 ms
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   72:				    @   - Cycles = 8000 (8 MHz * 0.001 s)
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   73:				    @   - Iterations = Cycles / 3 = 2666.66...  (approx 2667)
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   74:				    @   - Initialize R1 with (2667 * 3) / 2 = 3999.5, round up to 4000
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   75:				    @       Because the loop takes 2 cycles per iteration (SUBS, BNE)
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   76:
+   77:				    @ Calculate loop iterations
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   78:				    movs  r1, r0         @ R1 = delay (milliseconds)
+					  ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   79:				    ldr   r2, =8000     @ R2 = core clock frequency (8 MHz, example)
+					  ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   80:	  0000	A4		    mul   r1, r1, r2     @ R1 = delay * clock frequency (cycles)
+					  ^
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
+
+
+
+ Line  I  Addr  Code            Source
+
+			  @@@@@ illegal operand @@@@@
+
+   81:				    lsrs  r1, r1, #1     @ R1 = (delay * clock frequency) / 2 (approximate)
+					  ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   82:
+   83:				    @ Initialize loop counter
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   84:				    movs  r2, r1         @ R2 = loop counter
+					  ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   85:
+   86:	  0001			delay_loop:
+   87:				    subs  r2, #1          @ Subtract 1 from the counter
+					  ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   88:				    bne   delay_loop      @ Branch back if not zero
+					  ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   89:
+   90:				    @ Return
+				    ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   91:				    bx lr
+				       ^
+			  @@@@@ illegal statement syntax @@@@@
+
+   92:
+				^
+			  @@@@@ no END statement found @@@@@
+
+
+
+
+
+
+                     register banks used:  ---
+
+                     71 errors detected
+
+
+
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 7
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6
+ACC				  DATA	      E0
+B				  DATA	      F0
+CY				  BIT	      D7
+DELAY_LOOP			  CODE	    0001	  86
+DELAY_MS			  CODE	    0000	  65
+DPH				  DATA	      83
+DPL				  DATA	      82
+EA				  BIT	      AF
+ES				  BIT	      AC
+ET0				  BIT	      A9
+ET1				  BIT	      AB
+EX0				  BIT	      A8
+EX1				  BIT	      AA
+EXTI0				  CODE	    0003
+EXTI1				  CODE	    0013
+F0				  BIT	      D5
+HSI_NOT_READY			  CODE	    0000	  18
+IE				  DATA	      A8
+IE0				  BIT	      89
+IE1				  BIT	      8B
+INT0				  BIT	      B2
+INT1				  BIT	      B3
+IP				  DATA	      B8
+IT0				  BIT	      88
+IT1				  BIT	      8A
+OV				  BIT	      D2
+P				  BIT	      D0
+P0				  DATA	      80
+P1				  DATA	      90
+P2				  DATA	      A0
+P3				  DATA	      B0
+PCON				  DATA	      87
+PS				  BIT	      BC
+PSW				  DATA	      D0
+PT0				  BIT	      B9
+PT1				  BIT	      BB
+PX0				  BIT	      B8
+PX1				  BIT	      BA
+RB8				  BIT	      9A
+RD				  BIT	      B7
+REN				  BIT	      9C
+RESET				  CODE	    0000
+RI				  BIT	      98
+RS0				  BIT	      D3
+RS1				  BIT	      D4
+RXD				  BIT	      B0
+SBUF				  DATA	      99
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 8
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+SCON				  DATA	      98
+SINT				  CODE	    0023
+SM0				  BIT	      9F
+SM1				  BIT	      9E
+SM2				  BIT	      9D
+SP				  DATA	      81
+SYSCLK_NOT_READY		  CODE	    0000	  32
+T0				  BIT	      B4
+T1				  BIT	      B5
+TB8				  BIT	      9B
+TCON				  DATA	      88
+TF0				  BIT	      8D
+TF1				  BIT	      8F
+TH0				  DATA	      8C
+TH1				  DATA	      8D
+TI				  BIT	      99
+TIMER0				  CODE	    000B
+TIMER1				  CODE	    001B
+TL0				  DATA	      8A
+TL1				  DATA	      8B
+TMOD				  DATA	      89
+TR0				  BIT	      8C
+TR1				  BIT	      8E
+TURN_LED_ON			  CODE	    0000	  57
+TXD				  BIT	      B1
+WR				  BIT	      B6
