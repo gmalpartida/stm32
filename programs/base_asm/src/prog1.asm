@@ -10,16 +10,22 @@
 .include "stm32f303xDE.inc"
 
 @ enable system clock, HSI 8Mhz
-	ldr r1, =RCC + 0x00
+	ldr r1, =RCC_CR
 	ldr r0, [r1]
 	orr r0, 0x01
 	str r0, [r1]
 
 @ enable GPIOB clock
-	ldr 	r1,	=0x40021014		
+	ldr 	r1,	=RCC_AHBENR		
 	ldr 	r0, [r1]
 	orr 	r0,	0x00040000
 	str		r0,	[r1]
+
+@ enable uart4 clock
+	ldr 	r1, =RCC_APB1ENR
+	ldr 	r0, [r1]
+	orr 	r0, 0x00040000   @ 00000000000001000000000000000000 
+	str 	rp, [r1]
 
 @ set GPIOB to output mode
 	ldr r1, =GPIOB_MODER 
@@ -28,7 +34,7 @@
 	str r0, [r1]
 
 @ set GPIOB pin 7 to high
-	ldr r1, =0x48000414
+	ldr r1, =GPIOB_ODR
 turn_led_on:
 	ldr r2, [r1]
 	eor r2, r2, 0x80		@ reverse bit
@@ -42,11 +48,11 @@ delay_ms:
     @ clk_freq = core clock frequency in Hz
     @ Loop takes 3 clock cycles per iteration
     @ Example:
-    @   - Core clock = 16 MHz
+    @   - Core clock = 8 MHz
     @   - Delay = 1 ms
-    @   - Cycles = 16000 (16 MHz * 0.001 s)
-    @   - Iterations = Cycles / 3 = 5333.33...  (approx 5333)
-    @   - Initialize R1 with (5333 * 3) / 2 = 7999.5, round up to 8000
+    @   - Cycles = 8000 (8 MHz * 0.001 s)
+    @   - Iterations = Cycles / 3 = 2666.66...  (approx 2667)
+    @   - Initialize R1 with (2667 * 3) / 2 = 3999.5, round up to 4000
     @       Because the loop takes 2 cycles per iteration (SUBS, BNE)
 
     @ Calculate loop iterations
@@ -64,3 +70,4 @@ delay_loop:
     
     @ Return
     bx lr	
+

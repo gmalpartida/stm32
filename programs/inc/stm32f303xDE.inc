@@ -954,6 +954,43 @@ RTC_CR          =   RTC + 0x0008
 RTC_ISR         =   RTC + 0x000C
 RTC_PRER        =   RTC + 0x0010
 RTC_WUTR        =   RTC + 0x0014
+RTC_ALRMAR      =   RTC + 0x001C
+RTC_ALRMBR      =   RTC + 0x0020
+RTC_WPR         =   RTC + 0x0024
+RTC_SSR         =   RTC + 0x0028
+RTC_SHIFTR      =   RTC + 0x002C
+RTC_TSTR        =   RTC + 0x0030
+RTC_TSDR        =   RTC + 0x0034
+RTC_TSSSR       =   RTC + 0x0038
+RTC_CALR        =   RTC + 0x003C
+RTC_TAFCR       =   RTC + 0x0040
+RTC_ALRMASSR    =   RTC + 0x0044
+RTC_ALRMBSSR    =   RTC + 0x0048
+RTC_OR          =   RTC + 0x004C
+RTC_BKP0R       =   RTC + 0x0050
+RTC_BKP1R       =   RTC + 0x0054
+RTC_BKP2R       =   RTC + 0x0058
+RTC_BKP3R       =   RTC + 0x005C
+RTC_BKP4R       =   RTC + 0x0060
+RTC_BKP5R       =   RTC + 0x0064
+RTC_BKP6R       =   RTC + 0x0068
+RTC_BKP7R       =   RTC + 0x006C
+RTC_BKP8R       =   RTC + 0x0070
+RTC_BKP9R       =   RTC + 0x0074
+RTC_BKP10R       =   RTC + 0x0078
+RTC_BKP11R       =   RTC + 0x007C
+RTC_BKP12R       =   RTC + 0x0080
+RTC_BKP13R       =   RTC + 0x0084
+RTC_BKP14R       =   RTC + 0x0088
+RTC_BKP15R       =   RTC + 0x008C
+
+
+
+
+
+
+
+
 
 
 
