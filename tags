@@ -12,7 +12,7 @@ APB1ENR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2
 APB1RSTR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
 APB2ENR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
 APB2RSTR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-AS	programs/base_asm/Makefile	/^AS=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as$/;"	m
+AS	programs/base_asm/Makefile	/^AS=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as $/;"	m
 AS	programs/blink_led/Makefile	/^AS=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as$/;"	m
 ASFLAGS	programs/base_asm/Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
 ASFLAGS	programs/blink_led/Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
@@ -42,7 +42,7 @@ ELF	programs/base_asm/Makefile	/^ELF=$(TARGET).elf$/;"	m
 ELF	programs/blink_led/Makefile	/^ELF=$(TARGET).elf$/;"	m
 FLASH_FLAGS	programs/base_asm/Makefile	/^FLASH_FLAGS= --reset write $< 0x08000000$/;"	m
 FLASH_FLAGS	programs/blink_led/Makefile	/^FLASH_FLAGS= --reset write $< 0x08000000$/;"	m
-GDB	programs/base_asm/Makefile	/^GDB=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
+GDB	programs/base_asm/Makefile	/^GDB=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
 GDB	programs/blink_led/Makefile	/^GDB=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
 GPIO	programs/bare-blinky/src/main.c	34;"	d	file:
 GPIO_AF_MODE	programs/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
@@ -51,21 +51,20 @@ GPIO_INPUT_MODE	programs/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OU
 GPIO_OUTPUT_MODE	programs/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
 IDR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
 LCKR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-LD	programs/base_asm/Makefile	/^LD=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
+LD	programs/base_asm/Makefile	/^LD=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
 LD	programs/blink_led/Makefile	/^LD=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
 LDFLAGS	programs/bare-blinky/Makefile	/^LDFLAGS = -T src\/link.ld -nostdlib$/;"	m
-LDR	programs/blink_led/src/blink_led.s	/^LDR R0, =_estack$/;"	l
-LDR	programs/blink_led/src/blink_led.s	/^LDR R1, =GPIOA_MODER$/;"	l
-LDR	programs/blink_led/src/blink_led.s	/^LDR R1, =RCC_AHBENR$/;"	l
+LDR	programs/blink_led/src/blink_led.s	/^LDR R0, =GPIOA_MODER$/;"	l
+LDR	programs/blink_led/src/blink_led.s	/^LDR R1, [R0]$/;"	l
+LDR	programs/blink_led/src/blink_led.s	/^LDR R1, [r0]$/;"	l
 LIBS	programs/bare-blinky/Makefile	/^LIBS = -lc -lm -lgcc$/;"	m
 MODER	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-MOV	programs/blink_led/src/blink_led.s	/^MOV SP, R0$/;"	l
 MainLoop	programs/blink_led/src/blink_led.s	/^MainLoop:$/;"	l
 OBJ	programs/bare-blinky/Makefile	/^OBJ=bin\/main.o$/;"	m
 OBJ	programs/base_asm/Makefile	/^OBJ=$(TARGET).o$/;"	m
 OBJ	programs/blink_led/Makefile	/^OBJ=$(TARGET).o$/;"	m
 OBJCOPY	programs/bare-blinky/Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
-OBJCOPY	programs/base_asm/Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
+OBJCOPY	programs/base_asm/Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
 OBJCOPY	programs/blink_led/Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
 ODR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
 OPENOCD	programs/base_asm/Makefile	/^OPENOCD=openocd$/;"	m
@@ -82,27 +81,31 @@ PINNO	programs/bare-blinky/src/main.c	36;"	d	file:
 PUPDR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
 RCC	programs/bare-blinky/src/main.c	55;"	d	file:
 SRC	programs/bare-blinky/Makefile	/^SRC=src\/main.c$/;"	m
-SRC	programs/base_asm/Makefile	/^SRC=src\/prog1.asm$/;"	m
+SRC	programs/base_asm/Makefile	/^SRC=src\/test.asm$/;"	m
 SRC	programs/blink_led/Makefile	/^SRC=src\/blink_led.s$/;"	m
 STFLASH	programs/bare-blinky/Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
 STFLASH	programs/base_asm/Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
 STFLASH	programs/blink_led/Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
-STR	programs/blink_led/src/blink_led.s	/^STR R1, =GPIOA_MODER$/;"	l
-STR	programs/blink_led/src/blink_led.s	/^STR R1, =RCC_AHBENR$/;"	l
-TARGET	programs/base_asm/Makefile	/^TARGET=bin\/prog1$/;"	m
+STR	programs/blink_led/src/blink_led.s	/^STR R1, [R0]$/;"	l
+STR	programs/blink_led/src/blink_led.s	/^STR R1, [r0]$/;"	l
+TARGET	programs/base_asm/Makefile	/^TARGET=bin\/test$/;"	m
 TARGET	programs/blink_led/Makefile	/^TARGET=bin\/blink_led$/;"	m
 VI	programs/base_asm/Makefile	/^VI=vi$/;"	m
 VI	programs/blink_led/Makefile	/^VI=vi$/;"	m
 _reset	programs/bare-blinky/src/main.c	/^__attribute__((naked, noreturn)) void _reset(void){$/;"	f
+config_gpiob	programs/base_asm/src/test.asm	/^config_gpiob:$/;"	l
+config_hsi_clock	programs/base_asm/src/test.asm	/^config_hsi_clock:$/;"	l
+config_uart4	programs/base_asm/src/test.asm	/^config_uart4:	$/;"	l
 delay	programs/bare-blinky/src/main.c	/^static inline void delay(volatile uint32_t counter){$/;"	f	file:
-delay_loop	programs/base_asm/src/prog1.asm	/^delay_loop:$/;"	l
-delay_ms	programs/base_asm/src/prog1.asm	/^delay_ms:$/;"	l
+delay_loop	programs/base_asm/src/test.asm	/^delay_loop:$/;"	l
+delay_ms	programs/base_asm/src/test.asm	/^delay_ms:$/;"	l
 gpio	programs/bare-blinky/src/main.c	/^struct gpio$/;"	s	file:
 gpio_set_mode	programs/bare-blinky/src/main.c	/^static inline void gpio_set_mode(uint16_t pin, uint8_t mode)$/;"	f	file:
 gpio_write	programs/bare-blinky/src/main.c	/^static inline void gpio_write(uint16_t pin, bool val){$/;"	f	file:
-hsi_not_ready	programs/base_asm/src/prog1.asm	/^hsi_not_ready:				@ wait for HSI to be ready$/;"	l
+hsi_not_ready	programs/base_asm/src/test.asm	/^hsi_not_ready:				@ wait for HSI to be ready$/;"	l
+ldr	programs/blink_led/src/blink_led.s	/^ldr r0, =RCC_AHBENR$/;"	l
 main	programs/bare-blinky/src/main.c	/^int main(void)$/;"	f
 rcc	programs/bare-blinky/src/main.c	/^struct rcc{$/;"	s	file:
-sysclk_not_ready	programs/base_asm/src/prog1.asm	/^sysclk_not_ready:$/;"	l
+sysclk_not_ready	programs/base_asm/src/test.asm	/^sysclk_not_ready:$/;"	l
 tab	programs/bare-blinky/src/main.c	/^__attribute__((section(".vectors"))) void(*const tab[16 + 91])(void) = {$/;"	v
-turn_led_on	programs/base_asm/src/prog1.asm	/^turn_led_on:$/;"	l
+toggle_led	programs/base_asm/src/test.asm	/^toggle_led:$/;"	l
