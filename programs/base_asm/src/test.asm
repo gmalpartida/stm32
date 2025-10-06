@@ -7,7 +7,6 @@
 .word 0x080000ed	@ jump to start of program
 .space 0xe4			@ reserve this area for remaining of vector table
 
-.include "stm32f303xDE.inc"
 
 	bl config_hsi_clock
 	
@@ -109,13 +108,13 @@ config_uart4:
 	@ define word length, 8 data bits, oversampling by 8, no parity
 	ldr r1, =UART4_CR1
 	ldr r0, [r1]
-	and ro, 0x0fffebff
+	and r0, r0, 0x0fffebff
 	str r0, [r1]
 
 	@ 1 stop bit
 	ldr r1, =UART4_CR2
 	ldr r0, [r1]
-	and r0, 0xffffcfff
+	and r0,  r0, 0xffffcfff
 	str r0, [r1]
 
 	@ baud rate setup to 9600 bps
@@ -125,7 +124,7 @@ config_uart4:
 
 	ldr r1, =UART4_BRR
 	ldr r0, [r1]
-	orr r0, =0x681
+	orr r0, 0x681
 	str r0, [r1]
 
 	@ enable UART4 and start receiver
@@ -136,3 +135,33 @@ config_uart4:
 	str r0, [r1]
 
 	bx lr
+
+config_tim2:
+
+	ldr r1, =RCC_APB1ENR
+	ldr r0, [r1]
+	orr r0, 0x01				@ enable tim2 clock
+	str r0, [r1]
+
+	ldr r1, =TIM2_PSC			@ configure 1 second overflow
+	movs r0, #7999
+	str r0, [r1]
+	ldr r1, =TIM2_ARR
+	movs r0, #999
+	str r0, [r1]
+
+	ldr r1, =TIM2_EGR			@ generate update event to load values
+	movs r0, #1
+	str r0, [r1]
+
+	ldr r1, =TIM2_CR1			@ start the counter
+	ldr r0, [r1]
+	orr r0, r0, #1
+	str r0, [r1]
+
+	
+	bx lr
+
+
+.include "stm32f303xDE.inc"
+

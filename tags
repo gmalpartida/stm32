@@ -95,6 +95,7 @@ VI	programs/blink_led/Makefile	/^VI=vi$/;"	m
 _reset	programs/bare-blinky/src/main.c	/^__attribute__((naked, noreturn)) void _reset(void){$/;"	f
 config_gpiob	programs/base_asm/src/test.asm	/^config_gpiob:$/;"	l
 config_hsi_clock	programs/base_asm/src/test.asm	/^config_hsi_clock:$/;"	l
+config_tim2	programs/base_asm/src/test.asm	/^config_tim2:$/;"	l
 config_uart4	programs/base_asm/src/test.asm	/^config_uart4:	$/;"	l
 delay	programs/bare-blinky/src/main.c	/^static inline void delay(volatile uint32_t counter){$/;"	f	file:
 delay_loop	programs/base_asm/src/test.asm	/^delay_loop:$/;"	l

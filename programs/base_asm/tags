@@ -22,6 +22,7 @@ TARGET	Makefile	/^TARGET=bin\/test$/;"	m
 VI	Makefile	/^VI=vi$/;"	m
 config_gpiob	src/test.asm	/^config_gpiob:$/;"	l
 config_hsi_clock	src/test.asm	/^config_hsi_clock:$/;"	l
+config_tim2	src/test.asm	/^config_tim2:$/;"	l
 config_uart4	src/test.asm	/^config_uart4:	$/;"	l
 delay_loop	src/test.asm	/^delay_loop:$/;"	l
 delay_ms	src/test.asm	/^delay_ms:$/;"	l
