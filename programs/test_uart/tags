@@ -1,0 +1,42 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AS	Makefile	/^AS=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as $/;"	m
+ASFLAGS	Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
+BIN	Makefile	/^BIN=$(TARGET).bin$/;"	m
+CHIPS	Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
+ELF	Makefile	/^ELF=$(TARGET).elf$/;"	m
+FLASH_FLAGS	Makefile	/^FLASH_FLAGS= --reset write $< 0x08000000$/;"	m
+GDB	Makefile	/^GDB=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
+GPIOA_BASE	src/test_uart.asm	/^GPIOA_BASE      =     0x48000000$/;"	d
+GPIO_AFRL	src/test_uart.asm	/^GPIO_AFRL       =     0x20$/;"	d
+GPIO_MODER	src/test_uart.asm	/^GPIO_MODER      =     0x00$/;"	d
+LD	Makefile	/^LD=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
+OBJ	Makefile	/^OBJ=$(TARGET).o$/;"	m
+OBJCOPY	Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
+OPENOCD	Makefile	/^OPENOCD=openocd$/;"	m
+OPENOCD_FLAGS	Makefile	/^OPENOCD_FLAGS=-f interface\/stlink-v2.cfg -f target\/stm32f3x.cfg $/;"	m
+RCC_AHBENR	src/test_uart.asm	/^RCC_AHBENR      =     0x14$/;"	d
+RCC_APB1ENR	src/test_uart.asm	/^RCC_APB1ENR     =     0x1C$/;"	d
+RCC_BASE	src/test_uart.asm	/^RCC_BASE        =     0x40021000$/;"	d
+SRC	Makefile	/^SRC=src\/test_uart.asm$/;"	m
+STFLASH	Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
+TARGET	Makefile	/^TARGET=bin\/test_uart$/;"	m
+UART4_BASE	src/test_uart.asm	/^UART4_BASE      =     0x40004C00$/;"	d
+UART_BRR	src/test_uart.asm	/^UART_BRR        =     0x0C$/;"	d
+UART_CR1	src/test_uart.asm	/^UART_CR1        =     0x08$/;"	d
+UART_DR	src/test_uart.asm	/^UART_DR         =     0x04$/;"	d
+UART_ISR	src/test_uart.asm	/^UART_ISR        =     0x1C$/;"	d
+VI	Makefile	/^VI=vi$/;"	m
+_start	src/test_uart.asm	/^_start:$/;"	l
+end_send_string	src/test_uart.asm	/^end_send_string:$/;"	l
+hello_message	src/test_uart.asm	/^hello_message:$/;"	l
+infinite_loop	src/test_uart.asm	/^infinite_loop:$/;"	l
+next_char	src/test_uart.asm	/^next_char:$/;"	l
+tx_wait_loop	src/test_uart.asm	/^tx_wait_loop:$/;"	l
+uart4_setup	src/test_uart.asm	/^uart4_setup:$/;"	l
+uart_send_char	src/test_uart.asm	/^uart_send_char:$/;"	l
+uart_send_string	src/test_uart.asm	/^uart_send_string:$/;"	l

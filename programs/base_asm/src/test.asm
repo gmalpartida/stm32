@@ -108,7 +108,8 @@ config_uart4:
 	@ define word length, 8 data bits, oversampling by 8, no parity
 	ldr r1, =UART4_CR1
 	ldr r0, [r1]
-	and r0, r0, 0x0fffebff
+	ldr r2, =0x0fffebff
+	and r0, r0, r2
 	str r0, [r1]
 
 	@ 1 stop bit
@@ -124,13 +125,14 @@ config_uart4:
 
 	ldr r1, =UART4_BRR
 	ldr r0, [r1]
-	orr r0, 0x681
+	ldr r2, =0x681
+	orr r0, r2
 	str r0, [r1]
 
-	@ enable UART4 and start receiver
+	@ enable UART4, start receiver, start transmitter
 	ldr r1, =UART4_CR1
 	ldr r0, [r1]
-	orr r0, 0x05
+	orr r0, 0x07
 
 	str r0, [r1]
 
@@ -144,10 +146,11 @@ config_tim2:
 	str r0, [r1]
 
 	ldr r1, =TIM2_PSC			@ configure 1 second overflow
-	movs r0, #7999
+	ldr r2, =7999
+	movs r0, r2
 	str r0, [r1]
 	ldr r1, =TIM2_ARR
-	movs r0, #999
+	ldr r0, =999
 	str r0, [r1]
 
 	ldr r1, =TIM2_EGR			@ generate update event to load values
