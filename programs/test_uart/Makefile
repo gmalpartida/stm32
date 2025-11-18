@@ -11,8 +11,8 @@ GDB=/opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gdb
 VI=vi
 OPENOCD=openocd
 
-SRC=src/test_uart.asm
-TARGET=bin/test_uart
+SRC=src/uart.asm
+TARGET=bin/uart.asm
 OBJ=$(TARGET).o
 ELF=$(TARGET).elf
 BIN=$(TARGET).bin
