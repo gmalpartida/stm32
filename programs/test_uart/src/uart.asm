@@ -48,7 +48,7 @@
 	@ send a character to host
 
 	mov r0, #'G'
-	ldr r1, =UART4_ISR
+	@ldr r1, =UART4_ISR
 @uart4_tx_wait:
 @	tst r1, #(1 << 7)
 @	beq uart4_tx_wait

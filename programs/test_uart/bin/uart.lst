@@ -1,0 +1,2056 @@
+ARM GAS  src/uart.asm 			page 1
+
+
+   1              	.syntax unified
+   2              	.cpu cortex-m4
+   3              	.thumb
+   4              	
+   5              	@ definition of vector table
+   6 0000 00040020 	.word 0x20000400	@ initialize stack pointer
+   7 0004 ED000008 	.word 0x080000ed	@ jump to start of program
+   8 0008 00000000 	.space 0xe4			@ reserve this area for remaining of vector table
+   8      00000000 
+   8      00000000 
+   8      00000000 
+   8      00000000 
+   9              	
+  10              		@ enable gpio C clock
+  11 00ec 1348     		ldr r0, =RCC_AHBENR
+  12 00ee 0168     		ldr r1, [r0]
+  13 00f0 41F40021 		orr r1, #(0b0001 << 19)
+  14 00f4 0160     		str r1, [r0]
+  15              	
+  16              		@ enable uart4 clock
+  17 00f6 1248     		ldr r0, =RCC_APB1ENR
+  18 00f8 0168     		ldr r1, [r0]
+  19 00fa 41F40021 		orr r1, #(0b0001 << 19)
+  20 00fe 0160     		str r1, [r0]
+  21              	
+  22              		@ set pins PC10 and PC11 to alternate function mode
+  23 0100 1048     		ldr r0, =GPIOC_MODER
+  24 0102 0168     		ldr r1, [r0]
+  25 0104 41F42001 		orr r1, #(0b1010 << 20)
+  26 0108 0160     		str r1, [r0]
+  27              	
+  28              		@ set uart4 tx, rx as the alternate function for pins PC10 and PC11
+  29 010a 0F48     		ldr r0, =GPIOC_AFRH
+  30 010c 0168     		ldr r1, [r0]
+  31 010e 4FF4AA42 		ldr r2, =(0b0101010100000000)		
+  32 0112 41EA0201 		orr r1, r2
+  33 0116 0160     		str r1, [r0]	
+  34              	
+  35              		@ set uart4 baud rate to 9600 bps, oversampling by 16
+  36 0118 0C48     		ldr r0, =UART4_BRR
+  37 011a 0168     		ldr r1, [r0]
+  38 011c 4FF04502 		ldr r2, =0x0045
+  39 0120 41EA0201 		orr r1, r2
+  40 0124 0160     		str r1, [r0]
+  41              	
+  42              		@ enable TE, RE and UE
+  43 0126 0A48     		ldr r0, =UART4_CR1
+  44 0128 0168     		ldr r1, [r0]
+  45 012a 41F00D01 		orr r1, #0b1101
+  46 012e 0160     		str r1, [r0]
+  47              	
+  48              		@ send a character to host
+  49              	
+  50 0130 4FF04700 		mov r0, #'G'
+  51              		@ldr r1, =UART4_ISR
+  52              	@uart4_tx_wait:
+  53              	@	tst r1, #(1 << 7)
+ARM GAS  src/uart.asm 			page 2
+
+
+  54              	@	beq uart4_tx_wait
+  55 0134 074A     		ldr r2, =UART4_TDR
+  56 0136 1070     		strb r0, [r2]
+  57              	
+  58              	halt:
+  59 0138 FEE7     		b halt
+  60              			
+  61              			
+  62              	
+  63              	
+  64              	
+  65              	
+  66              	.include "stm32f303xDE.inc"
+   1              	@ BUSES
+   2              	APB1                = 0x40000000 
+   3              	APB2 				= 0x40010000
+   4              	AHB1 				= 0x40020000
+   5              	AHB2 				= 0x48000000
+   6              	AHB3 				= 0x50000000
+   7              	AHB4_1				= 0x60000000
+   8              	AHB4_2				= 0x80000000
+   9              	AHB4_3				= 0xA0000000
+  10              	
+  11              	@ PERIPHERALS
+  12              	
+  13              	BOOT_CONFIG         = 0x00000000
+  14              	MAIN_FLASH	        = 0x08000000
+  15              	CCM_SRAM	        = 0x10000000
+  16              	SYS_MEM		        = 0x1FFFD800
+  17              	OPTION		        = 0x1FFFF800
+  18              	SRAM 		        = 0x20000000
+  19              	
+  20              	TIM2		        = APB1 + 0x0000
+  21              	TIM3		        = APB1 + 0x0400
+  22              	TIM4		        = APB1 + 0x0800
+  23              	TIM6		        = APB1 + 0x1000
+  24              	TIM7		        = APB1 + 0x1400
+  25              	RTC			        = APB1 + 0x2800
+  26              	WWDG		        = APB1 + 0x2C00
+  27              	IWDG		        = APB1 + 0x3000
+  28              	I2S2EXT		        = APB1 + 0x3400
+  29              	SPI2_I2S2	        = APB1 + 0x3800
+  30              	SPI3_I2S3	        = APB1 + 0x3C00
+  31              	I2S3EXT		        = APB1 + 0x4000
+  32              	USART2		        = APB1 + 0x4400
+  33              	USART3 		        = APB1 + 0x4800
+  34              	UART4		        = APB1 + 0x4C00
+  35              	UART5		        = APB1 + 0x5000
+  36              	I2C1		        = APB1 + 0x5400
+  37              	I2C2		        = APB1 + 0x5800
+  38              	USB 		        = APB1 + 0x5C00
+  39              	USB_SRAM            = APB1 + 0x6000
+  40              	BXCAN		        = APB1 + 0x6400
+  41              	PWR			        = APB1 + 0x7000
+  42              	DAC1		        = APB1 + 0x7400
+  43              	I2C3		        = APB1 + 0x7800
+  44              	
+ARM GAS  src/uart.asm 			page 3
+
+
+  45              	SYSCFG              =   APB2 + 0x4001
+  46              	COMP                =   APB2 + 0x4001
+  47              	OPAMP               =   APB2 + 0x4001
+  48              	EXTI				= APB2 + 0x0400
+  49              	TIM1				= APB2 + 0x2C00
+  50              	SPI1				= APB2 + 0x3000
+  51              	TIM8				= APB2 + 0x3400
+  52              	USART1				= APB2 + 0x3800
+  53              	SPI4				= APB2 + 0x3C00
+  54              	TIM15				= APB2 + 0x4000
+  55              	TIM16				= APB2 + 0x4400
+  56              	TIM17				= APB2 + 0x4800
+  57              	TIM20				= APB2 + 0x5000
+  58              	
+  59              	DMA1				= AHB1 + 0x0000
+  60              	DMA2				= AHB1 + 0x0400
+  61              	RCC 				= AHB1 + 0x1000
+  62              	FLASH   			= AHB1 + 0x2000
+  63              	CRC					= AHB1 + 0x3000
+  64              	TSC					= AHB1 + 0x4000
+  65              	
+  66              	GPIOA				= AHB2 + 0x0000
+  67              	GPIOB 				= AHB2 + 0x0400
+  68              	GPIOC				= AHB2 + 0x0800
+  69              	GPIOD				= AHB2 + 0x0C00
+  70              	GPIOE				= AHB2 + 0x1000
+  71              	GPIOF				= AHB2 + 0x1400
+  72              	GPIOG				= AHB2 + 0x1800
+  73              	GPIOH				= AHB2 + 0x1C00
+  74              	
+  75              	ADC1				= AHB3 + 0x0000
+  76              	ADC2				= AHB3 + 0x0000
+  77              	ADC3				= AHB3 + 0x0400
+  78              	ADC4				= AHB3 + 0x0400
+  79              	
+  80              	FMC_BANK1           = AHB4_1 + 0x0000
+  81              	FMC_BANK2   	    = AHB4_1 + 0x0000
+  82              	FMC_BANK3		    = AHB4_2 + 0x0400
+  83              	FMC_BANK4		    = AHB4_2 + 0x0400
+  84              	FMC 				= AHB4_3 + 0x0400
+  85              	
+  86              	@ GPIO REGISTERS
+  87              	
+  88              	GPIOA_MODER    = GPIOA + 0x0000
+  89              	GPIOA_OTYPER   = GPIOA + 0x0004
+  90              	GPIOA_OSPEEDR  = GPIOA + 0x0008
+  91              	GPIOA_PUPDR    = GPIOA + 0x000C
+  92              	GPIOA_IDR      = GPIOA + 0x0010
+  93              	GPIOA_ODR      = GPIOA + 0x0014
+  94              	GPIOA_BSRR     = GPIOA + 0x0018
+  95              	GPIOA_LCKR     = GPIOA + 0x001C
+  96              	GPIOA_AFRL     = GPIOA + 0x0020
+  97              	GPIOA_AFRH     = GPIOA + 0x0024
+  98              	GPIOA_BRR      = GPIOA + 0x0028
+  99              	
+ 100              	GPIOB_MODER    = GPIOB + 0x0000
+ 101              	GPIOB_OTYPER   = GPIOB + 0x0004
+ARM GAS  src/uart.asm 			page 4
+
+
+ 102              	GPIOB_OSPEEDR  = GPIOB + 0x0008
+ 103              	GPIOB_PUPDR    = GPIOB + 0x000C
+ 104              	GPIOB_IDR      = GPIOB + 0x0010
+ 105              	GPIOB_ODR      = GPIOB + 0x0014
+ 106              	GPIOB_BSRR     = GPIOB + 0x0018
+ 107              	GPIOB_LCKR     = GPIOB + 0x001C
+ 108              	GPIOB_AFRL     = GPIOB + 0x0020
+ 109              	GPIOB_AFRH     = GPIOB + 0x0024
+ 110              	GPIOB_BRR      = GPIOB + 0x0028
+ 111              	
+ 112              	GPIOC_MODER    = GPIOC + 0x0000
+ 113              	GPIOC_OTYPER   = GPIOC + 0x0004
+ 114              	GPIOC_OSPEEDR  = GPIOC + 0x0008
+ 115              	GPIOC_PUPDR    = GPIOC + 0x000C
+ 116              	GPIOC_IDR      = GPIOC + 0x0010
+ 117              	GPIOC_ODR      = GPIOC + 0x0014
+ 118              	GPIOC_BSRR     = GPIOC + 0x0018
+ 119              	GPIOC_LCKR     = GPIOC + 0x001C
+ 120              	GPIOC_AFRL     = GPIOC + 0x0020
+ 121              	GPIOC_AFRH     = GPIOC + 0x0024
+ 122              	GPIOC_BRR      = GPIOC + 0x0028
+ 123              	
+ 124              	GPIOD_MODER    = GPIOD + 0x0000
+ 125              	GPIOD_OTYPER   = GPIOD + 0x0004
+ 126              	GPIOD_OSPEEDR  = GPIOD + 0x0008
+ 127              	GPIOD_PUPDR    = GPIOD + 0x000C
+ 128              	GPIOD_IDR      = GPIOD + 0x0010
+ 129              	GPIOD_ODR      = GPIOD + 0x0014
+ 130              	GPIOD_BSRR     = GPIOD + 0x0018
+ 131              	GPIOD_LCKR     = GPIOD + 0x001C
+ 132              	GPIOD_AFRL     = GPIOD + 0x0020
+ 133              	GPIOD_AFRH     = GPIOD + 0x0024
+ 134              	GPIOD_BRR      = GPIOD + 0x0028
+ 135              	
+ 136              	GPIOE_MODER    = GPIOE + 0x0000
+ 137              	GPIOE_OTYPER   = GPIOE + 0x0004
+ 138              	GPIOE_OSPEEDR  = GPIOE + 0x0008
+ 139              	GPIOE_PUPDR    = GPIOE + 0x000C
+ 140              	GPIOE_IDR      = GPIOE + 0x0010
+ 141              	GPIOE_ODR      = GPIOE + 0x0014
+ 142              	GPIOE_BSRR     = GPIOE + 0x0018
+ 143              	GPIOE_LCKR     = GPIOE + 0x001C
+ 144              	GPIOE_AFRL     = GPIOE + 0x0020
+ 145              	GPIOE_AFRH     = GPIOE + 0x0024
+ 146              	GPIOE_BRR      = GPIOE + 0x0028
+ 147              	
+ 148              	GPIOF_MODER    = GPIOF + 0x0000
+ 149              	GPIOF_OTYPER   = GPIOF + 0x0004
+ 150              	GPIOF_OSPEEDR  = GPIOF + 0x0008
+ 151              	GPIOF_PUPDR    = GPIOF + 0x000C
+ 152              	GPIOF_IDR      = GPIOF + 0x0010
+ 153              	GPIOF_ODR      = GPIOF + 0x0014
+ 154              	GPIOF_BSRR     = GPIOF + 0x0018
+ 155              	GPIOF_LCKR     = GPIOF + 0x001C
+ 156              	GPIOF_AFRL     = GPIOF + 0x0020
+ 157              	GPIOF_AFRH     = GPIOF + 0x0024
+ 158              	GPIOF_BRR      = GPIOF + 0x0028
+ARM GAS  src/uart.asm 			page 5
+
+
+ 159              	
+ 160              	GPIOG_MODER    = GPIOG + 0x0000
+ 161              	GPIOG_OTYPER   = GPIOG + 0x0004
+ 162              	GPIOG_OSPEEDR  = GPIOG + 0x0008
+ 163              	GPIOG_PUPDR    = GPIOG + 0x000C
+ 164              	GPIOG_IDR      = GPIOG + 0x0010
+ 165              	GPIOG_ODR      = GPIOG + 0x0014
+ 166              	GPIOG_BSRR     = GPIOG + 0x0018
+ 167              	GPIOG_LCKR     = GPIOG + 0x001C
+ 168              	GPIOG_AFRL     = GPIOG + 0x0020
+ 169              	GPIOG_AFRH     = GPIOG + 0x0024
+ 170              	GPIOG_BRR      = GPIOG + 0x0028
+ 171              	
+ 172              	GPIOH_MODER    = GPIOH + 0x0000
+ 173              	GPIOH_OTYPER   = GPIOH + 0x0004
+ 174              	GPIOH_OSPEEDR  = GPIOH + 0x0008
+ 175              	GPIOH_PUPDR    = GPIOH + 0x000C
+ 176              	GPIOH_IDR      = GPIOH + 0x0010
+ 177              	GPIOH_ODR      = GPIOH + 0x0014
+ 178              	GPIOH_BSRR     = GPIOH + 0x0018
+ 179              	GPIOH_LCKR     = GPIOH + 0x001C
+ 180              	GPIOH_AFRL     = GPIOH + 0x0020
+ 181              	GPIOH_AFRH     = GPIOH + 0x0024
+ 182              	GPIOH_BRR      = GPIOH + 0x0028
+ 183              	
+ 184              	@ ADVANCED TIMER REGISTERS
+ 185              	
+ 186              	TIM1_CR1        =   TIM1 + 0x0000
+ 187              	TIM1_CR2        =   TIM1 + 0x0004
+ 188              	TIM1_SMCR       =   TIM1 + 0x0008
+ 189              	TIM1_DIER       =   TIM1 + 0x000C
+ 190              	TIM1_SR         =   TIM1 + 0x0010
+ 191              	TIM1_EGR        =   TIM1 + 0x0014
+ 192              	TIM1_CCMR1      =   TIM1 + 0x0018
+ 193              	TIM1_CCMR2      =   TIM1 + 0x001C
+ 194              	TIM1_CCER       =   TIM1 + 0x0020
+ 195              	TIM1_CNT        =   TIM1 + 0x0024
+ 196              	TIM1_PSC        =   TIM1 + 0x0028
+ 197              	TIM1_ARR        =   TIM1 + 0x002C
+ 198              	TIM1_RCR        =   TIM1 + 0x0030
+ 199              	TIM1_CCR1       =   TIM1 + 0x0034
+ 200              	TIM1_CCR2       =   TIM1 + 0x0038
+ 201              	TIM1_CCR3       =   TIM1 + 0x003C
+ 202              	TIM1_CCR4       =   TIM1 + 0x0040
+ 203              	TIM1_BDTR       =   TIM1 + 0x0044
+ 204              	TIM1_DCR        =   TIM1 + 0x0048
+ 205              	TIM1_DMAR       =   TIM1 + 0x004C
+ 206              	TIM1_OR         =   TIM1 + 0x0050
+ 207              	TIM1_CCMR3      =   TIM1 + 0x0054
+ 208              	TIM1_CCR5       =   TIM1 + 0x0058
+ 209              	TIM1_CCR6       =   TIM1 + 0x005C
+ 210              	
+ 211              	TIM8_CR1        =   TIM8 + 0x0000
+ 212              	TIM8_CR2        =   TIM8 + 0x0004
+ 213              	TIM8_SMCR       =   TIM8 + 0x0008
+ 214              	TIM8_DIER       =   TIM8 + 0x000C
+ 215              	TIM8_SR         =   TIM8 + 0x0010
+ARM GAS  src/uart.asm 			page 6
+
+
+ 216              	TIM8_EGR        =   TIM8 + 0x0014
+ 217              	TIM8_CCMR1      =   TIM8 + 0x0018
+ 218              	TIM8_CCMR2      =   TIM8 + 0x001C
+ 219              	TIM8_CCER       =   TIM8 + 0x0020
+ 220              	TIM8_CNT        =   TIM8 + 0x0024
+ 221              	TIM8_PSC        =   TIM8 + 0x0028
+ 222              	TIM8_ARR        =   TIM8 + 0x002C
+ 223              	TIM8_RCR        =   TIM8 + 0x0030
+ 224              	TIM8_CCR1       =   TIM8 + 0x0034
+ 225              	TIM8_CCR2       =   TIM8 + 0x0038
+ 226              	TIM8_CCR3       =   TIM8 + 0x003C
+ 227              	TIM8_CCR4       =   TIM8 + 0x0040
+ 228              	TIM8_BDTR       =   TIM8 + 0x0044
+ 229              	TIM8_DCR        =   TIM8 + 0x0048
+ 230              	TIM8_DMAR       =   TIM8 + 0x004C
+ 231              	TIM8_OR         =   TIM8 + 0x0050
+ 232              	TIM8_CCMR3      =   TIM8 + 0x0054
+ 233              	TIM8_CCR5       =   TIM8 + 0x0058
+ 234              	TIM8_CCR6       =   TIM8 + 0x005C
+ 235              	
+ 236              	TIM20_CR1        =   TIM20 + 0x0000
+ 237              	TIM20_CR2        =   TIM20 + 0x0004
+ 238              	TIM20_SMCR       =   TIM20 + 0x0008
+ 239              	TIM20_DIER       =   TIM20 + 0x000C
+ 240              	TIM20_SR         =   TIM20 + 0x0010
+ 241              	TIM20_EGR        =   TIM20 + 0x0014
+ 242              	TIM20_CCMR1      =   TIM20 + 0x0018
+ 243              	TIM20_CCMR2      =   TIM20 + 0x001C
+ 244              	TIM20_CCER       =   TIM20 + 0x0020
+ 245              	TIM20_CNT        =   TIM20 + 0x0024
+ 246              	TIM20_PSC        =   TIM20 + 0x0028
+ 247              	TIM20_ARR        =   TIM20 + 0x002C
+ 248              	TIM20_RCR        =   TIM20 + 0x0030
+ 249              	TIM20_CCR1       =   TIM20 + 0x0034
+ 250              	TIM20_CCR2       =   TIM20 + 0x0038
+ 251              	TIM20_CCR3       =   TIM20 + 0x003C
+ 252              	TIM20_CCR4       =   TIM20 + 0x0040
+ 253              	TIM20_BDTR       =   TIM20 + 0x0044
+ 254              	TIM20_DCR        =   TIM20 + 0x0048
+ 255              	TIM20_DMAR       =   TIM20 + 0x004C
+ 256              	TIM20_OR         =   TIM20 + 0x0050
+ 257              	TIM20_CCMR3      =   TIM20 + 0x0054
+ 258              	TIM20_CCR5       =   TIM20 + 0x0058
+ 259              	TIM20_CCR6       =   TIM20 + 0x005C
+ 260              	
+ 261              	@ GENERAL PURPOSE TIMER REGISTERS
+ 262              	
+ 263              	TIM2_CR1        =   TIM2 + 0x0000
+ 264              	TIM2_CR2        =   TIM2 + 0x0004
+ 265              	TIM2_SMCR       =   TIM2 + 0x0008
+ 266              	TIM2_DIER       =   TIM2 + 0x000C
+ 267              	TIM2_SR         =   TIM2 + 0x0010
+ 268              	TIM2_EGR        =   TIM2 + 0x0014
+ 269              	TIM2_CCMR1      =   TIM2 + 0x0018
+ 270              	TIM2_CCMR2      =   TIM2 + 0x001C
+ 271              	TIM2_CCER       =   TIM2 + 0x0020
+ 272              	TIM2_CNT        =   TIM2 + 0x0024
+ARM GAS  src/uart.asm 			page 7
+
+
+ 273              	TIM2_PSC        =   TIM2 + 0x0028
+ 274              	TIM2_ARR        =   TIM2 + 0x002C
+ 275              	TIM2_RCR        =   TIM2 + 0x0030
+ 276              	TIM2_CCR1       =   TIM2 + 0x0034
+ 277              	TIM2_CCR2       =   TIM2 + 0x0038
+ 278              	TIM2_CCR3       =   TIM2 + 0x003C
+ 279              	TIM2_CCR4       =   TIM2 + 0x0040
+ 280              	TIM2_DCR        =   TIM2 + 0x0048
+ 281              	TIM2_DMAR       =   TIM2 + 0x004C
+ 282              	
+ 283              	TIM3_CR1        =   TIM3 + 0x0000
+ 284              	TIM3_CR2        =   TIM3 + 0x0004
+ 285              	TIM3_SMCR       =   TIM3 + 0x0008
+ 286              	TIM3_DIER       =   TIM3 + 0x000C
+ 287              	TIM3_SR         =   TIM3 + 0x0010
+ 288              	TIM3_EGR        =   TIM3 + 0x0014
+ 289              	TIM3_CCMR1      =   TIM3 + 0x0018
+ 290              	TIM3_CCMR2      =   TIM3 + 0x001C
+ 291              	TIM3_CCER       =   TIM3 + 0x0020
+ 292              	TIM3_CNT        =   TIM3 + 0x0024
+ 293              	TIM3_PSC        =   TIM3 + 0x0028
+ 294              	TIM3_ARR        =   TIM3 + 0x002C
+ 295              	TIM3_RCR        =   TIM3 + 0x0030
+ 296              	TIM3_CCR1       =   TIM3 + 0x0034
+ 297              	TIM3_CCR2       =   TIM3 + 0x0038
+ 298              	TIM3_CCR3       =   TIM3 + 0x003C
+ 299              	TIM3_CCR4       =   TIM3 + 0x0040
+ 300              	TIM3_DCR        =   TIM3 + 0x0048
+ 301              	TIM3_DMAR       =   TIM3 + 0x004C
+ 302              	
+ 303              	TIM4_CR1        =   TIM4 + 0x0000
+ 304              	TIM4_CR2        =   TIM4 + 0x0004
+ 305              	TIM4_SMCR       =   TIM4 + 0x0008
+ 306              	TIM4_DIER       =   TIM4 + 0x000C
+ 307              	TIM4_SR         =   TIM4 + 0x0010
+ 308              	TIM4_EGR        =   TIM4 + 0x0014
+ 309              	TIM4_CCMR1      =   TIM4 + 0x0018
+ 310              	TIM4_CCMR2      =   TIM4 + 0x001C
+ 311              	TIM4_CCER       =   TIM4 + 0x0020
+ 312              	TIM4_CNT        =   TIM4 + 0x0024
+ 313              	TIM4_PSC        =   TIM4 + 0x0028
+ 314              	TIM4_ARR        =   TIM4 + 0x002C
+ 315              	TIM4_RCR        =   TIM4 + 0x0030
+ 316              	TIM4_CCR1       =   TIM4 + 0x0034
+ 317              	TIM4_CCR2       =   TIM4 + 0x0038
+ 318              	TIM4_CCR3       =   TIM4 + 0x003C
+ 319              	TIM4_CCR4       =   TIM4 + 0x0040
+ 320              	TIM4_DCR        =   TIM4 + 0x0048
+ 321              	TIM4_DMAR       =   TIM4 + 0x004C
+ 322              	
+ 323              	@ BASIC TIMER REGISTERS
+ 324              	
+ 325              	TIM6_CR1        =   TIM6 + 0x0000
+ 326              	TIM6_CR2        =   TIM6 + 0x0004
+ 327              	TIM6_DIER       =   TIM6 + 0x000C
+ 328              	TIM6_SR         =   TIM6 + 0x0010
+ 329              	TIM6_EGR        =   TIM6 + 0x0014
+ARM GAS  src/uart.asm 			page 8
+
+
+ 330              	TIM6_CNT        =   TIM6 + 0x0024
+ 331              	TIM6_PSC        =   TIM6 + 0x0028
+ 332              	TIM6_ARR        =   TIM6 + 0x002C
+ 333              	
+ 334              	TIM7_CR1        =   TIM7 + 0x0000
+ 335              	TIM7_CR2        =   TIM7 + 0x0004
+ 336              	TIM7_DIER       =   TIM7 + 0x000C
+ 337              	TIM7_SR         =   TIM7 + 0x0010
+ 338              	TIM7_EGR        =   TIM7 + 0x0014
+ 339              	TIM7_CNT        =   TIM7 + 0x0024
+ 340              	TIM7_PSC        =   TIM7 + 0x0028
+ 341              	TIM7_ARR        =   TIM7 + 0x002C
+ 342              	
+ 343              	@ GENERAL PURPOSE TIMER REGISTERS
+ 344              	
+ 345              	TIM15_CR1        =   TIM15 + 0x0000
+ 346              	TIM15_CR2        =   TIM15 + 0x0004
+ 347              	TIM15_SMCR       =   TIM15 + 0x0008
+ 348              	TIM15_DIER       =   TIM15 + 0x000C
+ 349              	TIM15_SR         =   TIM15 + 0x0010
+ 350              	TIM15_EGR        =   TIM15 + 0x0014
+ 351              	TIM15_CCMR1      =   TIM15 + 0x0018
+ 352              	TIM15_CCER       =   TIM15 + 0x0020
+ 353              	TIM15_CNT        =   TIM15 + 0x0024
+ 354              	TIM15_PSC        =   TIM15 + 0x0028
+ 355              	TIM15_ARR        =   TIM15 + 0x002C
+ 356              	TIM15_RCR        =   TIM15 + 0x0030
+ 357              	TIM15_CCR1       =   TIM15 + 0x0034
+ 358              	TIM15_CCR2       =   TIM15 + 0x0038
+ 359              	TIM15_BDTR       =   TIM15 + 0x0044
+ 360              	TIM15_DCR        =   TIM15 + 0x0048
+ 361              	TIM15_DMAR       =   TIM15 + 0x004C
+ 362              	
+ 363              	TIM16_CR1        =   TIM16 + 0x0000
+ 364              	TIM16_CR2        =   TIM16 + 0x0004
+ 365              	TIM16_DIER       =   TIM16 + 0x000C
+ 366              	TIM16_SR         =   TIM16 + 0x0010
+ 367              	TIM16_EGR        =   TIM16 + 0x0014
+ 368              	TIM16_CCMR1      =   TIM16 + 0x0018
+ 369              	TIM16_CCER       =   TIM16 + 0x0020
+ 370              	TIM16_CNT        =   TIM16 + 0x0024
+ 371              	TIM16_PSC        =   TIM16 + 0x0028
+ 372              	TIM16_ARR        =   TIM16 + 0x002C
+ 373              	TIM16_RCR        =   TIM16 + 0x0030
+ 374              	TIM16_CCR1       =   TIM16 + 0x0034
+ 375              	TIM16_BDTR       =   TIM16 + 0x0044
+ 376              	TIM16_DCR        =   TIM16 + 0x0048
+ 377              	TIM16_DMAR       =   TIM16 + 0x004C
+ 378              	TIM16_OR         =   TIM16 + 0x0050
+ 379              	
+ 380              	TIM17_CR1        =   TIM17 + 0x0000
+ 381              	TIM17_CR2        =   TIM17 + 0x0004
+ 382              	TIM17_DIER       =   TIM17 + 0x000C
+ 383              	TIM17_SR         =   TIM17 + 0x0010
+ 384              	TIM17_EGR        =   TIM17 + 0x0014
+ 385              	TIM17_CCMR1      =   TIM17 + 0x0018
+ 386              	TIM17_CCER       =   TIM17 + 0x0020
+ARM GAS  src/uart.asm 			page 9
+
+
+ 387              	TIM17_CNT        =   TIM17 + 0x0024
+ 388              	TIM17_PSC        =   TIM17 + 0x0028
+ 389              	TIM17_ARR        =   TIM17 + 0x002C
+ 390              	TIM17_RCR        =   TIM17 + 0x0030
+ 391              	TIM17_CCR1       =   TIM17 + 0x0034
+ 392              	TIM17_BDTR       =   TIM17 + 0x0044
+ 393              	TIM17_DCR        =   TIM17 + 0x0048
+ 394              	TIM17_DMAR       =   TIM17 + 0x004C
+ 395              	TIM17_OR         =   TIM17 + 0x0050
+ 396              	
+ 397              	@ MASTER ADC REGISTERS
+ 398              	
+ 399              	ADC1_ISR        =   ADC1 + 0x0000
+ 400              	ADC1_IER        =   ADC1 + 0x0004
+ 401              	ADC1_CR         =   ADC1 + 0x0008
+ 402              	ADC1_CFGR       =   ADC1 + 0x000C
+ 403              	ADC1_SMPR1      =   ADC1 + 0x0014
+ 404              	ADC1_SMPR2      =   ADC1 + 0x0018
+ 405              	ADC1_TR1        =   ADC1 + 0x0020
+ 406              	ADC1_TR2        =   ADC1 + 0x0024
+ 407              	ADC1_TR3        =   ADC1 + 0x0028
+ 408              	ADC1_SQR1       =   ADC1 + 0x0030
+ 409              	ADC1_SQR2       =   ADC1 + 0x0034
+ 410              	ADC1_SQR3       =   ADC1 + 0x0038
+ 411              	ADC1_SQR4       =   ADC1 + 0x003C
+ 412              	ADC1_DR         =   ADC1 + 0x0040
+ 413              	ADC1_JSQR       =   ADC1 + 0x004C
+ 414              	ADC1_OFR1       =   ADC1 + 0x0060
+ 415              	ADC1_OFR2       =   ADC1 + 0x0064
+ 416              	ADC1_OFR3       =   ADC1 + 0x0068
+ 417              	ADC1_OFR4       =   ADC1 + 0x006C
+ 418              	ADC1_JDR1       =   ADC1 + 0x0080
+ 419              	ADC1_JDR2       =   ADC1 + 0x0084
+ 420              	ADC1_JDR3       =   ADC1 + 0x0088
+ 421              	ADC1_JDR4       =   ADC1 + 0x008C
+ 422              	ADC1_AWD2CR     =   ADC1 + 0x00A0
+ 423              	ADC1_AWD3CR     =   ADC1 + 0x00A4
+ 424              	ADC1_DIFSEL     =   ADC1 + 0x00B0
+ 425              	ADC1_CALFACT    =   ADC1 + 0x00B4
+ 426              	ADC1_CSR        =   ADC1 + 0x0300
+ 427              	ADC1_CCR        =   ADC1 + 0x0308
+ 428              	ADC1_CDR        =   ADC1 + 0x030C
+ 429              	
+ 430              	ADC3_ISR        =   ADC3 + 0x0000
+ 431              	ADC3_IER        =   ADC3 + 0x0004
+ 432              	ADC3_CR         =   ADC3 + 0x0008
+ 433              	ADC3_CFGR       =   ADC3 + 0x000C
+ 434              	ADC3_SMPR1      =   ADC3 + 0x0014
+ 435              	ADC3_SMPR2      =   ADC3 + 0x0018
+ 436              	ADC3_TR1        =   ADC3 + 0x0020
+ 437              	ADC3_TR2        =   ADC3 + 0x0024
+ 438              	ADC3_TR3        =   ADC3 + 0x0028
+ 439              	ADC3_SQR1       =   ADC3 + 0x0030
+ 440              	ADC3_SQR2       =   ADC3 + 0x0034
+ 441              	ADC3_SQR3       =   ADC3 + 0x0038
+ 442              	ADC3_SQR4       =   ADC3 + 0x003C
+ 443              	ADC3_DR         =   ADC3 + 0x0040
+ARM GAS  src/uart.asm 			page 10
+
+
+ 444              	ADC3_JSQR       =   ADC3 + 0x004C
+ 445              	ADC3_OFR1       =   ADC3 + 0x0060
+ 446              	ADC3_OFR2       =   ADC3 + 0x0064
+ 447              	ADC3_OFR3       =   ADC3 + 0x0068
+ 448              	ADC3_OFR4       =   ADC3 + 0x006C
+ 449              	ADC3_JDR1       =   ADC3 + 0x0080
+ 450              	ADC3_JDR2       =   ADC3 + 0x0084
+ 451              	ADC3_JDR3       =   ADC3 + 0x0088
+ 452              	ADC3_JDR4       =   ADC3 + 0x008C
+ 453              	ADC3_AWD2CR     =   ADC3 + 0x00A0
+ 454              	ADC3_AWD3CR     =   ADC3 + 0x00A4
+ 455              	ADC3_DIFSEL     =   ADC3 + 0x00B0
+ 456              	ADC3_CALFACT    =   ADC3 + 0x00B4
+ 457              	ADC3_CSR        =   ADC3 + 0x0300
+ 458              	ADC3_CCR        =   ADC3 + 0x0308
+ 459              	ADC3_CDR        =   ADC3 + 0x030C
+ 460              	
+ 461              	@ SLAVE ADC REGISTERS
+ 462              	
+ 463              	ADC2_ISR        =   ADC2 + 0x0100
+ 464              	ADC2_IER        =   ADC2 + 0x0104
+ 465              	ADC2_CR         =   ADC2 + 0x0108
+ 466              	ADC2_CFGR       =   ADC2 + 0x010C
+ 467              	ADC2_SMPR1      =   ADC2 + 0x0114
+ 468              	ADC2_SMPR2      =   ADC2 + 0x0118
+ 469              	ADC2_TR1        =   ADC2 + 0x0120
+ 470              	ADC2_TR2        =   ADC2 + 0x0124
+ 471              	ADC2_TR3        =   ADC2 + 0x0128
+ 472              	ADC2_SQR1       =   ADC2 + 0x0130
+ 473              	ADC2_SQR2       =   ADC2 + 0x0134
+ 474              	ADC2_SQR3       =   ADC2 + 0x0138
+ 475              	ADC2_SQR4       =   ADC2 + 0x013C
+ 476              	ADC2_DR         =   ADC2 + 0x0140
+ 477              	ADC2_JSQR       =   ADC2 + 0x014C
+ 478              	ADC2_OFR1       =   ADC2 + 0x0160
+ 479              	ADC2_OFR2       =   ADC2 + 0x0164
+ 480              	ADC2_OFR3       =   ADC2 + 0x0168
+ 481              	ADC2_OFR4       =   ADC2 + 0x016C
+ 482              	ADC2_JDR1       =   ADC2 + 0x0180
+ 483              	ADC2_JDR2       =   ADC2 + 0x0184
+ 484              	ADC2_JDR3       =   ADC2 + 0x0188
+ 485              	ADC2_JDR4       =   ADC2 + 0x018C
+ 486              	ADC2_AWD2CR     =   ADC2 + 0x01A0
+ 487              	ADC2_AWD3CR     =   ADC2 + 0x01A4
+ 488              	ADC2_DIFSEL     =   ADC2 + 0x01B0
+ 489              	ADC2_CALFACT    =   ADC2 + 0x01B4
+ 490              	ADC2_CSR        =   ADC2 + 0x0300
+ 491              	ADC2_CCR        =   ADC2 + 0x0308
+ 492              	ADC2_CDR        =   ADC2 + 0x030C
+ 493              	
+ 494              	ADC4_ISR        =   ADC4 + 0x0100
+ 495              	ADC4_IER        =   ADC4 + 0x0104
+ 496              	ADC4_CR         =   ADC4 + 0x0108
+ 497              	ADC4_CFGR       =   ADC4 + 0x010C
+ 498              	ADC4_SMPR1      =   ADC4 + 0x0114
+ 499              	ADC4_SMPR2      =   ADC4 + 0x0118
+ 500              	ADC4_TR1        =   ADC4 + 0x0120
+ARM GAS  src/uart.asm 			page 11
+
+
+ 501              	ADC4_TR2        =   ADC4 + 0x0124
+ 502              	ADC4_TR3        =   ADC4 + 0x0128
+ 503              	ADC4_SQR1       =   ADC4 + 0x0130
+ 504              	ADC4_SQR2       =   ADC4 + 0x0134
+ 505              	ADC4_SQR3       =   ADC4 + 0x0138
+ 506              	ADC4_SQR4       =   ADC4 + 0x013C
+ 507              	ADC4_DR         =   ADC4 + 0x0140
+ 508              	ADC4_JSQR       =   ADC4 + 0x014C
+ 509              	ADC4_OFR1       =   ADC4 + 0x0160
+ 510              	ADC4_OFR2       =   ADC4 + 0x0164
+ 511              	ADC4_OFR3       =   ADC4 + 0x0168
+ 512              	ADC4_OFR4       =   ADC4 + 0x016C
+ 513              	ADC4_JDR1       =   ADC4 + 0x0180
+ 514              	ADC4_JDR2       =   ADC4 + 0x0184
+ 515              	ADC4_JDR3       =   ADC4 + 0x0188
+ 516              	ADC4_JDR4       =   ADC4 + 0x018C
+ 517              	ADC4_AWD2CR     =   ADC4 + 0x01A0
+ 518              	ADC4_AWD3CR     =   ADC4 + 0x01A4
+ 519              	ADC4_DIFSEL     =   ADC4 + 0x01B0
+ 520              	ADC4_CALFACT    =   ADC4 + 0x01B4
+ 521              	ADC4_CSR        =   ADC4 + 0x0300
+ 522              	ADC4_CCR        =   ADC4 + 0x0308
+ 523              	ADC4_CDR        =   ADC4 + 0x030C
+ 524              	
+ 525              	@ TSC REGISTERS
+ 526              	
+ 527              	TSC_CR          =   TSC + 0x0000
+ 528              	TSC_IER         =   TSC + 0x0004
+ 529              	TSC_ICR         =   TSC + 0x0008
+ 530              	TSC_ISR         =   TSC + 0x000C
+ 531              	TSC_IOHCR       =   TSC + 0x0010
+ 532              	TSC_IOASCR      =   TSC + 0x0018
+ 533              	TSC_IOSCR       =   TSC + 0x0020
+ 534              	TSC_IOCCR       =   TSC + 0x0028
+ 535              	TSC_IOGCSR      =   TSC + 0x0030
+ 536              	TSC_IOG1CR      =   TSC + 0x0034
+ 537              	TSC_IOG2CR      =   TSC + 0x0038
+ 538              	TSC_IOG3CR      =   TSC + 0x003C
+ 539              	TSC_IOG4CR      =   TSC + 0x0040
+ 540              	TSC_IOG5CR      =   TSC + 0x0044
+ 541              	TSC_IOG6CR      =   TSC + 0x0048
+ 542              	TSC_IOG7CR      =   TSC + 0x004C
+ 543              	TSC_IOG8CR      =   TSC + 0x0050
+ 544              	
+ 545              	@ CRC REGISTERS
+ 546              	
+ 547              	CRC_DR          =   CRC + 0x0000
+ 548              	CRC_IDR         =   CRC + 0x0004
+ 549              	CRC_CR          =   CRC + 0x0008
+ 550              	CRC_INIT        =   CRC + 0x0010
+ 551              	CRC_POL         =   CRC + 0x0014
+ 552              	
+ 553              	@ FLASH INTERFACE REGISTERS
+ 554              	
+ 555              	FLASH_ACR       =   FLASH + 0x0000
+ 556              	FLASH_KEYR      =   FLASH + 0x0004
+ 557              	FLASH_OPTKEYR   =   FLASH + 0x0008
+ARM GAS  src/uart.asm 			page 12
+
+
+ 558              	FLASH_SR        =   FLASH + 0x000C
+ 559              	FLASH_CR        =   FLASH + 0x0010
+ 560              	FLASH_AR        =   FLASH + 0x0014
+ 561              	FLASH_OBR       =   FLASH + 0x001C
+ 562              	FLASH_WRPR      =   FLASH + 0x0020
+ 563              	
+ 564              	@ RCC REGISTERS
+ 565              	
+ 566              	RCC_CR          =   RCC + 0x0000
+ 567              	RCC_CFGR        =   RCC + 0x0004
+ 568              	RCC_CIR         =   RCC + 0x0008
+ 569              	RCC_APB2RSTR    =   RCC + 0x000C
+ 570              	RCC_APB1RSTR    =   RCC + 0x0010
+ 571              	RCC_AHBENR      =   RCC + 0x0014
+ 572              	RCC_APB2ENR     =   RCC + 0x0018
+ 573              	RCC_APB1ENR     =   RCC + 0x001C
+ 574              	RCC_BDCR        =   RCC + 0x0020
+ 575              	RCC_CSR         =   RCC + 0x0024
+ 576              	RCC_AHBRSTR     =   RCC + 0x0028
+ 577              	RCC_CFGR2       =   RCC + 0x002C
+ 578              	RCC_CFGR3       =   RCC + 0x0030
+ 579              	
+ 580              	@ DMA REGISTERS
+ 581              	
+ 582              	DMA1_ISR        =   DMA1 + 0x0000
+ 583              	DMA1_IFCR       =   DMA1 + 0x0004
+ 584              	DMA1_CCR1       =   DMA1 + 0x0008
+ 585              	DMA1_CNDTR1     =   DMA1 + 0x000C
+ 586              	DMA1_CPAR1      =   DMA1 + 0x0010
+ 587              	DMA1_CMAR1      =   DMA1 + 0x0014
+ 588              	DMA1_CCR2       =   DMA1 + 0x001C
+ 589              	DMA1_CNDTR2     =   DMA1 + 0x0020
+ 590              	DMA1_CPAR2      =   DMA1 + 0x0024
+ 591              	DMA1_CMAR2      =   DMA1 + 0x0028
+ 592              	DMA1_CCR3       =   DMA1 + 0x0030
+ 593              	DMA1_CNDTR3     =   DMA1 + 0x0034
+ 594              	DMA1_CPAR3      =   DMA1 + 0x0038
+ 595              	DMA1_CMAR3      =   DMA1 + 0x003C
+ 596              	DMA1_CCR4       =   DMA1 + 0x0044
+ 597              	DMA1_CNDTR4     =   DMA1 + 0x0048
+ 598              	DMA1_CPAR4      =   DMA1 + 0x004C
+ 599              	DMA1_CMAR4      =   DMA1 + 0x0050
+ 600              	DMA1_CCR5       =   DMA1 + 0x0058
+ 601              	DMA1_CNDTR5     =   DMA1 + 0x005C
+ 602              	DMA1_CPAR5      =   DMA1 + 0x0060
+ 603              	DMA1_CMAR5      =   DMA1 + 0x0064
+ 604              	DMA1_CCR6       =   DMA1 + 0x006C
+ 605              	DMA1_CNDTR6     =   DMA1 + 0x0070
+ 606              	DMA1_CPAR6      =   DMA1 + 0x0074
+ 607              	DMA1_CMAR6      =   DMA1 + 0x0078
+ 608              	DMA1_CCR7       =   DMA1 + 0x0080
+ 609              	DMA1_CNDTR7     =   DMA1 + 0x0084
+ 610              	DMA1_CPAR7      =   DMA1 + 0x0088
+ 611              	DMA1_CMAR7      =   DMA1 + 0x008C
+ 612              	
+ 613              	@ DMA2 ONLY HAS 5 CHANNELS
+ 614              	
+ARM GAS  src/uart.asm 			page 13
+
+
+ 615              	DMA2_ISR        =   DMA2 + 0x0000
+ 616              	DMA2_IFCR       =   DMA2 + 0x0004
+ 617              	DMA2_CCR1       =   DMA2 + 0x0008
+ 618              	DMA2_CNDTR1     =   DMA2 + 0x000C
+ 619              	DMA2_CPAR1      =   DMA2 + 0x0010
+ 620              	DMA2_CMAR1      =   DMA2 + 0x0014
+ 621              	DMA2_CCR2       =   DMA2 + 0x001C
+ 622              	DMA2_CNDTR2     =   DMA2 + 0x0020
+ 623              	DMA2_CPAR2      =   DMA2 + 0x0024
+ 624              	DMA2_CMAR2      =   DMA2 + 0x0028
+ 625              	DMA2_CCR3       =   DMA2 + 0x0030
+ 626              	DMA2_CNDTR3     =   DMA2 + 0x0034
+ 627              	DMA2_CPAR3      =   DMA2 + 0x0038
+ 628              	DMA2_CMAR3      =   DMA2 + 0x003C
+ 629              	DMA2_CCR4       =   DMA2 + 0x0044
+ 630              	DMA2_CNDTR4     =   DMA2 + 0x0048
+ 631              	DMA2_CPAR4      =   DMA2 + 0x004C
+ 632              	DMA2_CMAR4      =   DMA2 + 0x0050
+ 633              	DMA2_CCR5       =   DMA2 + 0x0058
+ 634              	DMA2_CNDTR5     =   DMA2 + 0x005C
+ 635              	DMA2_CPAR5      =   DMA2 + 0x0060
+ 636              	DMA2_CMAR5      =   DMA2 + 0x0064
+ 637              	
+ 638              	@ USART/UART REGISTERS
+ 639              	
+ 640              	USART1_CR1      =   USART1 + 0x0000
+ 641              	USART1_CR2      =   USART1 + 0x0004
+ 642              	USART1_CR3      =   USART1 + 0x0008
+ 643              	USART1_BRR      =   USART1 + 0x000C
+ 644              	USART1_GTPR     =   USART1 + 0x0010
+ 645              	USART1_RTOR     =   USART1 + 0x0014
+ 646              	USART1_RQR      =   USART1 + 0x0018
+ 647              	USART1_ISR      =   USART1 + 0x001C
+ 648              	USART1_ICR      =   USART1 + 0x0020
+ 649              	USART1_RDR      =   USART1 + 0x0024
+ 650              	USART1_TDR      =   USART1 + 0x0028
+ 651              	
+ 652              	USART2_CR1      =   USART2 + 0x0000
+ 653              	USART2_CR2      =   USART2 + 0x0004
+ 654              	USART2_CR3      =   USART2 + 0x0008
+ 655              	USART2_BRR      =   USART2 + 0x000C
+ 656              	USART2_GTPR     =   USART2 + 0x0010
+ 657              	USART2_RTOR     =   USART2 + 0x0014
+ 658              	USART2_RQR      =   USART2 + 0x0018
+ 659              	USART2_ISR      =   USART2 + 0x001C
+ 660              	USART2_ICR      =   USART2 + 0x0020
+ 661              	USART2_RDR      =   USART2 + 0x0024
+ 662              	USART2_TDR      =   USART2 + 0x0028
+ 663              	
+ 664              	USART3_CR1      =   USART3 + 0x0000
+ 665              	USART3_CR2      =   USART3 + 0x0004
+ 666              	USART3_CR3      =   USART3 + 0x0008
+ 667              	USART3_BRR      =   USART3 + 0x000C
+ 668              	USART3_GTPR     =   USART3 + 0x0010
+ 669              	USART3_RTOR     =   USART3 + 0x0014
+ 670              	USART3_RQR      =   USART3 + 0x0018
+ 671              	USART3_ISR      =   USART3 + 0x001C
+ARM GAS  src/uart.asm 			page 14
+
+
+ 672              	USART3_ICR      =   USART3 + 0x0020
+ 673              	USART3_RDR      =   USART3 + 0x0024
+ 674              	USART3_TDR      =   USART3 + 0x0028
+ 675              	
+ 676              	UART4_CR1      =   UART4 + 0x0000
+ 677              	UART4_CR2      =   UART4 + 0x0004
+ 678              	UART4_CR3      =   UART4 + 0x0008
+ 679              	UART4_BRR      =   UART4 + 0x000C
+ 680              	UART4_GTPR     =   UART4 + 0x0010
+ 681              	UART4_RTOR     =   UART4 + 0x0014
+ 682              	UART4_RQR      =   UART4 + 0x0018
+ 683              	UART4_ISR      =   UART4 + 0x001C
+ 684              	UART4_ICR      =   UART4 + 0x0020
+ 685              	UART4_RDR      =   UART4 + 0x0024
+ 686              	UART4_TDR      =   UART4 + 0x0028
+ 687              	
+ 688              	UART5_CR1      =   UART5 + 0x0000
+ 689              	UART5_CR2      =   UART5 + 0x0004
+ 690              	UART5_CR3      =   UART5 + 0x0008
+ 691              	UART5_BRR      =   UART5 + 0x000C
+ 692              	UART5_GTPR     =   UART5 + 0x0010
+ 693              	UART5_RTOR     =   UART5 + 0x0014
+ 694              	UART5_RQR      =   UART5 + 0x0018
+ 695              	UART5_ISR      =   UART5 + 0x001C
+ 696              	UART5_ICR      =   UART5 + 0x0020
+ 697              	UART5_RDR      =   UART5 + 0x0024
+ 698              	UART5_TDR      =   UART5 + 0x0028
+ 699              	
+ 700              	@ SPI/I2S REGISTERS
+ 701              	
+ 702              	SPI1_CR1        =   SPI1 + 0x0000
+ 703              	SPI1_CR2        =   SPI1 + 0x0004
+ 704              	SPI1_SR         =   SPI1 + 0x0008
+ 705              	SPI1_DR         =   SPI1 + 0x000C
+ 706              	SPI1_CRCPR      =   SPI1 + 0x0010
+ 707              	SPI1_RXCRCR     =   SPI1 + 0x0014
+ 708              	SPI1_TXCRCR     =   SPI1 + 0x0018
+ 709              	SPI1_I2SCFGR    =   SPI1 + 0x001C
+ 710              	SPI1_I2SPR      =   SPI1 + 0x0020
+ 711              	
+ 712              	SPI2_I2S2_CR1        =   SPI2_I2S2 + 0x0000
+ 713              	SPI2_I2S2_CR2        =   SPI2_I2S2 + 0x0004
+ 714              	SPI2_I2S2_SR         =   SPI2_I2S2 + 0x0008
+ 715              	SPI2_I2S2_DR         =   SPI2_I2S2 + 0x000C
+ 716              	SPI2_I2S2_CRCPR      =   SPI2_I2S2 + 0x0010
+ 717              	SPI2_I2S2_RXCRCR     =   SPI2_I2S2 + 0x0014
+ 718              	SPI2_I2S2_TXCRCR     =   SPI2_I2S2 + 0x0018
+ 719              	SPI2_I2S2_I2SCFGR    =   SPI2_I2S2 + 0x001C
+ 720              	SPI2_I2S2_I2SPR      =   SPI2_I2S2 + 0x0020
+ 721              	
+ 722              	SPI3_I2S3_CR1        =   SPI3_I2S3 + 0x0000
+ 723              	SPI3_I2S3_CR2        =   SPI3_I2S3 + 0x0004
+ 724              	SPI3_I2S3_SR         =   SPI3_I2S3 + 0x0008
+ 725              	SPI3_I2S3_DR         =   SPI3_I2S3 + 0x000C
+ 726              	SPI3_I2S3_CRCPR      =   SPI3_I2S3 + 0x0010
+ 727              	SPI3_I2S3_RXCRCR     =   SPI3_I2S3 + 0x0014
+ 728              	SPI3_I2S3_TXCRCR     =   SPI3_I2S3 + 0x0018
+ARM GAS  src/uart.asm 			page 15
+
+
+ 729              	SPI3_I2S3_I2SCFGR    =   SPI3_I2S3 + 0x001C
+ 730              	SPI3_I2S3_I2SPR      =   SPI3_I2S3 + 0x0020
+ 731              	
+ 732              	SPI4_CR1        =   SPI4 + 0x0000
+ 733              	SPI4_CR2        =   SPI4 + 0x0004
+ 734              	SPI4_SR         =   SPI4 + 0x0008
+ 735              	SPI4_DR         =   SPI4 + 0x000C
+ 736              	SPI4_CRCPR      =   SPI4 + 0x0010
+ 737              	SPI4_RXCRCR     =   SPI4 + 0x0014
+ 738              	SPI4_TXCRCR     =   SPI4 + 0x0018
+ 739              	SPI4_I2SCFGR    =   SPI4 + 0x001C
+ 740              	SPI4_I2SPR      =   SPI4 + 0x0020
+ 741              	
+ 742              	@ FMC REGISTERS
+ 743              	
+ 744              	FMC_BCR1        =   FMC + 0x0000
+ 745              	FMC_BCR2        =   FMC + 0x0008
+ 746              	FMC_BCR3        =   FMC + 0x0010
+ 747              	FMC_BCR4        =   FMC + 0x0018
+ 748              	FMC_BTR1        =   FMC + 0x0004
+ 749              	FMC_BTR2        =   FMC + 0x000C
+ 750              	FMC_BTR3        =   FMC + 0x0014
+ 751              	FMC_BTR4        =   FMC + 0x001C
+ 752              	FMC_BWTR1       =   FMC + 0x0104
+ 753              	FMC_BWTR2       =   FMC + 0x010C
+ 754              	FMC_BWTR3       =   FMC + 0x0114
+ 755              	FMC_BWTR4       =   FMC + 0x011C
+ 756              	FMC_PCR2        =   FMC + 0x0060
+ 757              	FMC_PCR3        =   FMC + 0x0080
+ 758              	FMC_PCR4        =   FMC + 0x00A0
+ 759              	FMC_SR2         =   FMC + 0x0064
+ 760              	FMC_SR3         =   FMC + 0x0084
+ 761              	FMC_SR4         =   FMC + 0x00A4
+ 762              	FMC_PMEM2       =   FMC + 0x0068
+ 763              	FMC_PMEM3       =   FMC + 0x0088
+ 764              	FMC_PMEM4       =   FMC + 0x00A8
+ 765              	FMC_PATT2       =   FMC + 0x006C
+ 766              	FMC_PATT3       =   FMC + 0x008C
+ 767              	FMC_PATT4       =   FMC + 0x00AC
+ 768              	FMC_PIO4        =   FMC + 0x00B0
+ 769              	FMC_ECCR2       =   FMC + 0x0074
+ 770              	FMC_ECCR3       =   FMC + 0x0094
+ 771              	
+ 772              	@ EXTI REGISTERS
+ 773              	
+ 774              	EXTI_IMR1       =   EXTI + 0x0000
+ 775              	EXTI_EMR1       =   EXTI + 0x0004
+ 776              	EXTI_RTSR1      =   EXTI + 0x0008
+ 777              	EXTI_FTSR1      =   EXTI + 0x000C
+ 778              	EXTI_SWIER1     =   EXTI + 0x0010
+ 779              	EXTI_PR1        =   EXTI + 0x0014
+ 780              	EXTI_IMR2       =   EXTI + 0x0020
+ 781              	EXTI_EMR2       =   EXTI + 0x0024
+ 782              	EXTI_RTSR2      =   EXTI + 0x0028
+ 783              	EXTI_FTSR2      =   EXTI + 0x002C
+ 784              	EXTI_SWIER2     =   EXTI + 0x0030
+ 785              	EXTI_PR2        =   EXTI + 0x0034
+ARM GAS  src/uart.asm 			page 16
+
+
+ 786              	
+ 787              	@ SYSCFG REGISTERS
+ 788              	
+ 789              	SYSCFG_CFGR1    =   SYSCFG + 0x0000
+ 790              	SYSCFG_RCR      =   SYSCFG + 0x0004
+ 791              	SYSCFG_EXTICR1  =   SYSCFG + 0x0008
+ 792              	SYSCFG_EXTICR2  =   SYSCFG + 0x000C
+ 793              	SYSCFG_EXTICR3  =   SYSCFG + 0x0010
+ 794              	SYSCFG_EXTICR4  =   SYSCFG + 0x0014
+ 795              	SYSCFG_CFGR2    =   SYSCFG + 0x0018
+ 796              	SYSCFG_CFGR3    =   SYSCFG + 0x0050
+ 797              	SYSCFG_CFGR4    =   SYSCFG + 0x0048
+ 798              	
+ 799              	@ COMP REGISTERS
+ 800              	
+ 801              	COMP1_CSR       =   COMP + 0x001C
+ 802              	COMP2_CSR       =   COMP + 0x0020
+ 803              	COMP3_CSR       =   COMP + 0x0024
+ 804              	COMP4_CSR       =   COMP + 0x0028
+ 805              	COMP5_CSR       =   COMP + 0x002C
+ 806              	COMP6_CSR       =   COMP + 0x0030
+ 807              	COMP7_CSR       =   COMP + 0x0034
+ 808              	
+ 809              	@ OPAMP REGISTERS
+ 810              	
+ 811              	OPAMP1_CSR      =   OPAMP + 0x0038
+ 812              	OPAMP2_CSR      =   OPAMP + 0x003C
+ 813              	OPAMP3_CSR      =   OPAMP + 0x0040
+ 814              	OPAMP4_CSR      =   OPAMP + 0x0044
+ 815              	
+ 816              	@ I2C REGISTERS
+ 817              	
+ 818              	I2C1_CR1        =   I2C1 + 0x0000
+ 819              	I2C1_CR2        =   I2C1 + 0x0004
+ 820              	I2C1_OAR1       =   I2C1 + 0x0008
+ 821              	I2C1_OAR2       =   I2C1 + 0x000C
+ 822              	I2C1_TIMINGR    =   I2C1 + 0x0010
+ 823              	I2C1_TIMEOUTR   =   I2C1 + 0x0014
+ 824              	I2C1_ISR        =   I2C1 + 0x0018
+ 825              	I2C1_ICR        =   I2C1 + 0x001C
+ 826              	I2C1_PECR       =   I2C1 + 0x0020
+ 827              	I2C1_RXDR       =   I2C1 + 0x0024
+ 828              	I2C1_TXDR       =   I2C1 + 0x0028
+ 829              	
+ 830              	I2C2_CR1        =   I2C2 + 0x0000
+ 831              	I2C2_CR2        =   I2C2 + 0x0004
+ 832              	I2C2_OAR1       =   I2C2 + 0x0008
+ 833              	I2C2_OAR2       =   I2C2 + 0x000C
+ 834              	I2C2_TIMINGR    =   I2C2 + 0x0010
+ 835              	I2C2_TIMEOUTR   =   I2C2 + 0x0014
+ 836              	I2C2_ISR        =   I2C2 + 0x0018
+ 837              	I2C2_ICR        =   I2C2 + 0x001C
+ 838              	I2C2_PECR       =   I2C2 + 0x0020
+ 839              	I2C2_RXDR       =   I2C2 + 0x0024
+ 840              	I2C2_TXDR       =   I2C2 + 0x0028
+ 841              	
+ 842              	I2C3_CR1        =   I2C3 + 0x0000
+ARM GAS  src/uart.asm 			page 17
+
+
+ 843              	I2C3_CR2        =   I2C3 + 0x0004
+ 844              	I2C3_OAR1       =   I2C3 + 0x0008
+ 845              	I2C3_OAR2       =   I2C3 + 0x000C
+ 846              	I2C3_TIMINGR    =   I2C3 + 0x0010
+ 847              	I2C3_TIMEOUTR   =   I2C3 + 0x0014
+ 848              	I2C3_ISR        =   I2C3 + 0x0018
+ 849              	I2C3_ICR        =   I2C3 + 0x001C
+ 850              	I2C3_PECR       =   I2C3 + 0x0020
+ 851              	I2C3_RXDR       =   I2C3 + 0x0024
+ 852              	I2C3_TXDR       =   I2C3 + 0x0028
+ 853              	
+ 854              	@ DAC REGISTERS
+ 855              	
+ 856              	DAC_CR          =   DAC1 + 0x0000
+ 857              	DAC_SWTRIGR     =   DAC1 + 0x0004
+ 858              	DAC_DHR12R1     =   DAC1 + 0x0008
+ 859              	DAC_DHR12L1     =   DAC1 + 0x000C
+ 860              	DAC_DHR8R1      =   DAC1 + 0x0010
+ 861              	DAC_DHR12R2     =   DAC1 + 0x0014
+ 862              	DAC_DHR12L2     =   DAC1 + 0x0018
+ 863              	DAC_DHR8R2      =   DAC1 + 0x001C
+ 864              	DAC_DHR12RD     =   DAC1 + 0x0020
+ 865              	DAC_DHR12LD     =   DAC1 + 0x0024
+ 866              	DAC_DHR8RD      =   DAC1 + 0x0028
+ 867              	DAC_DOR1        =   DAC1 + 0x002C
+ 868              	DAC_DOR2        =   DAC1 + 0x0030
+ 869              	DAC_SR          =   DAC1 + 0x0034
+ 870              	
+ 871              	@ PWR REGISTERS
+ 872              	
+ 873              	PWR_CR          =   PWR + 0x0000
+ 874              	PWR_CSR         =   PWR + 0x0004
+ 875              	
+ 876              	@ BXCAN REGISTERS
+ 877              	
+ 878              	CAN_MCR         =   BXCAN + 0x0000
+ 879              	CAN_MSR         =   BXCAN + 0x0004
+ 880              	CAN_TSR         =   BXCAN + 0x0008
+ 881              	CAN_RF0R        =   BXCAN + 0x000C
+ 882              	CAN_RF1R        =   BXCAN + 0x0010
+ 883              	CAN_IER         =   BXCAN + 0x0014
+ 884              	CAN_ESR         =   BXCAN + 0x0018
+ 885              	CAN_BTR         =   BXCAN + 0x001C
+ 886              	CAN_TI0R        =   BXCAN + 0x0180
+ 887              	CAN_TDT0R       =   BXCAN + 0x0184
+ 888              	CAN_TDL0R       =   BXCAN + 0x0188
+ 889              	CAN_TDH0R       =   BXCAN + 0x018C
+ 890              	CAN_TI1R        =   BXCAN + 0x0190
+ 891              	CAN_TDT1R       =   BXCAN + 0x0194
+ 892              	CAN_TDL1R       =   BXCAN + 0x0198
+ 893              	CAN_TDH1R       =   BXCAN + 0x019C
+ 894              	CAN_TI2R        =   BXCAN + 0x01A0
+ 895              	CAN_TDT2R       =   BXCAN + 0x01A4
+ 896              	CAN_TDL2R       =   BXCAN + 0x01A8
+ 897              	CAN_TDH2R       =   BXCAN + 0x01AC
+ 898              	CAN_RI0R        =   BXCAN + 0x01B0
+ 899              	CAN_RDT0R       =   BXCAN + 0x01B4
+ARM GAS  src/uart.asm 			page 18
+
+
+ 900              	CAN_RDL0R       =   BXCAN + 0x01B8
+ 901              	CAN_RDH0R       =   BXCAN + 0x01BC
+ 902              	CAN_RI1R        =   BXCAN + 0x01C0
+ 903              	CAN_RDT1R       =   BXCAN + 0x01C4
+ 904              	CAN_RDL1R       =   BXCAN + 0x01C8
+ 905              	CAN_RDH1R       =   BXCAN + 0x01CC
+ 906              	CAN_FMR         =   BXCAN + 0x0200
+ 907              	CAN_FM1R        =   BXCAN + 0x0204
+ 908              	CAN_FS1R        =   BXCAN + 0x020C
+ 909              	CAN_FFA1R       =   BXCAN + 0x0214
+ 910              	CAN_FA1R        =   BXCAN + 0x021C
+ 911              	CAN_F0R1        =   BXCAN + 0x0240
+ 912              	CAN_F0R2        =   BXCAN + 0x0244
+ 913              	CAN_F1R1        =   BXCAN + 0x0248
+ 914              	CAN_F1R2        =   BXCAN + 0x024C
+ 915              	CAN_F13R1       =   BXCAN + 0x02AB
+ 916              	CAN_F13R2       =   BXCAN + 0x02AC
+ 917              	
+ 918              	@ USB REGISTERS
+ 919              	
+ 920              	USB_EP0R        =   USB + 0x0000
+ 921              	USB_EP1R        =   USB + 0x0004
+ 922              	USB_EP2R        =   USB + 0x0008
+ 923              	USB_EP3R        =   USB + 0x000C
+ 924              	USB_EP4R        =   USB + 0x0010
+ 925              	USB_EP5R        =   USB + 0x0014
+ 926              	USB_EP6R        =   USB + 0x0018
+ 927              	USB_EP7R        =   USB + 0x001C
+ 928              	USB_CNTR        =   USB + 0x0040
+ 929              	USB_ISTR        =   USB + 0x0044
+ 930              	USB_FNR         =   USB + 0x0048
+ 931              	USB_DADDR       =   USB + 0x004C
+ 932              	USB_BTABLE      =   USB_SRAM + 0x0050
+ 933              	USB_LPMCSR      =   USB_SRAM + 0X0054
+ 934              	
+ 935              	@ IWDG REGISTERS
+ 936              	
+ 937              	IWDG_KR         =   IWDG + 0x0000
+ 938              	IWDG_PR         =   IWDG + 0x0004
+ 939              	IWDG_RLR        =   IWDG + 0x0008
+ 940              	IWDG_SR         =   IWDG + 0x000C
+ 941              	IWDG_WINR       =   IWDG + 0x0010
+ 942              	
+ 943              	@ WWDG REGISTERS
+ 944              	
+ 945              	WWDG_CR         =   WWDG + 0x0000
+ 946              	WWDG_CFR        =   WWDG + 0x0004
+ 947              	WWDG_SR         =   WWDG + 0x0008
+ 948              	
+ 949              	@ RTC REGISTERS
+ 950              	
+ 951              	RTC_TR          =   RTC + 0x0000
+ 952              	RTC_DR          =   RTC + 0x0004
+ 953              	RTC_CR          =   RTC + 0x0008
+ 954              	RTC_ISR         =   RTC + 0x000C
+ 955              	RTC_PRER        =   RTC + 0x0010
+ 956              	RTC_WUTR        =   RTC + 0x0014
+ARM GAS  src/uart.asm 			page 19
+
+
+ 957              	RTC_ALRMAR      =   RTC + 0x001C
+ 958              	RTC_ALRMBR      =   RTC + 0x0020
+ 959              	RTC_WPR         =   RTC + 0x0024
+ 960              	RTC_SSR         =   RTC + 0x0028
+ 961              	RTC_SHIFTR      =   RTC + 0x002C
+ 962              	RTC_TSTR        =   RTC + 0x0030
+ 963              	RTC_TSDR        =   RTC + 0x0034
+ 964              	RTC_TSSSR       =   RTC + 0x0038
+ 965              	RTC_CALR        =   RTC + 0x003C
+ 966              	RTC_TAFCR       =   RTC + 0x0040
+ 967              	RTC_ALRMASSR    =   RTC + 0x0044
+ 968              	RTC_ALRMBSSR    =   RTC + 0x0048
+ 969              	RTC_OR          =   RTC + 0x004C
+ 970              	RTC_BKP0R       =   RTC + 0x0050
+ 971              	RTC_BKP1R       =   RTC + 0x0054
+ 972              	RTC_BKP2R       =   RTC + 0x0058
+ 973              	RTC_BKP3R       =   RTC + 0x005C
+ 974              	RTC_BKP4R       =   RTC + 0x0060
+ 975              	RTC_BKP5R       =   RTC + 0x0064
+ 976              	RTC_BKP6R       =   RTC + 0x0068
+ 977              	RTC_BKP7R       =   RTC + 0x006C
+ 978              	RTC_BKP8R       =   RTC + 0x0070
+ 979              	RTC_BKP9R       =   RTC + 0x0074
+ 980              	RTC_BKP10R       =   RTC + 0x0078
+ 981              	RTC_BKP11R       =   RTC + 0x007C
+ 982              	RTC_BKP12R       =   RTC + 0x0080
+ 983              	RTC_BKP13R       =   RTC + 0x0084
+ 984              	RTC_BKP14R       =   RTC + 0x0088
+ 985              	RTC_BKP15R       =   RTC + 0x008C
+ 986              	
+ 987              	
+ 988              	
+ 989              	
+ 990              	
+ 991              	
+ 992              	
+ 993              	
+ 994              	
+ 995              	
+ 996              	
+ 997              	
+ 998              	
+ 999              	
+ 1000              	
+ 1001              	
+ 1002              	
+  67 013a 00001410 	
+  67      02401C10 
+  67      02400008 
+  67      00482408 
+  67      00480C4C 
+ARM GAS  src/uart.asm 			page 20
+
+
+DEFINED SYMBOLS
+        src/uart.asm:8      .text:00000008 $d
+                            *ABS*:40021014 RCC_AHBENR
+        src/uart.asm:11     .text:000000ec $t
+                            *ABS*:4002101c RCC_APB1ENR
+                            *ABS*:48000800 GPIOC_MODER
+                            *ABS*:48000824 GPIOC_AFRH
+                            *ABS*:40004c0c UART4_BRR
+                            *ABS*:40004c00 UART4_CR1
+                            *ABS*:40004c28 UART4_TDR
+        src/uart.asm:58     .text:00000138 halt
+../inc/stm32f303xDE.inc:2      *ABS*:40000000 APB1
+../inc/stm32f303xDE.inc:3      *ABS*:40010000 APB2
+../inc/stm32f303xDE.inc:4      *ABS*:40020000 AHB1
+../inc/stm32f303xDE.inc:5      *ABS*:48000000 AHB2
+../inc/stm32f303xDE.inc:6      *ABS*:50000000 AHB3
+../inc/stm32f303xDE.inc:7      *ABS*:60000000 AHB4_1
+../inc/stm32f303xDE.inc:8      *ABS*:80000000 AHB4_2
+../inc/stm32f303xDE.inc:9      *ABS*:a0000000 AHB4_3
+../inc/stm32f303xDE.inc:13     *ABS*:00000000 BOOT_CONFIG
+../inc/stm32f303xDE.inc:14     *ABS*:08000000 MAIN_FLASH
+../inc/stm32f303xDE.inc:15     *ABS*:10000000 CCM_SRAM
+../inc/stm32f303xDE.inc:16     *ABS*:1fffd800 SYS_MEM
+../inc/stm32f303xDE.inc:17     *ABS*:1ffff800 OPTION
+../inc/stm32f303xDE.inc:18     *ABS*:20000000 SRAM
+../inc/stm32f303xDE.inc:20     *ABS*:40000000 TIM2
+../inc/stm32f303xDE.inc:21     *ABS*:40000400 TIM3
+../inc/stm32f303xDE.inc:22     *ABS*:40000800 TIM4
+../inc/stm32f303xDE.inc:23     *ABS*:40001000 TIM6
+../inc/stm32f303xDE.inc:24     *ABS*:40001400 TIM7
+../inc/stm32f303xDE.inc:25     *ABS*:40002800 RTC
+../inc/stm32f303xDE.inc:26     *ABS*:40002c00 WWDG
+../inc/stm32f303xDE.inc:27     *ABS*:40003000 IWDG
+../inc/stm32f303xDE.inc:28     *ABS*:40003400 I2S2EXT
+../inc/stm32f303xDE.inc:29     *ABS*:40003800 SPI2_I2S2
+../inc/stm32f303xDE.inc:30     *ABS*:40003c00 SPI3_I2S3
+../inc/stm32f303xDE.inc:31     *ABS*:40004000 I2S3EXT
+../inc/stm32f303xDE.inc:32     *ABS*:40004400 USART2
+../inc/stm32f303xDE.inc:33     *ABS*:40004800 USART3
+../inc/stm32f303xDE.inc:34     *ABS*:40004c00 UART4
+../inc/stm32f303xDE.inc:35     *ABS*:40005000 UART5
+../inc/stm32f303xDE.inc:36     *ABS*:40005400 I2C1
+../inc/stm32f303xDE.inc:37     *ABS*:40005800 I2C2
+../inc/stm32f303xDE.inc:38     *ABS*:40005c00 USB
+../inc/stm32f303xDE.inc:39     *ABS*:40006000 USB_SRAM
+../inc/stm32f303xDE.inc:40     *ABS*:40006400 BXCAN
+../inc/stm32f303xDE.inc:41     *ABS*:40007000 PWR
+../inc/stm32f303xDE.inc:42     *ABS*:40007400 DAC1
+../inc/stm32f303xDE.inc:43     *ABS*:40007800 I2C3
+../inc/stm32f303xDE.inc:45     *ABS*:40014001 SYSCFG
+../inc/stm32f303xDE.inc:46     *ABS*:40014001 COMP
+../inc/stm32f303xDE.inc:47     *ABS*:40014001 OPAMP
+../inc/stm32f303xDE.inc:48     *ABS*:40010400 EXTI
+../inc/stm32f303xDE.inc:49     *ABS*:40012c00 TIM1
+../inc/stm32f303xDE.inc:50     *ABS*:40013000 SPI1
+../inc/stm32f303xDE.inc:51     *ABS*:40013400 TIM8
+../inc/stm32f303xDE.inc:52     *ABS*:40013800 USART1
+ARM GAS  src/uart.asm 			page 21
+
+
+../inc/stm32f303xDE.inc:53     *ABS*:40013c00 SPI4
+../inc/stm32f303xDE.inc:54     *ABS*:40014000 TIM15
+../inc/stm32f303xDE.inc:55     *ABS*:40014400 TIM16
+../inc/stm32f303xDE.inc:56     *ABS*:40014800 TIM17
+../inc/stm32f303xDE.inc:57     *ABS*:40015000 TIM20
+../inc/stm32f303xDE.inc:59     *ABS*:40020000 DMA1
+../inc/stm32f303xDE.inc:60     *ABS*:40020400 DMA2
+../inc/stm32f303xDE.inc:61     *ABS*:40021000 RCC
+../inc/stm32f303xDE.inc:62     *ABS*:40022000 FLASH
+../inc/stm32f303xDE.inc:63     *ABS*:40023000 CRC
+../inc/stm32f303xDE.inc:64     *ABS*:40024000 TSC
+../inc/stm32f303xDE.inc:66     *ABS*:48000000 GPIOA
+../inc/stm32f303xDE.inc:67     *ABS*:48000400 GPIOB
+../inc/stm32f303xDE.inc:68     *ABS*:48000800 GPIOC
+../inc/stm32f303xDE.inc:69     *ABS*:48000c00 GPIOD
+../inc/stm32f303xDE.inc:70     *ABS*:48001000 GPIOE
+../inc/stm32f303xDE.inc:71     *ABS*:48001400 GPIOF
+../inc/stm32f303xDE.inc:72     *ABS*:48001800 GPIOG
+../inc/stm32f303xDE.inc:73     *ABS*:48001c00 GPIOH
+../inc/stm32f303xDE.inc:75     *ABS*:50000000 ADC1
+../inc/stm32f303xDE.inc:76     *ABS*:50000000 ADC2
+../inc/stm32f303xDE.inc:77     *ABS*:50000400 ADC3
+../inc/stm32f303xDE.inc:78     *ABS*:50000400 ADC4
+../inc/stm32f303xDE.inc:80     *ABS*:60000000 FMC_BANK1
+../inc/stm32f303xDE.inc:81     *ABS*:60000000 FMC_BANK2
+../inc/stm32f303xDE.inc:82     *ABS*:80000400 FMC_BANK3
+../inc/stm32f303xDE.inc:83     *ABS*:80000400 FMC_BANK4
+../inc/stm32f303xDE.inc:84     *ABS*:a0000400 FMC
+../inc/stm32f303xDE.inc:88     *ABS*:48000000 GPIOA_MODER
+../inc/stm32f303xDE.inc:89     *ABS*:48000004 GPIOA_OTYPER
+../inc/stm32f303xDE.inc:90     *ABS*:48000008 GPIOA_OSPEEDR
+../inc/stm32f303xDE.inc:91     *ABS*:4800000c GPIOA_PUPDR
+../inc/stm32f303xDE.inc:92     *ABS*:48000010 GPIOA_IDR
+../inc/stm32f303xDE.inc:93     *ABS*:48000014 GPIOA_ODR
+../inc/stm32f303xDE.inc:94     *ABS*:48000018 GPIOA_BSRR
+../inc/stm32f303xDE.inc:95     *ABS*:4800001c GPIOA_LCKR
+../inc/stm32f303xDE.inc:96     *ABS*:48000020 GPIOA_AFRL
+../inc/stm32f303xDE.inc:97     *ABS*:48000024 GPIOA_AFRH
+../inc/stm32f303xDE.inc:98     *ABS*:48000028 GPIOA_BRR
+../inc/stm32f303xDE.inc:100    *ABS*:48000400 GPIOB_MODER
+../inc/stm32f303xDE.inc:101    *ABS*:48000404 GPIOB_OTYPER
+../inc/stm32f303xDE.inc:102    *ABS*:48000408 GPIOB_OSPEEDR
+../inc/stm32f303xDE.inc:103    *ABS*:4800040c GPIOB_PUPDR
+../inc/stm32f303xDE.inc:104    *ABS*:48000410 GPIOB_IDR
+../inc/stm32f303xDE.inc:105    *ABS*:48000414 GPIOB_ODR
+../inc/stm32f303xDE.inc:106    *ABS*:48000418 GPIOB_BSRR
+../inc/stm32f303xDE.inc:107    *ABS*:4800041c GPIOB_LCKR
+../inc/stm32f303xDE.inc:108    *ABS*:48000420 GPIOB_AFRL
+../inc/stm32f303xDE.inc:109    *ABS*:48000424 GPIOB_AFRH
+../inc/stm32f303xDE.inc:110    *ABS*:48000428 GPIOB_BRR
+../inc/stm32f303xDE.inc:113    *ABS*:48000804 GPIOC_OTYPER
+../inc/stm32f303xDE.inc:114    *ABS*:48000808 GPIOC_OSPEEDR
+../inc/stm32f303xDE.inc:115    *ABS*:4800080c GPIOC_PUPDR
+../inc/stm32f303xDE.inc:116    *ABS*:48000810 GPIOC_IDR
+../inc/stm32f303xDE.inc:117    *ABS*:48000814 GPIOC_ODR
+../inc/stm32f303xDE.inc:118    *ABS*:48000818 GPIOC_BSRR
+../inc/stm32f303xDE.inc:119    *ABS*:4800081c GPIOC_LCKR
+ARM GAS  src/uart.asm 			page 22
+
+
+../inc/stm32f303xDE.inc:120    *ABS*:48000820 GPIOC_AFRL
+../inc/stm32f303xDE.inc:122    *ABS*:48000828 GPIOC_BRR
+../inc/stm32f303xDE.inc:124    *ABS*:48000c00 GPIOD_MODER
+../inc/stm32f303xDE.inc:125    *ABS*:48000c04 GPIOD_OTYPER
+../inc/stm32f303xDE.inc:126    *ABS*:48000c08 GPIOD_OSPEEDR
+../inc/stm32f303xDE.inc:127    *ABS*:48000c0c GPIOD_PUPDR
+../inc/stm32f303xDE.inc:128    *ABS*:48000c10 GPIOD_IDR
+../inc/stm32f303xDE.inc:129    *ABS*:48000c14 GPIOD_ODR
+../inc/stm32f303xDE.inc:130    *ABS*:48000c18 GPIOD_BSRR
+../inc/stm32f303xDE.inc:131    *ABS*:48000c1c GPIOD_LCKR
+../inc/stm32f303xDE.inc:132    *ABS*:48000c20 GPIOD_AFRL
+../inc/stm32f303xDE.inc:133    *ABS*:48000c24 GPIOD_AFRH
+../inc/stm32f303xDE.inc:134    *ABS*:48000c28 GPIOD_BRR
+../inc/stm32f303xDE.inc:136    *ABS*:48001000 GPIOE_MODER
+../inc/stm32f303xDE.inc:137    *ABS*:48001004 GPIOE_OTYPER
+../inc/stm32f303xDE.inc:138    *ABS*:48001008 GPIOE_OSPEEDR
+../inc/stm32f303xDE.inc:139    *ABS*:4800100c GPIOE_PUPDR
+../inc/stm32f303xDE.inc:140    *ABS*:48001010 GPIOE_IDR
+../inc/stm32f303xDE.inc:141    *ABS*:48001014 GPIOE_ODR
+../inc/stm32f303xDE.inc:142    *ABS*:48001018 GPIOE_BSRR
+../inc/stm32f303xDE.inc:143    *ABS*:4800101c GPIOE_LCKR
+../inc/stm32f303xDE.inc:144    *ABS*:48001020 GPIOE_AFRL
+../inc/stm32f303xDE.inc:145    *ABS*:48001024 GPIOE_AFRH
+../inc/stm32f303xDE.inc:146    *ABS*:48001028 GPIOE_BRR
+../inc/stm32f303xDE.inc:148    *ABS*:48001400 GPIOF_MODER
+../inc/stm32f303xDE.inc:149    *ABS*:48001404 GPIOF_OTYPER
+../inc/stm32f303xDE.inc:150    *ABS*:48001408 GPIOF_OSPEEDR
+../inc/stm32f303xDE.inc:151    *ABS*:4800140c GPIOF_PUPDR
+../inc/stm32f303xDE.inc:152    *ABS*:48001410 GPIOF_IDR
+../inc/stm32f303xDE.inc:153    *ABS*:48001414 GPIOF_ODR
+../inc/stm32f303xDE.inc:154    *ABS*:48001418 GPIOF_BSRR
+../inc/stm32f303xDE.inc:155    *ABS*:4800141c GPIOF_LCKR
+../inc/stm32f303xDE.inc:156    *ABS*:48001420 GPIOF_AFRL
+../inc/stm32f303xDE.inc:157    *ABS*:48001424 GPIOF_AFRH
+../inc/stm32f303xDE.inc:158    *ABS*:48001428 GPIOF_BRR
+../inc/stm32f303xDE.inc:160    *ABS*:48001800 GPIOG_MODER
+../inc/stm32f303xDE.inc:161    *ABS*:48001804 GPIOG_OTYPER
+../inc/stm32f303xDE.inc:162    *ABS*:48001808 GPIOG_OSPEEDR
+../inc/stm32f303xDE.inc:163    *ABS*:4800180c GPIOG_PUPDR
+../inc/stm32f303xDE.inc:164    *ABS*:48001810 GPIOG_IDR
+../inc/stm32f303xDE.inc:165    *ABS*:48001814 GPIOG_ODR
+../inc/stm32f303xDE.inc:166    *ABS*:48001818 GPIOG_BSRR
+../inc/stm32f303xDE.inc:167    *ABS*:4800181c GPIOG_LCKR
+../inc/stm32f303xDE.inc:168    *ABS*:48001820 GPIOG_AFRL
+../inc/stm32f303xDE.inc:169    *ABS*:48001824 GPIOG_AFRH
+../inc/stm32f303xDE.inc:170    *ABS*:48001828 GPIOG_BRR
+../inc/stm32f303xDE.inc:172    *ABS*:48001c00 GPIOH_MODER
+../inc/stm32f303xDE.inc:173    *ABS*:48001c04 GPIOH_OTYPER
+../inc/stm32f303xDE.inc:174    *ABS*:48001c08 GPIOH_OSPEEDR
+../inc/stm32f303xDE.inc:175    *ABS*:48001c0c GPIOH_PUPDR
+../inc/stm32f303xDE.inc:176    *ABS*:48001c10 GPIOH_IDR
+../inc/stm32f303xDE.inc:177    *ABS*:48001c14 GPIOH_ODR
+../inc/stm32f303xDE.inc:178    *ABS*:48001c18 GPIOH_BSRR
+../inc/stm32f303xDE.inc:179    *ABS*:48001c1c GPIOH_LCKR
+../inc/stm32f303xDE.inc:180    *ABS*:48001c20 GPIOH_AFRL
+../inc/stm32f303xDE.inc:181    *ABS*:48001c24 GPIOH_AFRH
+../inc/stm32f303xDE.inc:182    *ABS*:48001c28 GPIOH_BRR
+ARM GAS  src/uart.asm 			page 23
+
+
+../inc/stm32f303xDE.inc:186    *ABS*:40012c00 TIM1_CR1
+../inc/stm32f303xDE.inc:187    *ABS*:40012c04 TIM1_CR2
+../inc/stm32f303xDE.inc:188    *ABS*:40012c08 TIM1_SMCR
+../inc/stm32f303xDE.inc:189    *ABS*:40012c0c TIM1_DIER
+../inc/stm32f303xDE.inc:190    *ABS*:40012c10 TIM1_SR
+../inc/stm32f303xDE.inc:191    *ABS*:40012c14 TIM1_EGR
+../inc/stm32f303xDE.inc:192    *ABS*:40012c18 TIM1_CCMR1
+../inc/stm32f303xDE.inc:193    *ABS*:40012c1c TIM1_CCMR2
+../inc/stm32f303xDE.inc:194    *ABS*:40012c20 TIM1_CCER
+../inc/stm32f303xDE.inc:195    *ABS*:40012c24 TIM1_CNT
+../inc/stm32f303xDE.inc:196    *ABS*:40012c28 TIM1_PSC
+../inc/stm32f303xDE.inc:197    *ABS*:40012c2c TIM1_ARR
+../inc/stm32f303xDE.inc:198    *ABS*:40012c30 TIM1_RCR
+../inc/stm32f303xDE.inc:199    *ABS*:40012c34 TIM1_CCR1
+../inc/stm32f303xDE.inc:200    *ABS*:40012c38 TIM1_CCR2
+../inc/stm32f303xDE.inc:201    *ABS*:40012c3c TIM1_CCR3
+../inc/stm32f303xDE.inc:202    *ABS*:40012c40 TIM1_CCR4
+../inc/stm32f303xDE.inc:203    *ABS*:40012c44 TIM1_BDTR
+../inc/stm32f303xDE.inc:204    *ABS*:40012c48 TIM1_DCR
+../inc/stm32f303xDE.inc:205    *ABS*:40012c4c TIM1_DMAR
+../inc/stm32f303xDE.inc:206    *ABS*:40012c50 TIM1_OR
+../inc/stm32f303xDE.inc:207    *ABS*:40012c54 TIM1_CCMR3
+../inc/stm32f303xDE.inc:208    *ABS*:40012c58 TIM1_CCR5
+../inc/stm32f303xDE.inc:209    *ABS*:40012c5c TIM1_CCR6
+../inc/stm32f303xDE.inc:211    *ABS*:40013400 TIM8_CR1
+../inc/stm32f303xDE.inc:212    *ABS*:40013404 TIM8_CR2
+../inc/stm32f303xDE.inc:213    *ABS*:40013408 TIM8_SMCR
+../inc/stm32f303xDE.inc:214    *ABS*:4001340c TIM8_DIER
+../inc/stm32f303xDE.inc:215    *ABS*:40013410 TIM8_SR
+../inc/stm32f303xDE.inc:216    *ABS*:40013414 TIM8_EGR
+../inc/stm32f303xDE.inc:217    *ABS*:40013418 TIM8_CCMR1
+../inc/stm32f303xDE.inc:218    *ABS*:4001341c TIM8_CCMR2
+../inc/stm32f303xDE.inc:219    *ABS*:40013420 TIM8_CCER
+../inc/stm32f303xDE.inc:220    *ABS*:40013424 TIM8_CNT
+../inc/stm32f303xDE.inc:221    *ABS*:40013428 TIM8_PSC
+../inc/stm32f303xDE.inc:222    *ABS*:4001342c TIM8_ARR
+../inc/stm32f303xDE.inc:223    *ABS*:40013430 TIM8_RCR
+../inc/stm32f303xDE.inc:224    *ABS*:40013434 TIM8_CCR1
+../inc/stm32f303xDE.inc:225    *ABS*:40013438 TIM8_CCR2
+../inc/stm32f303xDE.inc:226    *ABS*:4001343c TIM8_CCR3
+../inc/stm32f303xDE.inc:227    *ABS*:40013440 TIM8_CCR4
+../inc/stm32f303xDE.inc:228    *ABS*:40013444 TIM8_BDTR
+../inc/stm32f303xDE.inc:229    *ABS*:40013448 TIM8_DCR
+../inc/stm32f303xDE.inc:230    *ABS*:4001344c TIM8_DMAR
+../inc/stm32f303xDE.inc:231    *ABS*:40013450 TIM8_OR
+../inc/stm32f303xDE.inc:232    *ABS*:40013454 TIM8_CCMR3
+../inc/stm32f303xDE.inc:233    *ABS*:40013458 TIM8_CCR5
+../inc/stm32f303xDE.inc:234    *ABS*:4001345c TIM8_CCR6
+../inc/stm32f303xDE.inc:236    *ABS*:40015000 TIM20_CR1
+../inc/stm32f303xDE.inc:237    *ABS*:40015004 TIM20_CR2
+../inc/stm32f303xDE.inc:238    *ABS*:40015008 TIM20_SMCR
+../inc/stm32f303xDE.inc:239    *ABS*:4001500c TIM20_DIER
+../inc/stm32f303xDE.inc:240    *ABS*:40015010 TIM20_SR
+../inc/stm32f303xDE.inc:241    *ABS*:40015014 TIM20_EGR
+../inc/stm32f303xDE.inc:242    *ABS*:40015018 TIM20_CCMR1
+../inc/stm32f303xDE.inc:243    *ABS*:4001501c TIM20_CCMR2
+../inc/stm32f303xDE.inc:244    *ABS*:40015020 TIM20_CCER
+ARM GAS  src/uart.asm 			page 24
+
+
+../inc/stm32f303xDE.inc:245    *ABS*:40015024 TIM20_CNT
+../inc/stm32f303xDE.inc:246    *ABS*:40015028 TIM20_PSC
+../inc/stm32f303xDE.inc:247    *ABS*:4001502c TIM20_ARR
+../inc/stm32f303xDE.inc:248    *ABS*:40015030 TIM20_RCR
+../inc/stm32f303xDE.inc:249    *ABS*:40015034 TIM20_CCR1
+../inc/stm32f303xDE.inc:250    *ABS*:40015038 TIM20_CCR2
+../inc/stm32f303xDE.inc:251    *ABS*:4001503c TIM20_CCR3
+../inc/stm32f303xDE.inc:252    *ABS*:40015040 TIM20_CCR4
+../inc/stm32f303xDE.inc:253    *ABS*:40015044 TIM20_BDTR
+../inc/stm32f303xDE.inc:254    *ABS*:40015048 TIM20_DCR
+../inc/stm32f303xDE.inc:255    *ABS*:4001504c TIM20_DMAR
+../inc/stm32f303xDE.inc:256    *ABS*:40015050 TIM20_OR
+../inc/stm32f303xDE.inc:257    *ABS*:40015054 TIM20_CCMR3
+../inc/stm32f303xDE.inc:258    *ABS*:40015058 TIM20_CCR5
+../inc/stm32f303xDE.inc:259    *ABS*:4001505c TIM20_CCR6
+../inc/stm32f303xDE.inc:263    *ABS*:40000000 TIM2_CR1
+../inc/stm32f303xDE.inc:264    *ABS*:40000004 TIM2_CR2
+../inc/stm32f303xDE.inc:265    *ABS*:40000008 TIM2_SMCR
+../inc/stm32f303xDE.inc:266    *ABS*:4000000c TIM2_DIER
+../inc/stm32f303xDE.inc:267    *ABS*:40000010 TIM2_SR
+../inc/stm32f303xDE.inc:268    *ABS*:40000014 TIM2_EGR
+../inc/stm32f303xDE.inc:269    *ABS*:40000018 TIM2_CCMR1
+../inc/stm32f303xDE.inc:270    *ABS*:4000001c TIM2_CCMR2
+../inc/stm32f303xDE.inc:271    *ABS*:40000020 TIM2_CCER
+../inc/stm32f303xDE.inc:272    *ABS*:40000024 TIM2_CNT
+../inc/stm32f303xDE.inc:273    *ABS*:40000028 TIM2_PSC
+../inc/stm32f303xDE.inc:274    *ABS*:4000002c TIM2_ARR
+../inc/stm32f303xDE.inc:275    *ABS*:40000030 TIM2_RCR
+../inc/stm32f303xDE.inc:276    *ABS*:40000034 TIM2_CCR1
+../inc/stm32f303xDE.inc:277    *ABS*:40000038 TIM2_CCR2
+../inc/stm32f303xDE.inc:278    *ABS*:4000003c TIM2_CCR3
+../inc/stm32f303xDE.inc:279    *ABS*:40000040 TIM2_CCR4
+../inc/stm32f303xDE.inc:280    *ABS*:40000048 TIM2_DCR
+../inc/stm32f303xDE.inc:281    *ABS*:4000004c TIM2_DMAR
+../inc/stm32f303xDE.inc:283    *ABS*:40000400 TIM3_CR1
+../inc/stm32f303xDE.inc:284    *ABS*:40000404 TIM3_CR2
+../inc/stm32f303xDE.inc:285    *ABS*:40000408 TIM3_SMCR
+../inc/stm32f303xDE.inc:286    *ABS*:4000040c TIM3_DIER
+../inc/stm32f303xDE.inc:287    *ABS*:40000410 TIM3_SR
+../inc/stm32f303xDE.inc:288    *ABS*:40000414 TIM3_EGR
+../inc/stm32f303xDE.inc:289    *ABS*:40000418 TIM3_CCMR1
+../inc/stm32f303xDE.inc:290    *ABS*:4000041c TIM3_CCMR2
+../inc/stm32f303xDE.inc:291    *ABS*:40000420 TIM3_CCER
+../inc/stm32f303xDE.inc:292    *ABS*:40000424 TIM3_CNT
+../inc/stm32f303xDE.inc:293    *ABS*:40000428 TIM3_PSC
+../inc/stm32f303xDE.inc:294    *ABS*:4000042c TIM3_ARR
+../inc/stm32f303xDE.inc:295    *ABS*:40000430 TIM3_RCR
+../inc/stm32f303xDE.inc:296    *ABS*:40000434 TIM3_CCR1
+../inc/stm32f303xDE.inc:297    *ABS*:40000438 TIM3_CCR2
+../inc/stm32f303xDE.inc:298    *ABS*:4000043c TIM3_CCR3
+../inc/stm32f303xDE.inc:299    *ABS*:40000440 TIM3_CCR4
+../inc/stm32f303xDE.inc:300    *ABS*:40000448 TIM3_DCR
+../inc/stm32f303xDE.inc:301    *ABS*:4000044c TIM3_DMAR
+../inc/stm32f303xDE.inc:303    *ABS*:40000800 TIM4_CR1
+../inc/stm32f303xDE.inc:304    *ABS*:40000804 TIM4_CR2
+../inc/stm32f303xDE.inc:305    *ABS*:40000808 TIM4_SMCR
+../inc/stm32f303xDE.inc:306    *ABS*:4000080c TIM4_DIER
+ARM GAS  src/uart.asm 			page 25
+
+
+../inc/stm32f303xDE.inc:307    *ABS*:40000810 TIM4_SR
+../inc/stm32f303xDE.inc:308    *ABS*:40000814 TIM4_EGR
+../inc/stm32f303xDE.inc:309    *ABS*:40000818 TIM4_CCMR1
+../inc/stm32f303xDE.inc:310    *ABS*:4000081c TIM4_CCMR2
+../inc/stm32f303xDE.inc:311    *ABS*:40000820 TIM4_CCER
+../inc/stm32f303xDE.inc:312    *ABS*:40000824 TIM4_CNT
+../inc/stm32f303xDE.inc:313    *ABS*:40000828 TIM4_PSC
+../inc/stm32f303xDE.inc:314    *ABS*:4000082c TIM4_ARR
+../inc/stm32f303xDE.inc:315    *ABS*:40000830 TIM4_RCR
+../inc/stm32f303xDE.inc:316    *ABS*:40000834 TIM4_CCR1
+../inc/stm32f303xDE.inc:317    *ABS*:40000838 TIM4_CCR2
+../inc/stm32f303xDE.inc:318    *ABS*:4000083c TIM4_CCR3
+../inc/stm32f303xDE.inc:319    *ABS*:40000840 TIM4_CCR4
+../inc/stm32f303xDE.inc:320    *ABS*:40000848 TIM4_DCR
+../inc/stm32f303xDE.inc:321    *ABS*:4000084c TIM4_DMAR
+../inc/stm32f303xDE.inc:325    *ABS*:40001000 TIM6_CR1
+../inc/stm32f303xDE.inc:326    *ABS*:40001004 TIM6_CR2
+../inc/stm32f303xDE.inc:327    *ABS*:4000100c TIM6_DIER
+../inc/stm32f303xDE.inc:328    *ABS*:40001010 TIM6_SR
+../inc/stm32f303xDE.inc:329    *ABS*:40001014 TIM6_EGR
+../inc/stm32f303xDE.inc:330    *ABS*:40001024 TIM6_CNT
+../inc/stm32f303xDE.inc:331    *ABS*:40001028 TIM6_PSC
+../inc/stm32f303xDE.inc:332    *ABS*:4000102c TIM6_ARR
+../inc/stm32f303xDE.inc:334    *ABS*:40001400 TIM7_CR1
+../inc/stm32f303xDE.inc:335    *ABS*:40001404 TIM7_CR2
+../inc/stm32f303xDE.inc:336    *ABS*:4000140c TIM7_DIER
+../inc/stm32f303xDE.inc:337    *ABS*:40001410 TIM7_SR
+../inc/stm32f303xDE.inc:338    *ABS*:40001414 TIM7_EGR
+../inc/stm32f303xDE.inc:339    *ABS*:40001424 TIM7_CNT
+../inc/stm32f303xDE.inc:340    *ABS*:40001428 TIM7_PSC
+../inc/stm32f303xDE.inc:341    *ABS*:4000142c TIM7_ARR
+../inc/stm32f303xDE.inc:345    *ABS*:40014000 TIM15_CR1
+../inc/stm32f303xDE.inc:346    *ABS*:40014004 TIM15_CR2
+../inc/stm32f303xDE.inc:347    *ABS*:40014008 TIM15_SMCR
+../inc/stm32f303xDE.inc:348    *ABS*:4001400c TIM15_DIER
+../inc/stm32f303xDE.inc:349    *ABS*:40014010 TIM15_SR
+../inc/stm32f303xDE.inc:350    *ABS*:40014014 TIM15_EGR
+../inc/stm32f303xDE.inc:351    *ABS*:40014018 TIM15_CCMR1
+../inc/stm32f303xDE.inc:352    *ABS*:40014020 TIM15_CCER
+../inc/stm32f303xDE.inc:353    *ABS*:40014024 TIM15_CNT
+../inc/stm32f303xDE.inc:354    *ABS*:40014028 TIM15_PSC
+../inc/stm32f303xDE.inc:355    *ABS*:4001402c TIM15_ARR
+../inc/stm32f303xDE.inc:356    *ABS*:40014030 TIM15_RCR
+../inc/stm32f303xDE.inc:357    *ABS*:40014034 TIM15_CCR1
+../inc/stm32f303xDE.inc:358    *ABS*:40014038 TIM15_CCR2
+../inc/stm32f303xDE.inc:359    *ABS*:40014044 TIM15_BDTR
+../inc/stm32f303xDE.inc:360    *ABS*:40014048 TIM15_DCR
+../inc/stm32f303xDE.inc:361    *ABS*:4001404c TIM15_DMAR
+../inc/stm32f303xDE.inc:363    *ABS*:40014400 TIM16_CR1
+../inc/stm32f303xDE.inc:364    *ABS*:40014404 TIM16_CR2
+../inc/stm32f303xDE.inc:365    *ABS*:4001440c TIM16_DIER
+../inc/stm32f303xDE.inc:366    *ABS*:40014410 TIM16_SR
+../inc/stm32f303xDE.inc:367    *ABS*:40014414 TIM16_EGR
+../inc/stm32f303xDE.inc:368    *ABS*:40014418 TIM16_CCMR1
+../inc/stm32f303xDE.inc:369    *ABS*:40014420 TIM16_CCER
+../inc/stm32f303xDE.inc:370    *ABS*:40014424 TIM16_CNT
+../inc/stm32f303xDE.inc:371    *ABS*:40014428 TIM16_PSC
+ARM GAS  src/uart.asm 			page 26
+
+
+../inc/stm32f303xDE.inc:372    *ABS*:4001442c TIM16_ARR
+../inc/stm32f303xDE.inc:373    *ABS*:40014430 TIM16_RCR
+../inc/stm32f303xDE.inc:374    *ABS*:40014434 TIM16_CCR1
+../inc/stm32f303xDE.inc:375    *ABS*:40014444 TIM16_BDTR
+../inc/stm32f303xDE.inc:376    *ABS*:40014448 TIM16_DCR
+../inc/stm32f303xDE.inc:377    *ABS*:4001444c TIM16_DMAR
+../inc/stm32f303xDE.inc:378    *ABS*:40014450 TIM16_OR
+../inc/stm32f303xDE.inc:380    *ABS*:40014800 TIM17_CR1
+../inc/stm32f303xDE.inc:381    *ABS*:40014804 TIM17_CR2
+../inc/stm32f303xDE.inc:382    *ABS*:4001480c TIM17_DIER
+../inc/stm32f303xDE.inc:383    *ABS*:40014810 TIM17_SR
+../inc/stm32f303xDE.inc:384    *ABS*:40014814 TIM17_EGR
+../inc/stm32f303xDE.inc:385    *ABS*:40014818 TIM17_CCMR1
+../inc/stm32f303xDE.inc:386    *ABS*:40014820 TIM17_CCER
+../inc/stm32f303xDE.inc:387    *ABS*:40014824 TIM17_CNT
+../inc/stm32f303xDE.inc:388    *ABS*:40014828 TIM17_PSC
+../inc/stm32f303xDE.inc:389    *ABS*:4001482c TIM17_ARR
+../inc/stm32f303xDE.inc:390    *ABS*:40014830 TIM17_RCR
+../inc/stm32f303xDE.inc:391    *ABS*:40014834 TIM17_CCR1
+../inc/stm32f303xDE.inc:392    *ABS*:40014844 TIM17_BDTR
+../inc/stm32f303xDE.inc:393    *ABS*:40014848 TIM17_DCR
+../inc/stm32f303xDE.inc:394    *ABS*:4001484c TIM17_DMAR
+../inc/stm32f303xDE.inc:395    *ABS*:40014850 TIM17_OR
+../inc/stm32f303xDE.inc:399    *ABS*:50000000 ADC1_ISR
+../inc/stm32f303xDE.inc:400    *ABS*:50000004 ADC1_IER
+../inc/stm32f303xDE.inc:401    *ABS*:50000008 ADC1_CR
+../inc/stm32f303xDE.inc:402    *ABS*:5000000c ADC1_CFGR
+../inc/stm32f303xDE.inc:403    *ABS*:50000014 ADC1_SMPR1
+../inc/stm32f303xDE.inc:404    *ABS*:50000018 ADC1_SMPR2
+../inc/stm32f303xDE.inc:405    *ABS*:50000020 ADC1_TR1
+../inc/stm32f303xDE.inc:406    *ABS*:50000024 ADC1_TR2
+../inc/stm32f303xDE.inc:407    *ABS*:50000028 ADC1_TR3
+../inc/stm32f303xDE.inc:408    *ABS*:50000030 ADC1_SQR1
+../inc/stm32f303xDE.inc:409    *ABS*:50000034 ADC1_SQR2
+../inc/stm32f303xDE.inc:410    *ABS*:50000038 ADC1_SQR3
+../inc/stm32f303xDE.inc:411    *ABS*:5000003c ADC1_SQR4
+../inc/stm32f303xDE.inc:412    *ABS*:50000040 ADC1_DR
+../inc/stm32f303xDE.inc:413    *ABS*:5000004c ADC1_JSQR
+../inc/stm32f303xDE.inc:414    *ABS*:50000060 ADC1_OFR1
+../inc/stm32f303xDE.inc:415    *ABS*:50000064 ADC1_OFR2
+../inc/stm32f303xDE.inc:416    *ABS*:50000068 ADC1_OFR3
+../inc/stm32f303xDE.inc:417    *ABS*:5000006c ADC1_OFR4
+../inc/stm32f303xDE.inc:418    *ABS*:50000080 ADC1_JDR1
+../inc/stm32f303xDE.inc:419    *ABS*:50000084 ADC1_JDR2
+../inc/stm32f303xDE.inc:420    *ABS*:50000088 ADC1_JDR3
+../inc/stm32f303xDE.inc:421    *ABS*:5000008c ADC1_JDR4
+../inc/stm32f303xDE.inc:422    *ABS*:500000a0 ADC1_AWD2CR
+../inc/stm32f303xDE.inc:423    *ABS*:500000a4 ADC1_AWD3CR
+../inc/stm32f303xDE.inc:424    *ABS*:500000b0 ADC1_DIFSEL
+../inc/stm32f303xDE.inc:425    *ABS*:500000b4 ADC1_CALFACT
+../inc/stm32f303xDE.inc:426    *ABS*:50000300 ADC1_CSR
+../inc/stm32f303xDE.inc:427    *ABS*:50000308 ADC1_CCR
+../inc/stm32f303xDE.inc:428    *ABS*:5000030c ADC1_CDR
+../inc/stm32f303xDE.inc:430    *ABS*:50000400 ADC3_ISR
+../inc/stm32f303xDE.inc:431    *ABS*:50000404 ADC3_IER
+../inc/stm32f303xDE.inc:432    *ABS*:50000408 ADC3_CR
+../inc/stm32f303xDE.inc:433    *ABS*:5000040c ADC3_CFGR
+ARM GAS  src/uart.asm 			page 27
+
+
+../inc/stm32f303xDE.inc:434    *ABS*:50000414 ADC3_SMPR1
+../inc/stm32f303xDE.inc:435    *ABS*:50000418 ADC3_SMPR2
+../inc/stm32f303xDE.inc:436    *ABS*:50000420 ADC3_TR1
+../inc/stm32f303xDE.inc:437    *ABS*:50000424 ADC3_TR2
+../inc/stm32f303xDE.inc:438    *ABS*:50000428 ADC3_TR3
+../inc/stm32f303xDE.inc:439    *ABS*:50000430 ADC3_SQR1
+../inc/stm32f303xDE.inc:440    *ABS*:50000434 ADC3_SQR2
+../inc/stm32f303xDE.inc:441    *ABS*:50000438 ADC3_SQR3
+../inc/stm32f303xDE.inc:442    *ABS*:5000043c ADC3_SQR4
+../inc/stm32f303xDE.inc:443    *ABS*:50000440 ADC3_DR
+../inc/stm32f303xDE.inc:444    *ABS*:5000044c ADC3_JSQR
+../inc/stm32f303xDE.inc:445    *ABS*:50000460 ADC3_OFR1
+../inc/stm32f303xDE.inc:446    *ABS*:50000464 ADC3_OFR2
+../inc/stm32f303xDE.inc:447    *ABS*:50000468 ADC3_OFR3
+../inc/stm32f303xDE.inc:448    *ABS*:5000046c ADC3_OFR4
+../inc/stm32f303xDE.inc:449    *ABS*:50000480 ADC3_JDR1
+../inc/stm32f303xDE.inc:450    *ABS*:50000484 ADC3_JDR2
+../inc/stm32f303xDE.inc:451    *ABS*:50000488 ADC3_JDR3
+../inc/stm32f303xDE.inc:452    *ABS*:5000048c ADC3_JDR4
+../inc/stm32f303xDE.inc:453    *ABS*:500004a0 ADC3_AWD2CR
+../inc/stm32f303xDE.inc:454    *ABS*:500004a4 ADC3_AWD3CR
+../inc/stm32f303xDE.inc:455    *ABS*:500004b0 ADC3_DIFSEL
+../inc/stm32f303xDE.inc:456    *ABS*:500004b4 ADC3_CALFACT
+../inc/stm32f303xDE.inc:457    *ABS*:50000700 ADC3_CSR
+../inc/stm32f303xDE.inc:458    *ABS*:50000708 ADC3_CCR
+../inc/stm32f303xDE.inc:459    *ABS*:5000070c ADC3_CDR
+../inc/stm32f303xDE.inc:463    *ABS*:50000100 ADC2_ISR
+../inc/stm32f303xDE.inc:464    *ABS*:50000104 ADC2_IER
+../inc/stm32f303xDE.inc:465    *ABS*:50000108 ADC2_CR
+../inc/stm32f303xDE.inc:466    *ABS*:5000010c ADC2_CFGR
+../inc/stm32f303xDE.inc:467    *ABS*:50000114 ADC2_SMPR1
+../inc/stm32f303xDE.inc:468    *ABS*:50000118 ADC2_SMPR2
+../inc/stm32f303xDE.inc:469    *ABS*:50000120 ADC2_TR1
+../inc/stm32f303xDE.inc:470    *ABS*:50000124 ADC2_TR2
+../inc/stm32f303xDE.inc:471    *ABS*:50000128 ADC2_TR3
+../inc/stm32f303xDE.inc:472    *ABS*:50000130 ADC2_SQR1
+../inc/stm32f303xDE.inc:473    *ABS*:50000134 ADC2_SQR2
+../inc/stm32f303xDE.inc:474    *ABS*:50000138 ADC2_SQR3
+../inc/stm32f303xDE.inc:475    *ABS*:5000013c ADC2_SQR4
+../inc/stm32f303xDE.inc:476    *ABS*:50000140 ADC2_DR
+../inc/stm32f303xDE.inc:477    *ABS*:5000014c ADC2_JSQR
+../inc/stm32f303xDE.inc:478    *ABS*:50000160 ADC2_OFR1
+../inc/stm32f303xDE.inc:479    *ABS*:50000164 ADC2_OFR2
+../inc/stm32f303xDE.inc:480    *ABS*:50000168 ADC2_OFR3
+../inc/stm32f303xDE.inc:481    *ABS*:5000016c ADC2_OFR4
+../inc/stm32f303xDE.inc:482    *ABS*:50000180 ADC2_JDR1
+../inc/stm32f303xDE.inc:483    *ABS*:50000184 ADC2_JDR2
+../inc/stm32f303xDE.inc:484    *ABS*:50000188 ADC2_JDR3
+../inc/stm32f303xDE.inc:485    *ABS*:5000018c ADC2_JDR4
+../inc/stm32f303xDE.inc:486    *ABS*:500001a0 ADC2_AWD2CR
+../inc/stm32f303xDE.inc:487    *ABS*:500001a4 ADC2_AWD3CR
+../inc/stm32f303xDE.inc:488    *ABS*:500001b0 ADC2_DIFSEL
+../inc/stm32f303xDE.inc:489    *ABS*:500001b4 ADC2_CALFACT
+../inc/stm32f303xDE.inc:490    *ABS*:50000300 ADC2_CSR
+../inc/stm32f303xDE.inc:491    *ABS*:50000308 ADC2_CCR
+../inc/stm32f303xDE.inc:492    *ABS*:5000030c ADC2_CDR
+../inc/stm32f303xDE.inc:494    *ABS*:50000500 ADC4_ISR
+ARM GAS  src/uart.asm 			page 28
+
+
+../inc/stm32f303xDE.inc:495    *ABS*:50000504 ADC4_IER
+../inc/stm32f303xDE.inc:496    *ABS*:50000508 ADC4_CR
+../inc/stm32f303xDE.inc:497    *ABS*:5000050c ADC4_CFGR
+../inc/stm32f303xDE.inc:498    *ABS*:50000514 ADC4_SMPR1
+../inc/stm32f303xDE.inc:499    *ABS*:50000518 ADC4_SMPR2
+../inc/stm32f303xDE.inc:500    *ABS*:50000520 ADC4_TR1
+../inc/stm32f303xDE.inc:501    *ABS*:50000524 ADC4_TR2
+../inc/stm32f303xDE.inc:502    *ABS*:50000528 ADC4_TR3
+../inc/stm32f303xDE.inc:503    *ABS*:50000530 ADC4_SQR1
+../inc/stm32f303xDE.inc:504    *ABS*:50000534 ADC4_SQR2
+../inc/stm32f303xDE.inc:505    *ABS*:50000538 ADC4_SQR3
+../inc/stm32f303xDE.inc:506    *ABS*:5000053c ADC4_SQR4
+../inc/stm32f303xDE.inc:507    *ABS*:50000540 ADC4_DR
+../inc/stm32f303xDE.inc:508    *ABS*:5000054c ADC4_JSQR
+../inc/stm32f303xDE.inc:509    *ABS*:50000560 ADC4_OFR1
+../inc/stm32f303xDE.inc:510    *ABS*:50000564 ADC4_OFR2
+../inc/stm32f303xDE.inc:511    *ABS*:50000568 ADC4_OFR3
+../inc/stm32f303xDE.inc:512    *ABS*:5000056c ADC4_OFR4
+../inc/stm32f303xDE.inc:513    *ABS*:50000580 ADC4_JDR1
+../inc/stm32f303xDE.inc:514    *ABS*:50000584 ADC4_JDR2
+../inc/stm32f303xDE.inc:515    *ABS*:50000588 ADC4_JDR3
+../inc/stm32f303xDE.inc:516    *ABS*:5000058c ADC4_JDR4
+../inc/stm32f303xDE.inc:517    *ABS*:500005a0 ADC4_AWD2CR
+../inc/stm32f303xDE.inc:518    *ABS*:500005a4 ADC4_AWD3CR
+../inc/stm32f303xDE.inc:519    *ABS*:500005b0 ADC4_DIFSEL
+../inc/stm32f303xDE.inc:520    *ABS*:500005b4 ADC4_CALFACT
+../inc/stm32f303xDE.inc:521    *ABS*:50000700 ADC4_CSR
+../inc/stm32f303xDE.inc:522    *ABS*:50000708 ADC4_CCR
+../inc/stm32f303xDE.inc:523    *ABS*:5000070c ADC4_CDR
+../inc/stm32f303xDE.inc:527    *ABS*:40024000 TSC_CR
+../inc/stm32f303xDE.inc:528    *ABS*:40024004 TSC_IER
+../inc/stm32f303xDE.inc:529    *ABS*:40024008 TSC_ICR
+../inc/stm32f303xDE.inc:530    *ABS*:4002400c TSC_ISR
+../inc/stm32f303xDE.inc:531    *ABS*:40024010 TSC_IOHCR
+../inc/stm32f303xDE.inc:532    *ABS*:40024018 TSC_IOASCR
+../inc/stm32f303xDE.inc:533    *ABS*:40024020 TSC_IOSCR
+../inc/stm32f303xDE.inc:534    *ABS*:40024028 TSC_IOCCR
+../inc/stm32f303xDE.inc:535    *ABS*:40024030 TSC_IOGCSR
+../inc/stm32f303xDE.inc:536    *ABS*:40024034 TSC_IOG1CR
+../inc/stm32f303xDE.inc:537    *ABS*:40024038 TSC_IOG2CR
+../inc/stm32f303xDE.inc:538    *ABS*:4002403c TSC_IOG3CR
+../inc/stm32f303xDE.inc:539    *ABS*:40024040 TSC_IOG4CR
+../inc/stm32f303xDE.inc:540    *ABS*:40024044 TSC_IOG5CR
+../inc/stm32f303xDE.inc:541    *ABS*:40024048 TSC_IOG6CR
+../inc/stm32f303xDE.inc:542    *ABS*:4002404c TSC_IOG7CR
+../inc/stm32f303xDE.inc:543    *ABS*:40024050 TSC_IOG8CR
+../inc/stm32f303xDE.inc:547    *ABS*:40023000 CRC_DR
+../inc/stm32f303xDE.inc:548    *ABS*:40023004 CRC_IDR
+../inc/stm32f303xDE.inc:549    *ABS*:40023008 CRC_CR
+../inc/stm32f303xDE.inc:550    *ABS*:40023010 CRC_INIT
+../inc/stm32f303xDE.inc:551    *ABS*:40023014 CRC_POL
+../inc/stm32f303xDE.inc:555    *ABS*:40022000 FLASH_ACR
+../inc/stm32f303xDE.inc:556    *ABS*:40022004 FLASH_KEYR
+../inc/stm32f303xDE.inc:557    *ABS*:40022008 FLASH_OPTKEYR
+../inc/stm32f303xDE.inc:558    *ABS*:4002200c FLASH_SR
+../inc/stm32f303xDE.inc:559    *ABS*:40022010 FLASH_CR
+../inc/stm32f303xDE.inc:560    *ABS*:40022014 FLASH_AR
+ARM GAS  src/uart.asm 			page 29
+
+
+../inc/stm32f303xDE.inc:561    *ABS*:4002201c FLASH_OBR
+../inc/stm32f303xDE.inc:562    *ABS*:40022020 FLASH_WRPR
+../inc/stm32f303xDE.inc:566    *ABS*:40021000 RCC_CR
+../inc/stm32f303xDE.inc:567    *ABS*:40021004 RCC_CFGR
+../inc/stm32f303xDE.inc:568    *ABS*:40021008 RCC_CIR
+../inc/stm32f303xDE.inc:569    *ABS*:4002100c RCC_APB2RSTR
+../inc/stm32f303xDE.inc:570    *ABS*:40021010 RCC_APB1RSTR
+../inc/stm32f303xDE.inc:572    *ABS*:40021018 RCC_APB2ENR
+../inc/stm32f303xDE.inc:574    *ABS*:40021020 RCC_BDCR
+../inc/stm32f303xDE.inc:575    *ABS*:40021024 RCC_CSR
+../inc/stm32f303xDE.inc:576    *ABS*:40021028 RCC_AHBRSTR
+../inc/stm32f303xDE.inc:577    *ABS*:4002102c RCC_CFGR2
+../inc/stm32f303xDE.inc:578    *ABS*:40021030 RCC_CFGR3
+../inc/stm32f303xDE.inc:582    *ABS*:40020000 DMA1_ISR
+../inc/stm32f303xDE.inc:583    *ABS*:40020004 DMA1_IFCR
+../inc/stm32f303xDE.inc:584    *ABS*:40020008 DMA1_CCR1
+../inc/stm32f303xDE.inc:585    *ABS*:4002000c DMA1_CNDTR1
+../inc/stm32f303xDE.inc:586    *ABS*:40020010 DMA1_CPAR1
+../inc/stm32f303xDE.inc:587    *ABS*:40020014 DMA1_CMAR1
+../inc/stm32f303xDE.inc:588    *ABS*:4002001c DMA1_CCR2
+../inc/stm32f303xDE.inc:589    *ABS*:40020020 DMA1_CNDTR2
+../inc/stm32f303xDE.inc:590    *ABS*:40020024 DMA1_CPAR2
+../inc/stm32f303xDE.inc:591    *ABS*:40020028 DMA1_CMAR2
+../inc/stm32f303xDE.inc:592    *ABS*:40020030 DMA1_CCR3
+../inc/stm32f303xDE.inc:593    *ABS*:40020034 DMA1_CNDTR3
+../inc/stm32f303xDE.inc:594    *ABS*:40020038 DMA1_CPAR3
+../inc/stm32f303xDE.inc:595    *ABS*:4002003c DMA1_CMAR3
+../inc/stm32f303xDE.inc:596    *ABS*:40020044 DMA1_CCR4
+../inc/stm32f303xDE.inc:597    *ABS*:40020048 DMA1_CNDTR4
+../inc/stm32f303xDE.inc:598    *ABS*:4002004c DMA1_CPAR4
+../inc/stm32f303xDE.inc:599    *ABS*:40020050 DMA1_CMAR4
+../inc/stm32f303xDE.inc:600    *ABS*:40020058 DMA1_CCR5
+../inc/stm32f303xDE.inc:601    *ABS*:4002005c DMA1_CNDTR5
+../inc/stm32f303xDE.inc:602    *ABS*:40020060 DMA1_CPAR5
+../inc/stm32f303xDE.inc:603    *ABS*:40020064 DMA1_CMAR5
+../inc/stm32f303xDE.inc:604    *ABS*:4002006c DMA1_CCR6
+../inc/stm32f303xDE.inc:605    *ABS*:40020070 DMA1_CNDTR6
+../inc/stm32f303xDE.inc:606    *ABS*:40020074 DMA1_CPAR6
+../inc/stm32f303xDE.inc:607    *ABS*:40020078 DMA1_CMAR6
+../inc/stm32f303xDE.inc:608    *ABS*:40020080 DMA1_CCR7
+../inc/stm32f303xDE.inc:609    *ABS*:40020084 DMA1_CNDTR7
+../inc/stm32f303xDE.inc:610    *ABS*:40020088 DMA1_CPAR7
+../inc/stm32f303xDE.inc:611    *ABS*:4002008c DMA1_CMAR7
+../inc/stm32f303xDE.inc:615    *ABS*:40020400 DMA2_ISR
+../inc/stm32f303xDE.inc:616    *ABS*:40020404 DMA2_IFCR
+../inc/stm32f303xDE.inc:617    *ABS*:40020408 DMA2_CCR1
+../inc/stm32f303xDE.inc:618    *ABS*:4002040c DMA2_CNDTR1
+../inc/stm32f303xDE.inc:619    *ABS*:40020410 DMA2_CPAR1
+../inc/stm32f303xDE.inc:620    *ABS*:40020414 DMA2_CMAR1
+../inc/stm32f303xDE.inc:621    *ABS*:4002041c DMA2_CCR2
+../inc/stm32f303xDE.inc:622    *ABS*:40020420 DMA2_CNDTR2
+../inc/stm32f303xDE.inc:623    *ABS*:40020424 DMA2_CPAR2
+../inc/stm32f303xDE.inc:624    *ABS*:40020428 DMA2_CMAR2
+../inc/stm32f303xDE.inc:625    *ABS*:40020430 DMA2_CCR3
+../inc/stm32f303xDE.inc:626    *ABS*:40020434 DMA2_CNDTR3
+../inc/stm32f303xDE.inc:627    *ABS*:40020438 DMA2_CPAR3
+../inc/stm32f303xDE.inc:628    *ABS*:4002043c DMA2_CMAR3
+ARM GAS  src/uart.asm 			page 30
+
+
+../inc/stm32f303xDE.inc:629    *ABS*:40020444 DMA2_CCR4
+../inc/stm32f303xDE.inc:630    *ABS*:40020448 DMA2_CNDTR4
+../inc/stm32f303xDE.inc:631    *ABS*:4002044c DMA2_CPAR4
+../inc/stm32f303xDE.inc:632    *ABS*:40020450 DMA2_CMAR4
+../inc/stm32f303xDE.inc:633    *ABS*:40020458 DMA2_CCR5
+../inc/stm32f303xDE.inc:634    *ABS*:4002045c DMA2_CNDTR5
+../inc/stm32f303xDE.inc:635    *ABS*:40020460 DMA2_CPAR5
+../inc/stm32f303xDE.inc:636    *ABS*:40020464 DMA2_CMAR5
+../inc/stm32f303xDE.inc:640    *ABS*:40013800 USART1_CR1
+../inc/stm32f303xDE.inc:641    *ABS*:40013804 USART1_CR2
+../inc/stm32f303xDE.inc:642    *ABS*:40013808 USART1_CR3
+../inc/stm32f303xDE.inc:643    *ABS*:4001380c USART1_BRR
+../inc/stm32f303xDE.inc:644    *ABS*:40013810 USART1_GTPR
+../inc/stm32f303xDE.inc:645    *ABS*:40013814 USART1_RTOR
+../inc/stm32f303xDE.inc:646    *ABS*:40013818 USART1_RQR
+../inc/stm32f303xDE.inc:647    *ABS*:4001381c USART1_ISR
+../inc/stm32f303xDE.inc:648    *ABS*:40013820 USART1_ICR
+../inc/stm32f303xDE.inc:649    *ABS*:40013824 USART1_RDR
+../inc/stm32f303xDE.inc:650    *ABS*:40013828 USART1_TDR
+../inc/stm32f303xDE.inc:652    *ABS*:40004400 USART2_CR1
+../inc/stm32f303xDE.inc:653    *ABS*:40004404 USART2_CR2
+../inc/stm32f303xDE.inc:654    *ABS*:40004408 USART2_CR3
+../inc/stm32f303xDE.inc:655    *ABS*:4000440c USART2_BRR
+../inc/stm32f303xDE.inc:656    *ABS*:40004410 USART2_GTPR
+../inc/stm32f303xDE.inc:657    *ABS*:40004414 USART2_RTOR
+../inc/stm32f303xDE.inc:658    *ABS*:40004418 USART2_RQR
+../inc/stm32f303xDE.inc:659    *ABS*:4000441c USART2_ISR
+../inc/stm32f303xDE.inc:660    *ABS*:40004420 USART2_ICR
+../inc/stm32f303xDE.inc:661    *ABS*:40004424 USART2_RDR
+../inc/stm32f303xDE.inc:662    *ABS*:40004428 USART2_TDR
+../inc/stm32f303xDE.inc:664    *ABS*:40004800 USART3_CR1
+../inc/stm32f303xDE.inc:665    *ABS*:40004804 USART3_CR2
+../inc/stm32f303xDE.inc:666    *ABS*:40004808 USART3_CR3
+../inc/stm32f303xDE.inc:667    *ABS*:4000480c USART3_BRR
+../inc/stm32f303xDE.inc:668    *ABS*:40004810 USART3_GTPR
+../inc/stm32f303xDE.inc:669    *ABS*:40004814 USART3_RTOR
+../inc/stm32f303xDE.inc:670    *ABS*:40004818 USART3_RQR
+../inc/stm32f303xDE.inc:671    *ABS*:4000481c USART3_ISR
+../inc/stm32f303xDE.inc:672    *ABS*:40004820 USART3_ICR
+../inc/stm32f303xDE.inc:673    *ABS*:40004824 USART3_RDR
+../inc/stm32f303xDE.inc:674    *ABS*:40004828 USART3_TDR
+../inc/stm32f303xDE.inc:677    *ABS*:40004c04 UART4_CR2
+../inc/stm32f303xDE.inc:678    *ABS*:40004c08 UART4_CR3
+../inc/stm32f303xDE.inc:680    *ABS*:40004c10 UART4_GTPR
+../inc/stm32f303xDE.inc:681    *ABS*:40004c14 UART4_RTOR
+../inc/stm32f303xDE.inc:682    *ABS*:40004c18 UART4_RQR
+../inc/stm32f303xDE.inc:683    *ABS*:40004c1c UART4_ISR
+../inc/stm32f303xDE.inc:684    *ABS*:40004c20 UART4_ICR
+../inc/stm32f303xDE.inc:685    *ABS*:40004c24 UART4_RDR
+../inc/stm32f303xDE.inc:688    *ABS*:40005000 UART5_CR1
+../inc/stm32f303xDE.inc:689    *ABS*:40005004 UART5_CR2
+../inc/stm32f303xDE.inc:690    *ABS*:40005008 UART5_CR3
+../inc/stm32f303xDE.inc:691    *ABS*:4000500c UART5_BRR
+../inc/stm32f303xDE.inc:692    *ABS*:40005010 UART5_GTPR
+../inc/stm32f303xDE.inc:693    *ABS*:40005014 UART5_RTOR
+../inc/stm32f303xDE.inc:694    *ABS*:40005018 UART5_RQR
+../inc/stm32f303xDE.inc:695    *ABS*:4000501c UART5_ISR
+ARM GAS  src/uart.asm 			page 31
+
+
+../inc/stm32f303xDE.inc:696    *ABS*:40005020 UART5_ICR
+../inc/stm32f303xDE.inc:697    *ABS*:40005024 UART5_RDR
+../inc/stm32f303xDE.inc:698    *ABS*:40005028 UART5_TDR
+../inc/stm32f303xDE.inc:702    *ABS*:40013000 SPI1_CR1
+../inc/stm32f303xDE.inc:703    *ABS*:40013004 SPI1_CR2
+../inc/stm32f303xDE.inc:704    *ABS*:40013008 SPI1_SR
+../inc/stm32f303xDE.inc:705    *ABS*:4001300c SPI1_DR
+../inc/stm32f303xDE.inc:706    *ABS*:40013010 SPI1_CRCPR
+../inc/stm32f303xDE.inc:707    *ABS*:40013014 SPI1_RXCRCR
+../inc/stm32f303xDE.inc:708    *ABS*:40013018 SPI1_TXCRCR
+../inc/stm32f303xDE.inc:709    *ABS*:4001301c SPI1_I2SCFGR
+../inc/stm32f303xDE.inc:710    *ABS*:40013020 SPI1_I2SPR
+../inc/stm32f303xDE.inc:712    *ABS*:40003800 SPI2_I2S2_CR1
+../inc/stm32f303xDE.inc:713    *ABS*:40003804 SPI2_I2S2_CR2
+../inc/stm32f303xDE.inc:714    *ABS*:40003808 SPI2_I2S2_SR
+../inc/stm32f303xDE.inc:715    *ABS*:4000380c SPI2_I2S2_DR
+../inc/stm32f303xDE.inc:716    *ABS*:40003810 SPI2_I2S2_CRCPR
+../inc/stm32f303xDE.inc:717    *ABS*:40003814 SPI2_I2S2_RXCRCR
+../inc/stm32f303xDE.inc:718    *ABS*:40003818 SPI2_I2S2_TXCRCR
+../inc/stm32f303xDE.inc:719    *ABS*:4000381c SPI2_I2S2_I2SCFGR
+../inc/stm32f303xDE.inc:720    *ABS*:40003820 SPI2_I2S2_I2SPR
+../inc/stm32f303xDE.inc:722    *ABS*:40003c00 SPI3_I2S3_CR1
+../inc/stm32f303xDE.inc:723    *ABS*:40003c04 SPI3_I2S3_CR2
+../inc/stm32f303xDE.inc:724    *ABS*:40003c08 SPI3_I2S3_SR
+../inc/stm32f303xDE.inc:725    *ABS*:40003c0c SPI3_I2S3_DR
+../inc/stm32f303xDE.inc:726    *ABS*:40003c10 SPI3_I2S3_CRCPR
+../inc/stm32f303xDE.inc:727    *ABS*:40003c14 SPI3_I2S3_RXCRCR
+../inc/stm32f303xDE.inc:728    *ABS*:40003c18 SPI3_I2S3_TXCRCR
+../inc/stm32f303xDE.inc:729    *ABS*:40003c1c SPI3_I2S3_I2SCFGR
+../inc/stm32f303xDE.inc:730    *ABS*:40003c20 SPI3_I2S3_I2SPR
+../inc/stm32f303xDE.inc:732    *ABS*:40013c00 SPI4_CR1
+../inc/stm32f303xDE.inc:733    *ABS*:40013c04 SPI4_CR2
+../inc/stm32f303xDE.inc:734    *ABS*:40013c08 SPI4_SR
+../inc/stm32f303xDE.inc:735    *ABS*:40013c0c SPI4_DR
+../inc/stm32f303xDE.inc:736    *ABS*:40013c10 SPI4_CRCPR
+../inc/stm32f303xDE.inc:737    *ABS*:40013c14 SPI4_RXCRCR
+../inc/stm32f303xDE.inc:738    *ABS*:40013c18 SPI4_TXCRCR
+../inc/stm32f303xDE.inc:739    *ABS*:40013c1c SPI4_I2SCFGR
+../inc/stm32f303xDE.inc:740    *ABS*:40013c20 SPI4_I2SPR
+../inc/stm32f303xDE.inc:744    *ABS*:a0000400 FMC_BCR1
+../inc/stm32f303xDE.inc:745    *ABS*:a0000408 FMC_BCR2
+../inc/stm32f303xDE.inc:746    *ABS*:a0000410 FMC_BCR3
+../inc/stm32f303xDE.inc:747    *ABS*:a0000418 FMC_BCR4
+../inc/stm32f303xDE.inc:748    *ABS*:a0000404 FMC_BTR1
+../inc/stm32f303xDE.inc:749    *ABS*:a000040c FMC_BTR2
+../inc/stm32f303xDE.inc:750    *ABS*:a0000414 FMC_BTR3
+../inc/stm32f303xDE.inc:751    *ABS*:a000041c FMC_BTR4
+../inc/stm32f303xDE.inc:752    *ABS*:a0000504 FMC_BWTR1
+../inc/stm32f303xDE.inc:753    *ABS*:a000050c FMC_BWTR2
+../inc/stm32f303xDE.inc:754    *ABS*:a0000514 FMC_BWTR3
+../inc/stm32f303xDE.inc:755    *ABS*:a000051c FMC_BWTR4
+../inc/stm32f303xDE.inc:756    *ABS*:a0000460 FMC_PCR2
+../inc/stm32f303xDE.inc:757    *ABS*:a0000480 FMC_PCR3
+../inc/stm32f303xDE.inc:758    *ABS*:a00004a0 FMC_PCR4
+../inc/stm32f303xDE.inc:759    *ABS*:a0000464 FMC_SR2
+../inc/stm32f303xDE.inc:760    *ABS*:a0000484 FMC_SR3
+../inc/stm32f303xDE.inc:761    *ABS*:a00004a4 FMC_SR4
+ARM GAS  src/uart.asm 			page 32
+
+
+../inc/stm32f303xDE.inc:762    *ABS*:a0000468 FMC_PMEM2
+../inc/stm32f303xDE.inc:763    *ABS*:a0000488 FMC_PMEM3
+../inc/stm32f303xDE.inc:764    *ABS*:a00004a8 FMC_PMEM4
+../inc/stm32f303xDE.inc:765    *ABS*:a000046c FMC_PATT2
+../inc/stm32f303xDE.inc:766    *ABS*:a000048c FMC_PATT3
+../inc/stm32f303xDE.inc:767    *ABS*:a00004ac FMC_PATT4
+../inc/stm32f303xDE.inc:768    *ABS*:a00004b0 FMC_PIO4
+../inc/stm32f303xDE.inc:769    *ABS*:a0000474 FMC_ECCR2
+../inc/stm32f303xDE.inc:770    *ABS*:a0000494 FMC_ECCR3
+../inc/stm32f303xDE.inc:774    *ABS*:40010400 EXTI_IMR1
+../inc/stm32f303xDE.inc:775    *ABS*:40010404 EXTI_EMR1
+../inc/stm32f303xDE.inc:776    *ABS*:40010408 EXTI_RTSR1
+../inc/stm32f303xDE.inc:777    *ABS*:4001040c EXTI_FTSR1
+../inc/stm32f303xDE.inc:778    *ABS*:40010410 EXTI_SWIER1
+../inc/stm32f303xDE.inc:779    *ABS*:40010414 EXTI_PR1
+../inc/stm32f303xDE.inc:780    *ABS*:40010420 EXTI_IMR2
+../inc/stm32f303xDE.inc:781    *ABS*:40010424 EXTI_EMR2
+../inc/stm32f303xDE.inc:782    *ABS*:40010428 EXTI_RTSR2
+../inc/stm32f303xDE.inc:783    *ABS*:4001042c EXTI_FTSR2
+../inc/stm32f303xDE.inc:784    *ABS*:40010430 EXTI_SWIER2
+../inc/stm32f303xDE.inc:785    *ABS*:40010434 EXTI_PR2
+../inc/stm32f303xDE.inc:789    *ABS*:40014001 SYSCFG_CFGR1
+../inc/stm32f303xDE.inc:790    *ABS*:40014005 SYSCFG_RCR
+../inc/stm32f303xDE.inc:791    *ABS*:40014009 SYSCFG_EXTICR1
+../inc/stm32f303xDE.inc:792    *ABS*:4001400d SYSCFG_EXTICR2
+../inc/stm32f303xDE.inc:793    *ABS*:40014011 SYSCFG_EXTICR3
+../inc/stm32f303xDE.inc:794    *ABS*:40014015 SYSCFG_EXTICR4
+../inc/stm32f303xDE.inc:795    *ABS*:40014019 SYSCFG_CFGR2
+../inc/stm32f303xDE.inc:796    *ABS*:40014051 SYSCFG_CFGR3
+../inc/stm32f303xDE.inc:797    *ABS*:40014049 SYSCFG_CFGR4
+../inc/stm32f303xDE.inc:801    *ABS*:4001401d COMP1_CSR
+../inc/stm32f303xDE.inc:802    *ABS*:40014021 COMP2_CSR
+../inc/stm32f303xDE.inc:803    *ABS*:40014025 COMP3_CSR
+../inc/stm32f303xDE.inc:804    *ABS*:40014029 COMP4_CSR
+../inc/stm32f303xDE.inc:805    *ABS*:4001402d COMP5_CSR
+../inc/stm32f303xDE.inc:806    *ABS*:40014031 COMP6_CSR
+../inc/stm32f303xDE.inc:807    *ABS*:40014035 COMP7_CSR
+../inc/stm32f303xDE.inc:811    *ABS*:40014039 OPAMP1_CSR
+../inc/stm32f303xDE.inc:812    *ABS*:4001403d OPAMP2_CSR
+../inc/stm32f303xDE.inc:813    *ABS*:40014041 OPAMP3_CSR
+../inc/stm32f303xDE.inc:814    *ABS*:40014045 OPAMP4_CSR
+../inc/stm32f303xDE.inc:818    *ABS*:40005400 I2C1_CR1
+../inc/stm32f303xDE.inc:819    *ABS*:40005404 I2C1_CR2
+../inc/stm32f303xDE.inc:820    *ABS*:40005408 I2C1_OAR1
+../inc/stm32f303xDE.inc:821    *ABS*:4000540c I2C1_OAR2
+../inc/stm32f303xDE.inc:822    *ABS*:40005410 I2C1_TIMINGR
+../inc/stm32f303xDE.inc:823    *ABS*:40005414 I2C1_TIMEOUTR
+../inc/stm32f303xDE.inc:824    *ABS*:40005418 I2C1_ISR
+../inc/stm32f303xDE.inc:825    *ABS*:4000541c I2C1_ICR
+../inc/stm32f303xDE.inc:826    *ABS*:40005420 I2C1_PECR
+../inc/stm32f303xDE.inc:827    *ABS*:40005424 I2C1_RXDR
+../inc/stm32f303xDE.inc:828    *ABS*:40005428 I2C1_TXDR
+../inc/stm32f303xDE.inc:830    *ABS*:40005800 I2C2_CR1
+../inc/stm32f303xDE.inc:831    *ABS*:40005804 I2C2_CR2
+../inc/stm32f303xDE.inc:832    *ABS*:40005808 I2C2_OAR1
+../inc/stm32f303xDE.inc:833    *ABS*:4000580c I2C2_OAR2
+../inc/stm32f303xDE.inc:834    *ABS*:40005810 I2C2_TIMINGR
+ARM GAS  src/uart.asm 			page 33
+
+
+../inc/stm32f303xDE.inc:835    *ABS*:40005814 I2C2_TIMEOUTR
+../inc/stm32f303xDE.inc:836    *ABS*:40005818 I2C2_ISR
+../inc/stm32f303xDE.inc:837    *ABS*:4000581c I2C2_ICR
+../inc/stm32f303xDE.inc:838    *ABS*:40005820 I2C2_PECR
+../inc/stm32f303xDE.inc:839    *ABS*:40005824 I2C2_RXDR
+../inc/stm32f303xDE.inc:840    *ABS*:40005828 I2C2_TXDR
+../inc/stm32f303xDE.inc:842    *ABS*:40007800 I2C3_CR1
+../inc/stm32f303xDE.inc:843    *ABS*:40007804 I2C3_CR2
+../inc/stm32f303xDE.inc:844    *ABS*:40007808 I2C3_OAR1
+../inc/stm32f303xDE.inc:845    *ABS*:4000780c I2C3_OAR2
+../inc/stm32f303xDE.inc:846    *ABS*:40007810 I2C3_TIMINGR
+../inc/stm32f303xDE.inc:847    *ABS*:40007814 I2C3_TIMEOUTR
+../inc/stm32f303xDE.inc:848    *ABS*:40007818 I2C3_ISR
+../inc/stm32f303xDE.inc:849    *ABS*:4000781c I2C3_ICR
+../inc/stm32f303xDE.inc:850    *ABS*:40007820 I2C3_PECR
+../inc/stm32f303xDE.inc:851    *ABS*:40007824 I2C3_RXDR
+../inc/stm32f303xDE.inc:852    *ABS*:40007828 I2C3_TXDR
+../inc/stm32f303xDE.inc:856    *ABS*:40007400 DAC_CR
+../inc/stm32f303xDE.inc:857    *ABS*:40007404 DAC_SWTRIGR
+../inc/stm32f303xDE.inc:858    *ABS*:40007408 DAC_DHR12R1
+../inc/stm32f303xDE.inc:859    *ABS*:4000740c DAC_DHR12L1
+../inc/stm32f303xDE.inc:860    *ABS*:40007410 DAC_DHR8R1
+../inc/stm32f303xDE.inc:861    *ABS*:40007414 DAC_DHR12R2
+../inc/stm32f303xDE.inc:862    *ABS*:40007418 DAC_DHR12L2
+../inc/stm32f303xDE.inc:863    *ABS*:4000741c DAC_DHR8R2
+../inc/stm32f303xDE.inc:864    *ABS*:40007420 DAC_DHR12RD
+../inc/stm32f303xDE.inc:865    *ABS*:40007424 DAC_DHR12LD
+../inc/stm32f303xDE.inc:866    *ABS*:40007428 DAC_DHR8RD
+../inc/stm32f303xDE.inc:867    *ABS*:4000742c DAC_DOR1
+../inc/stm32f303xDE.inc:868    *ABS*:40007430 DAC_DOR2
+../inc/stm32f303xDE.inc:869    *ABS*:40007434 DAC_SR
+../inc/stm32f303xDE.inc:873    *ABS*:40007000 PWR_CR
+../inc/stm32f303xDE.inc:874    *ABS*:40007004 PWR_CSR
+../inc/stm32f303xDE.inc:878    *ABS*:40006400 CAN_MCR
+../inc/stm32f303xDE.inc:879    *ABS*:40006404 CAN_MSR
+../inc/stm32f303xDE.inc:880    *ABS*:40006408 CAN_TSR
+../inc/stm32f303xDE.inc:881    *ABS*:4000640c CAN_RF0R
+../inc/stm32f303xDE.inc:882    *ABS*:40006410 CAN_RF1R
+../inc/stm32f303xDE.inc:883    *ABS*:40006414 CAN_IER
+../inc/stm32f303xDE.inc:884    *ABS*:40006418 CAN_ESR
+../inc/stm32f303xDE.inc:885    *ABS*:4000641c CAN_BTR
+../inc/stm32f303xDE.inc:886    *ABS*:40006580 CAN_TI0R
+../inc/stm32f303xDE.inc:887    *ABS*:40006584 CAN_TDT0R
+../inc/stm32f303xDE.inc:888    *ABS*:40006588 CAN_TDL0R
+../inc/stm32f303xDE.inc:889    *ABS*:4000658c CAN_TDH0R
+../inc/stm32f303xDE.inc:890    *ABS*:40006590 CAN_TI1R
+../inc/stm32f303xDE.inc:891    *ABS*:40006594 CAN_TDT1R
+../inc/stm32f303xDE.inc:892    *ABS*:40006598 CAN_TDL1R
+../inc/stm32f303xDE.inc:893    *ABS*:4000659c CAN_TDH1R
+../inc/stm32f303xDE.inc:894    *ABS*:400065a0 CAN_TI2R
+../inc/stm32f303xDE.inc:895    *ABS*:400065a4 CAN_TDT2R
+../inc/stm32f303xDE.inc:896    *ABS*:400065a8 CAN_TDL2R
+../inc/stm32f303xDE.inc:897    *ABS*:400065ac CAN_TDH2R
+../inc/stm32f303xDE.inc:898    *ABS*:400065b0 CAN_RI0R
+../inc/stm32f303xDE.inc:899    *ABS*:400065b4 CAN_RDT0R
+../inc/stm32f303xDE.inc:900    *ABS*:400065b8 CAN_RDL0R
+../inc/stm32f303xDE.inc:901    *ABS*:400065bc CAN_RDH0R
+ARM GAS  src/uart.asm 			page 34
+
+
+../inc/stm32f303xDE.inc:902    *ABS*:400065c0 CAN_RI1R
+../inc/stm32f303xDE.inc:903    *ABS*:400065c4 CAN_RDT1R
+../inc/stm32f303xDE.inc:904    *ABS*:400065c8 CAN_RDL1R
+../inc/stm32f303xDE.inc:905    *ABS*:400065cc CAN_RDH1R
+../inc/stm32f303xDE.inc:906    *ABS*:40006600 CAN_FMR
+../inc/stm32f303xDE.inc:907    *ABS*:40006604 CAN_FM1R
+../inc/stm32f303xDE.inc:908    *ABS*:4000660c CAN_FS1R
+../inc/stm32f303xDE.inc:909    *ABS*:40006614 CAN_FFA1R
+../inc/stm32f303xDE.inc:910    *ABS*:4000661c CAN_FA1R
+../inc/stm32f303xDE.inc:911    *ABS*:40006640 CAN_F0R1
+../inc/stm32f303xDE.inc:912    *ABS*:40006644 CAN_F0R2
+../inc/stm32f303xDE.inc:913    *ABS*:40006648 CAN_F1R1
+../inc/stm32f303xDE.inc:914    *ABS*:4000664c CAN_F1R2
+../inc/stm32f303xDE.inc:915    *ABS*:400066ab CAN_F13R1
+../inc/stm32f303xDE.inc:916    *ABS*:400066ac CAN_F13R2
+../inc/stm32f303xDE.inc:920    *ABS*:40005c00 USB_EP0R
+../inc/stm32f303xDE.inc:921    *ABS*:40005c04 USB_EP1R
+../inc/stm32f303xDE.inc:922    *ABS*:40005c08 USB_EP2R
+../inc/stm32f303xDE.inc:923    *ABS*:40005c0c USB_EP3R
+../inc/stm32f303xDE.inc:924    *ABS*:40005c10 USB_EP4R
+../inc/stm32f303xDE.inc:925    *ABS*:40005c14 USB_EP5R
+../inc/stm32f303xDE.inc:926    *ABS*:40005c18 USB_EP6R
+../inc/stm32f303xDE.inc:927    *ABS*:40005c1c USB_EP7R
+../inc/stm32f303xDE.inc:928    *ABS*:40005c40 USB_CNTR
+../inc/stm32f303xDE.inc:929    *ABS*:40005c44 USB_ISTR
+../inc/stm32f303xDE.inc:930    *ABS*:40005c48 USB_FNR
+../inc/stm32f303xDE.inc:931    *ABS*:40005c4c USB_DADDR
+../inc/stm32f303xDE.inc:932    *ABS*:40006050 USB_BTABLE
+../inc/stm32f303xDE.inc:933    *ABS*:40006054 USB_LPMCSR
+../inc/stm32f303xDE.inc:937    *ABS*:40003000 IWDG_KR
+../inc/stm32f303xDE.inc:938    *ABS*:40003004 IWDG_PR
+../inc/stm32f303xDE.inc:939    *ABS*:40003008 IWDG_RLR
+../inc/stm32f303xDE.inc:940    *ABS*:4000300c IWDG_SR
+../inc/stm32f303xDE.inc:941    *ABS*:40003010 IWDG_WINR
+../inc/stm32f303xDE.inc:945    *ABS*:40002c00 WWDG_CR
+../inc/stm32f303xDE.inc:946    *ABS*:40002c04 WWDG_CFR
+../inc/stm32f303xDE.inc:947    *ABS*:40002c08 WWDG_SR
+../inc/stm32f303xDE.inc:951    *ABS*:40002800 RTC_TR
+../inc/stm32f303xDE.inc:952    *ABS*:40002804 RTC_DR
+../inc/stm32f303xDE.inc:953    *ABS*:40002808 RTC_CR
+../inc/stm32f303xDE.inc:954    *ABS*:4000280c RTC_ISR
+../inc/stm32f303xDE.inc:955    *ABS*:40002810 RTC_PRER
+../inc/stm32f303xDE.inc:956    *ABS*:40002814 RTC_WUTR
+../inc/stm32f303xDE.inc:957    *ABS*:4000281c RTC_ALRMAR
+../inc/stm32f303xDE.inc:958    *ABS*:40002820 RTC_ALRMBR
+../inc/stm32f303xDE.inc:959    *ABS*:40002824 RTC_WPR
+../inc/stm32f303xDE.inc:960    *ABS*:40002828 RTC_SSR
+../inc/stm32f303xDE.inc:961    *ABS*:4000282c RTC_SHIFTR
+../inc/stm32f303xDE.inc:962    *ABS*:40002830 RTC_TSTR
+../inc/stm32f303xDE.inc:963    *ABS*:40002834 RTC_TSDR
+../inc/stm32f303xDE.inc:964    *ABS*:40002838 RTC_TSSSR
+../inc/stm32f303xDE.inc:965    *ABS*:4000283c RTC_CALR
+../inc/stm32f303xDE.inc:966    *ABS*:40002840 RTC_TAFCR
+../inc/stm32f303xDE.inc:967    *ABS*:40002844 RTC_ALRMASSR
+../inc/stm32f303xDE.inc:968    *ABS*:40002848 RTC_ALRMBSSR
+../inc/stm32f303xDE.inc:969    *ABS*:4000284c RTC_OR
+../inc/stm32f303xDE.inc:970    *ABS*:40002850 RTC_BKP0R
+ARM GAS  src/uart.asm 			page 35
+
+
+../inc/stm32f303xDE.inc:971    *ABS*:40002854 RTC_BKP1R
+../inc/stm32f303xDE.inc:972    *ABS*:40002858 RTC_BKP2R
+../inc/stm32f303xDE.inc:973    *ABS*:4000285c RTC_BKP3R
+../inc/stm32f303xDE.inc:974    *ABS*:40002860 RTC_BKP4R
+../inc/stm32f303xDE.inc:975    *ABS*:40002864 RTC_BKP5R
+../inc/stm32f303xDE.inc:976    *ABS*:40002868 RTC_BKP6R
+../inc/stm32f303xDE.inc:977    *ABS*:4000286c RTC_BKP7R
+../inc/stm32f303xDE.inc:978    *ABS*:40002870 RTC_BKP8R
+../inc/stm32f303xDE.inc:979    *ABS*:40002874 RTC_BKP9R
+../inc/stm32f303xDE.inc:980    *ABS*:40002878 RTC_BKP10R
+../inc/stm32f303xDE.inc:981    *ABS*:4000287c RTC_BKP11R
+../inc/stm32f303xDE.inc:982    *ABS*:40002880 RTC_BKP12R
+../inc/stm32f303xDE.inc:983    *ABS*:40002884 RTC_BKP13R
+../inc/stm32f303xDE.inc:984    *ABS*:40002888 RTC_BKP14R
+../inc/stm32f303xDE.inc:985    *ABS*:4000288c RTC_BKP15R
+        src/uart.asm:67     .text:0000013a $d
+        src/uart.asm:67     .text:0000013c $d
+
+NO UNDEFINED SYMBOLS

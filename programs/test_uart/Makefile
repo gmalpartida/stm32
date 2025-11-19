@@ -12,7 +12,7 @@ VI=vi
 OPENOCD=openocd
 
 SRC=src/uart.asm
-TARGET=bin/uart.asm
+TARGET=bin/uart
 OBJ=$(TARGET).o
 ELF=$(TARGET).elf
 BIN=$(TARGET).bin
@@ -30,7 +30,7 @@ link: build
 	$(LD) $(OBJ) -o $(ELF) -Ttext=0x08000000
 
 build:
-	$(AS) $(ASFLAGS) $(SRC) -o $(OBJ)
+	$(AS) $(ASFLAGS) $(SRC) -o $(OBJ) -ahls > $(TARGET).lst
 
 flash: link
 	$(STFLASH) $(FLASH_FLAGS)
