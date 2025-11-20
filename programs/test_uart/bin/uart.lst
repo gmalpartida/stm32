@@ -42,38 +42,39 @@ ARM GAS  src/uart.asm 			page 1
   35              		@ set uart4 baud rate to 9600 bps, oversampling by 16
   36 0118 0C48     		ldr r0, =UART4_BRR
   37 011a 0168     		ldr r1, [r0]
-  38 011c 4FF04502 		ldr r2, =0x0045
-  39 0120 41EA0201 		orr r1, r2
-  40 0124 0160     		str r1, [r0]
-  41              	
-  42              		@ enable TE, RE and UE
-  43 0126 0A48     		ldr r0, =UART4_CR1
-  44 0128 0168     		ldr r1, [r0]
-  45 012a 41F00D01 		orr r1, #0b1101
-  46 012e 0160     		str r1, [r0]
-  47              	
-  48              		@ send a character to host
-  49              	
-  50 0130 4FF04700 		mov r0, #'G'
-  51              		@ldr r1, =UART4_ISR
-  52              	@uart4_tx_wait:
-  53              	@	tst r1, #(1 << 7)
+  38 011c 40F24131 		mov r1, #833		@ replace r1 with #833
+  39 0120 0160     		str r1, [r0]
+  40              	
+  41              		@ enable TE, RE and UE
+  42 0122 0B48     		ldr r0, =UART4_CR1
+  43 0124 0168     		ldr r1, [r0]
+  44 0126 41F00101 		orr r1, 0x01	
+  45 012a 0160     		str r1, [r0]		@ enable UE
+  46 012c 41F00C01 		orr r1, #0b1100
+  47 0130 0160     		str r1, [r0]		@ enable TE and RE
+  48              	
+  49              		@ send a character to host
+  50              	
+  51 0132 4FF04700 		mov r0, #'G'
+  52              		@ldr r1, =UART4_ISR
+  53              	@uart4_tx_wait:
 ARM GAS  src/uart.asm 			page 2
 
 
-  54              	@	beq uart4_tx_wait
-  55 0134 074A     		ldr r2, =UART4_TDR
-  56 0136 1070     		strb r0, [r2]
-  57              	
-  58              	halt:
-  59 0138 FEE7     		b halt
-  60              			
+  54              	@	tst r1, #(1 << 7)
+  55              	@	beq uart4_tx_wait
+  56 0136 074A     		ldr r2, =UART4_TDR
+  57 0138 1070     		strb r0, [r2]
+  58              	
+  59              	halt:
+  60 013a FEE7     		b halt
   61              			
-  62              	
+  62              			
   63              	
   64              	
   65              	
-  66              	.include "stm32f303xDE.inc"
+  66              	
+  67              	.include "stm32f303xDE.inc"
    1              	@ BUSES
    2              	APB1                = 0x40000000 
    3              	APB2 				= 0x40010000
@@ -117,10 +118,10 @@ ARM GAS  src/uart.asm 			page 1
   41              	PWR			        = APB1 + 0x7000
   42              	DAC1		        = APB1 + 0x7400
   43              	I2C3		        = APB1 + 0x7800
-  44              	
 ARM GAS  src/uart.asm 			page 3
 
 
+  44              	
   45              	SYSCFG              =   APB2 + 0x4001
   46              	COMP                =   APB2 + 0x4001
   47              	OPAMP               =   APB2 + 0x4001
@@ -177,10 +178,10 @@ ARM GAS  src/uart.asm 			page 1
   98              	GPIOA_BRR      = GPIOA + 0x0028
   99              	
  100              	GPIOB_MODER    = GPIOB + 0x0000
- 101              	GPIOB_OTYPER   = GPIOB + 0x0004
 ARM GAS  src/uart.asm 			page 4
 
 
+ 101              	GPIOB_OTYPER   = GPIOB + 0x0004
  102              	GPIOB_OSPEEDR  = GPIOB + 0x0008
  103              	GPIOB_PUPDR    = GPIOB + 0x000C
  104              	GPIOB_IDR      = GPIOB + 0x0010
@@ -237,10 +238,10 @@ ARM GAS  src/uart.asm 			page 1
  155              	GPIOF_LCKR     = GPIOF + 0x001C
  156              	GPIOF_AFRL     = GPIOF + 0x0020
  157              	GPIOF_AFRH     = GPIOF + 0x0024
- 158              	GPIOF_BRR      = GPIOF + 0x0028
 ARM GAS  src/uart.asm 			page 5
 
 
+ 158              	GPIOF_BRR      = GPIOF + 0x0028
  159              	
  160              	GPIOG_MODER    = GPIOG + 0x0000
  161              	GPIOG_OTYPER   = GPIOG + 0x0004
@@ -297,10 +298,10 @@ ARM GAS  src/uart.asm 			page 1
  212              	TIM8_CR2        =   TIM8 + 0x0004
  213              	TIM8_SMCR       =   TIM8 + 0x0008
  214              	TIM8_DIER       =   TIM8 + 0x000C
- 215              	TIM8_SR         =   TIM8 + 0x0010
 ARM GAS  src/uart.asm 			page 6
 
 
+ 215              	TIM8_SR         =   TIM8 + 0x0010
  216              	TIM8_EGR        =   TIM8 + 0x0014
  217              	TIM8_CCMR1      =   TIM8 + 0x0018
  218              	TIM8_CCMR2      =   TIM8 + 0x001C
@@ -357,10 +358,10 @@ ARM GAS  src/uart.asm 			page 1
  269              	TIM2_CCMR1      =   TIM2 + 0x0018
  270              	TIM2_CCMR2      =   TIM2 + 0x001C
  271              	TIM2_CCER       =   TIM2 + 0x0020
- 272              	TIM2_CNT        =   TIM2 + 0x0024
 ARM GAS  src/uart.asm 			page 7
 
 
+ 272              	TIM2_CNT        =   TIM2 + 0x0024
  273              	TIM2_PSC        =   TIM2 + 0x0028
  274              	TIM2_ARR        =   TIM2 + 0x002C
  275              	TIM2_RCR        =   TIM2 + 0x0030
@@ -417,10 +418,10 @@ ARM GAS  src/uart.asm 			page 1
  326              	TIM6_CR2        =   TIM6 + 0x0004
  327              	TIM6_DIER       =   TIM6 + 0x000C
  328              	TIM6_SR         =   TIM6 + 0x0010
- 329              	TIM6_EGR        =   TIM6 + 0x0014
 ARM GAS  src/uart.asm 			page 8
 
 
+ 329              	TIM6_EGR        =   TIM6 + 0x0014
  330              	TIM6_CNT        =   TIM6 + 0x0024
  331              	TIM6_PSC        =   TIM6 + 0x0028
  332              	TIM6_ARR        =   TIM6 + 0x002C
@@ -477,10 +478,10 @@ ARM GAS  src/uart.asm 			page 1
  383              	TIM17_SR         =   TIM17 + 0x0010
  384              	TIM17_EGR        =   TIM17 + 0x0014
  385              	TIM17_CCMR1      =   TIM17 + 0x0018
- 386              	TIM17_CCER       =   TIM17 + 0x0020
 ARM GAS  src/uart.asm 			page 9
 
 
+ 386              	TIM17_CCER       =   TIM17 + 0x0020
  387              	TIM17_CNT        =   TIM17 + 0x0024
  388              	TIM17_PSC        =   TIM17 + 0x0028
  389              	TIM17_ARR        =   TIM17 + 0x002C
@@ -537,10 +538,10 @@ ARM GAS  src/uart.asm 			page 1
  440              	ADC3_SQR2       =   ADC3 + 0x0034
  441              	ADC3_SQR3       =   ADC3 + 0x0038
  442              	ADC3_SQR4       =   ADC3 + 0x003C
- 443              	ADC3_DR         =   ADC3 + 0x0040
 ARM GAS  src/uart.asm 			page 10
 
 
+ 443              	ADC3_DR         =   ADC3 + 0x0040
  444              	ADC3_JSQR       =   ADC3 + 0x004C
  445              	ADC3_OFR1       =   ADC3 + 0x0060
  446              	ADC3_OFR2       =   ADC3 + 0x0064
@@ -597,10 +598,10 @@ ARM GAS  src/uart.asm 			page 1
  497              	ADC4_CFGR       =   ADC4 + 0x010C
  498              	ADC4_SMPR1      =   ADC4 + 0x0114
  499              	ADC4_SMPR2      =   ADC4 + 0x0118
- 500              	ADC4_TR1        =   ADC4 + 0x0120
 ARM GAS  src/uart.asm 			page 11
 
 
+ 500              	ADC4_TR1        =   ADC4 + 0x0120
  501              	ADC4_TR2        =   ADC4 + 0x0124
  502              	ADC4_TR3        =   ADC4 + 0x0128
  503              	ADC4_SQR1       =   ADC4 + 0x0130
@@ -657,10 +658,10 @@ ARM GAS  src/uart.asm 			page 1
  554              	
  555              	FLASH_ACR       =   FLASH + 0x0000
  556              	FLASH_KEYR      =   FLASH + 0x0004
- 557              	FLASH_OPTKEYR   =   FLASH + 0x0008
 ARM GAS  src/uart.asm 			page 12
 
 
+ 557              	FLASH_OPTKEYR   =   FLASH + 0x0008
  558              	FLASH_SR        =   FLASH + 0x000C
  559              	FLASH_CR        =   FLASH + 0x0010
  560              	FLASH_AR        =   FLASH + 0x0014
@@ -717,10 +718,10 @@ ARM GAS  src/uart.asm 			page 1
  611              	DMA1_CMAR7      =   DMA1 + 0x008C
  612              	
  613              	@ DMA2 ONLY HAS 5 CHANNELS
- 614              	
 ARM GAS  src/uart.asm 			page 13
 
 
+ 614              	
  615              	DMA2_ISR        =   DMA2 + 0x0000
  616              	DMA2_IFCR       =   DMA2 + 0x0004
  617              	DMA2_CCR1       =   DMA2 + 0x0008
@@ -777,10 +778,10 @@ ARM GAS  src/uart.asm 			page 1
  668              	USART3_GTPR     =   USART3 + 0x0010
  669              	USART3_RTOR     =   USART3 + 0x0014
  670              	USART3_RQR      =   USART3 + 0x0018
- 671              	USART3_ISR      =   USART3 + 0x001C
 ARM GAS  src/uart.asm 			page 14
 
 
+ 671              	USART3_ISR      =   USART3 + 0x001C
  672              	USART3_ICR      =   USART3 + 0x0020
  673              	USART3_RDR      =   USART3 + 0x0024
  674              	USART3_TDR      =   USART3 + 0x0028
@@ -837,10 +838,10 @@ ARM GAS  src/uart.asm 			page 1
  725              	SPI3_I2S3_DR         =   SPI3_I2S3 + 0x000C
  726              	SPI3_I2S3_CRCPR      =   SPI3_I2S3 + 0x0010
  727              	SPI3_I2S3_RXCRCR     =   SPI3_I2S3 + 0x0014
- 728              	SPI3_I2S3_TXCRCR     =   SPI3_I2S3 + 0x0018
 ARM GAS  src/uart.asm 			page 15
 
 
+ 728              	SPI3_I2S3_TXCRCR     =   SPI3_I2S3 + 0x0018
  729              	SPI3_I2S3_I2SCFGR    =   SPI3_I2S3 + 0x001C
  730              	SPI3_I2S3_I2SPR      =   SPI3_I2S3 + 0x0020
  731              	
@@ -897,10 +898,10 @@ ARM GAS  src/uart.asm 			page 1
  782              	EXTI_RTSR2      =   EXTI + 0x0028
  783              	EXTI_FTSR2      =   EXTI + 0x002C
  784              	EXTI_SWIER2     =   EXTI + 0x0030
- 785              	EXTI_PR2        =   EXTI + 0x0034
 ARM GAS  src/uart.asm 			page 16
 
 
+ 785              	EXTI_PR2        =   EXTI + 0x0034
  786              	
  787              	@ SYSCFG REGISTERS
  788              	
@@ -957,10 +958,10 @@ ARM GAS  src/uart.asm 			page 1
  839              	I2C2_RXDR       =   I2C2 + 0x0024
  840              	I2C2_TXDR       =   I2C2 + 0x0028
  841              	
- 842              	I2C3_CR1        =   I2C3 + 0x0000
 ARM GAS  src/uart.asm 			page 17
 
 
+ 842              	I2C3_CR1        =   I2C3 + 0x0000
  843              	I2C3_CR2        =   I2C3 + 0x0004
  844              	I2C3_OAR1       =   I2C3 + 0x0008
  845              	I2C3_OAR2       =   I2C3 + 0x000C
@@ -1017,10 +1018,10 @@ ARM GAS  src/uart.asm 			page 1
  896              	CAN_TDL2R       =   BXCAN + 0x01A8
  897              	CAN_TDH2R       =   BXCAN + 0x01AC
  898              	CAN_RI0R        =   BXCAN + 0x01B0
- 899              	CAN_RDT0R       =   BXCAN + 0x01B4
 ARM GAS  src/uart.asm 			page 18
 
 
+ 899              	CAN_RDT0R       =   BXCAN + 0x01B4
  900              	CAN_RDL0R       =   BXCAN + 0x01B8
  901              	CAN_RDH0R       =   BXCAN + 0x01BC
  902              	CAN_RI1R        =   BXCAN + 0x01C0
@@ -1077,10 +1078,10 @@ ARM GAS  src/uart.asm 			page 1
  953              	RTC_CR          =   RTC + 0x0008
  954              	RTC_ISR         =   RTC + 0x000C
  955              	RTC_PRER        =   RTC + 0x0010
- 956              	RTC_WUTR        =   RTC + 0x0014
 ARM GAS  src/uart.asm 			page 19
 
 
+ 956              	RTC_WUTR        =   RTC + 0x0014
  957              	RTC_ALRMAR      =   RTC + 0x001C
  958              	RTC_ALRMBR      =   RTC + 0x0020
  959              	RTC_WPR         =   RTC + 0x0024
@@ -1127,11 +1128,11 @@ ARM GAS  src/uart.asm 			page 1
  1000              	
  1001              	
  1002              	
-  67 013a 00001410 	
-  67      02401C10 
-  67      02400008 
-  67      00482408 
-  67      00480C4C 
+  68 013c 14100240 	
+  68      1C100240 
+  68      00080048 
+  68      24080048 
+  68      0C4C0040 
 ARM GAS  src/uart.asm 			page 20
 
 
@@ -1145,7 +1146,7 @@ DEFINED SYMBOLS
                             *ABS*:40004c0c UART4_BRR
                             *ABS*:40004c00 UART4_CR1
                             *ABS*:40004c28 UART4_TDR
-        src/uart.asm:58     .text:00000138 halt
+        src/uart.asm:59     .text:0000013a halt
 ../inc/stm32f303xDE.inc:2      *ABS*:40000000 APB1
 ../inc/stm32f303xDE.inc:3      *ABS*:40010000 APB2
 ../inc/stm32f303xDE.inc:4      *ABS*:40020000 AHB1
@@ -2050,7 +2051,6 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:983    *ABS*:40002884 RTC_BKP13R
 ../inc/stm32f303xDE.inc:984    *ABS*:40002888 RTC_BKP14R
 ../inc/stm32f303xDE.inc:985    *ABS*:4000288c RTC_BKP15R
-        src/uart.asm:67     .text:0000013a $d
-        src/uart.asm:67     .text:0000013c $d
+        src/uart.asm:68     .text:0000013c $d
 
 NO UNDEFINED SYMBOLS

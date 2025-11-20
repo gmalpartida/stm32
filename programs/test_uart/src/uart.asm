@@ -35,15 +35,16 @@
 	@ set uart4 baud rate to 9600 bps, oversampling by 16
 	ldr r0, =UART4_BRR
 	ldr r1, [r0]
-	ldr r2, =0x0045
-	orr r1, r2
+	mov r1, #833		@ replace r1 with #833
 	str r1, [r0]
 
 	@ enable TE, RE and UE
 	ldr r0, =UART4_CR1
 	ldr r1, [r0]
-	orr r1, #0b1101
-	str r1, [r0]
+	orr r1, 0x01	
+	str r1, [r0]		@ enable UE
+	orr r1, #0b1100
+	str r1, [r0]		@ enable TE and RE
 
 	@ send a character to host
 
