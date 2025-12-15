@@ -4,19 +4,19 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-AS	Makefile	/^AS=\/opt\/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as$/;"	m
+AS	Makefile	/^AS=arm-none-eabi-as$/;"	m
 ASFLAGS	Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
 BIN	Makefile	/^BIN=$(TARGET).bin$/;"	m
 CHIPS	Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
 ELF	Makefile	/^ELF=$(TARGET).elf$/;"	m
-FLASH_FLAGS	Makefile	/^FLASH_FLAGS= --reset write $< 0x08000000$/;"	m
-GDB	Makefile	/^GDB=\/opt\/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
+FLASH_FLAGS	Makefile	/^FLASH_FLAGS= --reset --connect-under-reset write $(ELF) 0x08000000$/;"	m
+GDB	Makefile	/^GDB=arm-none-eabi-gdb$/;"	m
 GPIOC_BASE	src/test_uart2.asm	/^GPIOC_BASE      = 0x40020C00$/;"	d
 GPIO_AFR_HIGH_OFFSET	src/test_uart2.asm	/^GPIO_AFR_HIGH_OFFSET = 0x24 @ AFRH for pins 8-15$/;"	d
 GPIO_MODER_OFFSET	src/test_uart2.asm	/^GPIO_MODER_OFFSET = 0x00$/;"	d
-LD	Makefile	/^LD=\/opt\/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
+LD	Makefile	/^LD=arm-none-eabi-ld$/;"	m
 OBJ	Makefile	/^OBJ=$(TARGET).o$/;"	m
-OBJCOPY	Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
+OBJCOPY	Makefile	/^OBJCOPY=arm-none-eabi-objcopy$/;"	m
 OPENOCD	Makefile	/^OPENOCD=openocd$/;"	m
 OPENOCD_FLAGS	Makefile	/^OPENOCD_FLAGS=-f interface\/stlink-v2.cfg -f target\/stm32f3x.cfg $/;"	m
 RCC_AHBENR_GPIOCEN	src/test_uart2.asm	/^RCC_AHBENR_GPIOCEN = (1 << 18) @ GPIOC clock enable bit$/;"	d
@@ -25,7 +25,9 @@ RCC_APB1ENR_OFFSET	src/test_uart2.asm	/^RCC_APB1ENR_OFFSET = 0x1C$/;"	d
 RCC_APB1ENR_UART4EN	src/test_uart2.asm	/^RCC_APB1ENR_UART4EN = (1 << 19) @ UART4 clock enable bit$/;"	d
 RCC_BASE	src/test_uart2.asm	/^RCC_BASE        = 0x40021000$/;"	d
 SRC	Makefile	/^SRC=src\/uart.asm$/;"	m
-STFLASH	Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
+STFLASH	Makefile	/^STFLASH=st-flash$/;"	m
+ST_PROGRAMMER	Makefile	/^ST_PROGRAMMER=~\/STMicroelectronics\/STM32Cube\/STM32CubeProgrammer\/bin\/STM32_Programmer_CLI$/;"	m
+ST_PROGRAMMER_FLAGS	Makefile	/^ST_PROGRAMMER_FLAGS=--connect port=SWD -d $/;"	m
 TARGET	Makefile	/^TARGET=bin\/uart$/;"	m
 UART4_BASE	src/test_uart2.asm	/^UART4_BASE      = 0x40007800 @ UART4 is on APB1$/;"	d
 UART_BRR_OFFSET	src/test_uart2.asm	/^UART_BRR_OFFSET = 0x10$/;"	d
@@ -42,6 +44,7 @@ hello_msg	src/test_uart2.asm	/^hello_msg:$/;"	l
 msg_end	src/test_uart2.asm	/^msg_end:$/;"	l
 send_done	src/test_uart2.asm	/^send_done:$/;"	l
 send_loop	src/test_uart2.asm	/^send_loop:$/;"	l
+uart4_tx_char	src/uart.asm	/^uart4_tx_char:$/;"	l
 uart_init	src/test_uart2.asm	/^uart_init:$/;"	l
 uart_send_char	src/test_uart2.asm	/^uart_send_char:$/;"	l
 uart_send_text	src/test_uart2.asm	/^uart_send_text:$/;"	l

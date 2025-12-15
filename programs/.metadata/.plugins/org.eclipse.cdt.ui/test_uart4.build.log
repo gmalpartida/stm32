@@ -1,0 +1,10 @@
+12:43:12 **** Incremental Build of configuration Debug for project test_uart4 ****
+make -j8 all 
+arm-none-eabi-size  test_uart4.elf 
+   text	   data	    bss	    dec	    hex	filename
+  11764	     44	   1708	  13516	   34cc	test_uart4.elf
+Finished building: default.size.stdout
+ 
+
+12:43:12 Build Finished. 0 errors, 0 warnings. (took 64ms)
+

@@ -1,0 +1,10 @@
+11:00:49 **** Incremental Build of configuration Debug for project SignalTimer ****
+make -j8 all 
+arm-none-eabi-size  SignalTimer.elf 
+   text	   data	    bss	    dec	    hex	filename
+  14692	     12	   1668	  16372	   3ff4	SignalTimer.elf
+Finished building: default.size.stdout
+ 
+
+11:00:49 Build Finished. 0 errors, 0 warnings. (took 73ms)
+

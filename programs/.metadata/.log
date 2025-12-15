@@ -1,0 +1,49 @@
+!SESSION 2025-12-04 10:09:04.803 -----------------------------------------------
+eclipse.buildId=Version 2.0.0
+java.version=21.0.8
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-12-04 10:09:37.802
+!MESSAGE Log4j2 initialized with config file /home/pepsico/Documents/github/stm32/programs/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-12-04 10:09:39.493
+!MESSAGE Started RMI Server, listening on port 41338
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-12-04 10:11:06.566
+!MESSAGE Indexed 'SignalTimer' (3 sources, 53 headers) in 0.48 sec: 1,954 declarations; 2,863 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.042%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-12-04 10:13:06.905
+!MESSAGE Indexed 'SignalTimer2' (3 sources, 53 headers) in 0.172 sec: 1,954 declarations; 2,863 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.042%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-12-04 10:28:25.770
+!MESSAGE Indexed 'SignalTimer' (21 sources, 110 headers) in 1.56 sec: 10,416 declarations; 61,593 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0.2%)
+!SESSION 2025-12-04 10:29:45.737 -----------------------------------------------
+eclipse.buildId=Version 2.0.0
+java.version=21.0.8
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  /home/pepsico/github/stm32/SignalTimer/SignalTimer.ioc
+Command-line arguments:  -os linux -ws gtk -arch x86_64 /home/pepsico/github/stm32/SignalTimer/SignalTimer.ioc
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-12-04 10:29:48.242
+!MESSAGE Log4j2 initialized with config file /home/pepsico/Documents/github/stm32/programs/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-12-04 10:29:50.946
+!MESSAGE Started RMI Server, listening on port 41338
+!SESSION 2025-12-10 12:33:51.634 -----------------------------------------------
+eclipse.buildId=Version 2.0.0
+java.version=21.0.8
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-12-10 12:33:54.578
+!MESSAGE Log4j2 initialized with config file /home/pepsico/Documents/github/stm32/programs/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-12-10 12:33:58.187
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-12-10 12:35:13.570
+!MESSAGE Indexed 'test_uart4' (23 sources, 115 headers) in 1.96 sec: 9,940 declarations; 48,157 references; 2 unresolved inclusions; 42 syntax errors; 147 unresolved names (0.25%)
