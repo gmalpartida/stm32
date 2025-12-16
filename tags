@@ -136,8 +136,10 @@ VI	programs/base_asm/Makefile	/^VI=vi$/;"	m
 VI	programs/blink_led/Makefile	/^VI=vi$/;"	m
 VI	programs/test_uart/Makefile	/^VI=vi$/;"	m
 _reset	programs/bare-blinky/src/main.c	/^__attribute__((naked, noreturn)) void _reset(void){$/;"	f
+app_menu	programs/test_uart/src/uart.asm	/^app_menu:$/;"	l
 clear_screen	programs/test_uart/src/uart.asm	/^clear_screen:$/;"	l
 clear_screen_seq	programs/test_uart/src/uart.asm	/^clear_screen_seq:$/;"	l
+clear_str	programs/test_uart/src/uart.asm	/^clear_str:$/;"	l
 command_prompt	programs/test_uart/src/uart.asm	/^command_prompt:$/;"	l
 command_prompt_loop	programs/test_uart/src/uart.asm	/^command_prompt_loop:$/;"	l
 config_gpiob	programs/base_asm/src/test.asm	/^config_gpiob:$/;"	l
@@ -148,15 +150,14 @@ copyright_text	programs/test_uart/src/uart.asm	/^copyright_text:$/;"	l
 delay	programs/bare-blinky/src/main.c	/^static inline void delay(volatile uint32_t counter){$/;"	f	file:
 delay_loop	programs/base_asm/src/test.asm	/^delay_loop:$/;"	l
 delay_ms	programs/base_asm/src/test.asm	/^delay_ms:$/;"	l
+do_clear_cmd	programs/test_uart/src/uart.asm	/^do_clear_cmd:$/;"	l
 do_help_cmd	programs/test_uart/src/uart.asm	/^do_help_cmd:$/;"	l
 do_invalid_cmd	programs/test_uart/src/uart.asm	/^do_invalid_cmd:$/;"	l
-do_list_cmd	programs/test_uart/src/uart.asm	/^do_list_cmd:$/;"	l
-equal_str	programs/test_uart/src/uart.asm	/^equal_str:$/;"	l
+do_ls_cmd	programs/test_uart/src/uart.asm	/^do_ls_cmd:$/;"	l
 g_pfnVectors	programs/test_uart/src/startup.asm	/^g_pfnVectors:$/;"	l
 gpio	programs/bare-blinky/src/main.c	/^struct gpio$/;"	s	file:
 gpio_set_mode	programs/bare-blinky/src/main.c	/^static inline void gpio_set_mode(uint16_t pin, uint8_t mode)$/;"	f	file:
 gpio_write	programs/bare-blinky/src/main.c	/^static inline void gpio_write(uint16_t pin, bool val){$/;"	f	file:
-greater_than_str	programs/test_uart/src/uart.asm	/^greater_than_str:$/;"	l
 halt	programs/test_uart/src/uart.asm	/^halt:$/;"	l
 hello_msg	programs/test_uart/src/test_uart2.asm	/^hello_msg:$/;"	l
 help_cmd_txt	programs/test_uart/src/uart.asm	/^help_cmd_txt:$/;"	l
@@ -165,9 +166,8 @@ help_str	programs/test_uart/src/uart.asm	/^help_str:$/;"	l
 hsi_not_ready	programs/base_asm/src/test.asm	/^hsi_not_ready:				@ wait for HSI to be ready$/;"	l
 invalid_cmd_txt	programs/test_uart/src/uart.asm	/^invalid_cmd_txt:$/;"	l
 ldr	programs/blink_led/src/blink_led.s	/^ldr r0, =RCC_AHBENR$/;"	l
-less_than_str	programs/test_uart/src/uart.asm	/^less_than_str:$/;"	l
-list_cmd_txt	programs/test_uart/src/uart.asm	/^list_cmd_txt:$/;"	l
-list_str	programs/test_uart/src/uart.asm	/^list_str:$/;"	l
+ls_cmd_txt	programs/test_uart/src/uart.asm	/^ls_cmd_txt:$/;"	l
+ls_str	programs/test_uart/src/uart.asm	/^ls_str:$/;"	l
 main	programs/bare-blinky/src/main.c	/^int main(void)$/;"	f
 main	programs/test_uart/src/uart.asm	/^main:$/;"	l
 msg_end	programs/test_uart/src/test_uart2.asm	/^msg_end:$/;"	l
@@ -177,9 +177,10 @@ print_copyright_text	programs/test_uart/src/uart.asm	/^print_copyright_text:$/;"
 print_help_menu	programs/test_uart/src/uart.asm	/^print_help_menu:$/;"	l
 print_ln	programs/test_uart/src/uart.asm	/^print_ln:$/;"	l
 print_pepsico_logo	programs/test_uart/src/uart.asm	/^print_pepsico_logo:$/;"	l
+process_clear_cmd	programs/test_uart/src/uart.asm	/^process_clear_cmd:$/;"	l
 process_help_cmd	programs/test_uart/src/uart.asm	/^process_help_cmd:$/;"	l
 process_invalid_cmd	programs/test_uart/src/uart.asm	/^process_invalid_cmd:$/;"	l
-process_list_cmd	programs/test_uart/src/uart.asm	/^process_list_cmd:$/;"	l
+process_ls_cmd	programs/test_uart/src/uart.asm	/^process_ls_cmd:$/;"	l
 rcc	programs/bare-blinky/src/main.c	/^struct rcc{$/;"	s	file:
 send_done	programs/test_uart/src/test_uart2.asm	/^send_done:$/;"	l
 send_loop	programs/test_uart/src/test_uart2.asm	/^send_loop:$/;"	l

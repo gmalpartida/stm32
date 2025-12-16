@@ -17,275 +17,295 @@ ARM GAS  src/uart.asm 			page 1
   14              	.global main
   15              	
   16              	main:
-  17 0000 00F0BFF8 		bl uart4_config
+  17 0000 00F0CCF8 		bl uart4_config
   18              	
-  19 0004 00F061F8 		bl clear_screen
-  20 0008 00F074F8 		bl print_pepsico_logo
-  21 000c 00F079F8 		bl print_ln
-  22 0010 00F069F8 		bl print_copyright_text
-  23 0014 00F075F8 		bl print_ln
-  24 0018 00F073F8 		bl print_ln
+  19 0004 00F06EF8 		bl clear_screen
+  20 0008 00F081F8 		bl print_pepsico_logo
+  21 000c 00F086F8 		bl print_ln
+  22 0010 00F076F8 		bl print_copyright_text
+  23 0014 00F082F8 		bl print_ln
+  24 0018 00F080F8 		bl print_ln
   25              	
-  26 001c 00F07DF8 		bl print_help_menu
-  27 0020 00F06FF8 		bl print_ln
-  28 0024 00F06DF8 		bl print_ln
+  26 001c 00F08AF8 		bl print_help_menu
+  27 0020 00F07CF8 		bl print_ln
+  28 0024 00F07AF8 		bl print_ln
   29              	
   30              	command_prompt_loop:
-  31 0028 00F056F8 		bl print_command_prompt
+  31 0028 00F063F8 		bl print_command_prompt
   32              	
-  33 002c 00F087F8 		bl uart4_rx_asciz
+  33 002c 00F094F8 		bl uart4_rx_asciz
   34              	
-  35 0030 6648     		ldr r0, =uart4_rx_buffer
-  36 0032 6749     		ldr r1, =help_str
-  37 0034 00F013F8 		bl strcmp
+  35 0030 6C48     		ldr r0, =uart4_rx_buffer
+  36 0032 6D49     		ldr r1, =help_str
+  37 0034 00F01BF8 		bl strcmp
   38 0038 0028     		cmp r0, #0
-  39 003a 06D0     		beq process_help_cmd
+  39 003a 0BD0     		beq process_help_cmd
   40              		
-  41 003c 6348     		ldr r0, =uart4_rx_buffer
-  42 003e 6549     		ldr r1, =list_str
-  43 0040 00F00DF8 		bl strcmp
+  41 003c 6948     		ldr r0, =uart4_rx_buffer
+  42 003e 6B49     		ldr r1, =ls_str
+  43 0040 00F015F8 		bl strcmp
   44              	
-  45 0044 04D0     		beq process_list_cmd
+  45 0044 09D0     		beq process_ls_cmd
   46              	
-  47 0046 06E0     		b process_invalid_cmd
-  48              	
-  49 0048 EEE7     		b command_prompt_loop
-  50              	
-  51              	process_help_cmd:
-  52 004a 00F02DF8 		bl do_help_cmd
-  53 004e EBE7     		b command_prompt_loop
-  54              	
-  55              	process_list_cmd:
-  56 0050 00F032F8 		bl do_list_cmd
-  57 0054 E8E7     		b command_prompt_loop
+  47 0046 6748     		ldr r0, =uart4_rx_buffer
+  48 0048 6949     		ldr r1, =clear_str
+  49 004a 00F010F8 		bl strcmp
+  50 004e 07D0     		beq process_clear_cmd
+  51              	
+  52 0050 09E0     		b process_invalid_cmd
+  53              	
+  54 0052 E9E7     		b command_prompt_loop
+  55              	
+  56              	process_help_cmd:
+  57 0054 00F02FF8 		bl do_help_cmd
 ARM GAS  src/uart.asm 			page 2
 
 
-  58              	
-  59              	process_invalid_cmd:
-  60 0056 00F01AF8 		bl do_invalid_cmd
-  61 005a E5E7     		b command_prompt_loop
-  62              	
-  63              	halt:
-  64 005c FEE7     		b halt
-  65              	
-  66              	@ compares two strings
-  67              	@ --> r0: address of first string
-  68              	@ --> r1: address of second string
-  69              	@ <-- r0: 0 if equal, 1 if r0 > r1, 2 if r0 < r1
-  70              	strcmp:
-  71 005e 30B4     		push {r4, r5}
-  72 0060 4FF00004 		mov r4, #0
-  73 0064 4FF00005 		mov r5, #0
+  58 0058 E6E7     		b command_prompt_loop
+  59              	
+  60              	process_ls_cmd:
+  61 005a 00F034F8 		bl do_ls_cmd
+  62 005e E3E7     		b command_prompt_loop
+  63              	
+  64              	process_clear_cmd:
+  65 0060 00F03AF8 		bl do_clear_cmd
+  66 0064 E0E7     		b command_prompt_loop
+  67              	
+  68              	process_invalid_cmd:
+  69 0066 00F01AF8 		bl do_invalid_cmd
+  70 006a DDE7     		b command_prompt_loop
+  71              	
+  72              	halt:
+  73 006c FEE7     		b halt
   74              	
-  75              	strcmp_loop:
-  76 0068 025D     		ldrb r2, [r0, r4]
-  77 006a 0B5D     		ldrb r3, [r1, r4]
-  78              	
-  79 006c 9A42     		cmp r2, r3
-  80 006e 06D0     		beq strcmp_equal
-  81 0070 02D3     		blo strcmp_lessthan
-  82              	
-  83 0072 4FF00105 		mov r5, #1
-  84 0076 07E0     		b strcmp_exit
-  85              		
-  86              	strcmp_lessthan:
-  87 0078 4FF00205 		mov r5, #2
-  88 007c 04E0     		b strcmp_exit
-  89              	
-  90              	strcmp_equal:
-  91 007e 002A     		cmp r2, #0
-  92 0080 02D0     		beq strcmp_exit
-  93 0082 04F10104 		add r4, r4, #1
-  94 0086 EFE7     		b strcmp_loop
-  95              	
-  96              	strcmp_exit:
-  97 0088 2846     		mov r0, r5
-  98 008a 30BC     		pop {r4, r5}
-  99 008c 7047     		bx lr
- 100              	
- 101              	do_invalid_cmd:
- 102 008e 00B5     		push {lr}
- 103 0090 4E4D     		ldr r5, =uart4_rx_buffer
- 104 0092 00F049F8 		bl uart4_tx_asciz
- 105 0096 4FF03F00 		mov r0, #'?'
- 106 009a 00F062F8 		bl uart4_tx_char
- 107 009e 00F030F8 		bl print_ln
- 108 00a2 5DF804EB 		pop {lr}
- 109 00a6 7047     		bx lr
- 110              	
- 111              	do_help_cmd:
- 112 00a8 00B5     		push {lr}
- 113              	
- 114 00aa 00F036F8 		bl print_help_menu
+  75              	@ compares two strings
+  76              	@ --> r0: address of first string
+  77              	@ --> r1: address of second string
+  78              	@ <-- r0: 0 if equal, 1 if r0 > r1, 2 if r0 < r1
+  79              	strcmp:
+  80 006e 30B4     		push {r4, r5}
+  81 0070 4FF00004 		mov r4, #0
+  82 0074 4FF00005 		mov r5, #0
+  83              	
+  84              	strcmp_loop:
+  85 0078 025D     		ldrb r2, [r0, r4]
+  86 007a 0B5D     		ldrb r3, [r1, r4]
+  87              	
+  88 007c 9A42     		cmp r2, r3
+  89 007e 06D0     		beq strcmp_equal
+  90 0080 02D3     		blo strcmp_lessthan
+  91              	
+  92 0082 4FF00105 		mov r5, #1
+  93 0086 07E0     		b strcmp_exit
+  94              		
+  95              	strcmp_lessthan:
+  96 0088 4FF00205 		mov r5, #2
+  97 008c 04E0     		b strcmp_exit
+  98              	
+  99              	strcmp_equal:
+ 100 008e 002A     		cmp r2, #0
+ 101 0090 02D0     		beq strcmp_exit
+ 102 0092 04F10104 		add r4, r4, #1
+ 103 0096 EFE7     		b strcmp_loop
+ 104              	
+ 105              	strcmp_exit:
+ 106 0098 2846     		mov r0, r5
+ 107 009a 30BC     		pop {r4, r5}
+ 108 009c 7047     		bx lr
+ 109              	
+ 110              	do_invalid_cmd:
+ 111 009e 00B5     		push {lr}
+ 112 00a0 504D     		ldr r5, =uart4_rx_buffer
+ 113 00a2 00F04EF8 		bl uart4_tx_asciz
+ 114 00a6 534D     		ldr r5, =invalid_cmd_txt
 ARM GAS  src/uart.asm 			page 3
 
 
- 115 00ae 00F028F8 		bl print_ln
- 116              		
- 117 00b2 5DF804EB 		pop {lr}
- 118 00b6 7047     		bx lr
+ 115 00a8 00F04BF8 		bl uart4_tx_asciz
+ 116 00ac 00F036F8 		bl print_ln
+ 117 00b0 5DF804EB 		pop {lr}
+ 118 00b4 7047     		bx lr
  119              	
- 120              	do_list_cmd:
- 121 00b8 00B5     		push {lr}
+ 120              	do_help_cmd:
+ 121 00b6 00B5     		push {lr}
  122              	
- 123 00ba 474D     		ldr r5, =list_cmd_txt
- 124 00bc 00F034F8 		bl uart4_tx_asciz
- 125 00c0 00F01FF8 		bl print_ln
- 126              	
- 127 00c4 5DF804EB 		pop {lr}
- 128 00c8 7047     		bx lr
- 129              	
- 130              	clear_screen:
- 131 00ca 444D     		ldr r5, =clear_screen_seq
- 132 00cc 00B5     		push {lr}
- 133 00ce 00F02BF8 		bl uart4_tx_asciz
- 134 00d2 5DF804EB 		pop {lr}
- 135 00d6 7047     		bx lr
- 136              	
- 137              	print_command_prompt:
+ 123 00b8 00F03CF8 		bl print_help_menu
+ 124 00bc 00F02EF8 		bl print_ln
+ 125              		
+ 126 00c0 5DF804EB 		pop {lr}
+ 127 00c4 7047     		bx lr
+ 128              	
+ 129              	do_ls_cmd:
+ 130 00c6 00B5     		push {lr}
+ 131              	
+ 132 00c8 4B4D     		ldr r5, =app_menu
+ 133 00ca 00F03AF8 		bl uart4_tx_asciz
+ 134 00ce 00F025F8 		bl print_ln
+ 135              	
+ 136 00d2 5DF804EB 		pop {lr}
+ 137 00d6 7047     		bx lr
  138              	
- 139 00d8 00B5     		push {lr}
- 140 00da 414D     		ldr r5, =command_prompt
- 141 00dc 00F024F8 		bl uart4_tx_asciz
- 142 00e0 5DF804EB 		pop {lr}
- 143 00e4 7047     		bx lr
- 144              	
- 145              	
- 146              	print_copyright_text:
- 147 00e6 3F4D     		ldr r5, =copyright_text
- 148 00e8 00B5     		push {lr}
- 149 00ea 00F01DF8 		bl uart4_tx_asciz
- 150 00ee 5DF804EB 		pop {lr}
- 151 00f2 7047     		bx lr
- 152              	
- 153              	print_pepsico_logo:
- 154 00f4 3C4D     		ldr r5, =pepsico_logo
- 155 00f6 00B5     		push {lr}
- 156 00f8 00F016F8 		bl uart4_tx_asciz
- 157 00fc 5DF804EB 		pop {lr}
- 158 0100 7047     		bx lr
- 159              	
- 160              	print_ln:
- 161 0102 4FF00D00 		mov r0, #'\r'
- 162 0106 00B5     		push {lr}
- 163 0108 00F02BF8 		bl uart4_tx_char
- 164 010c 4FF00A00 		mov r0, #'\n'
- 165 0110 00F027F8 		bl uart4_tx_char
- 166 0114 5DF804EB 		pop {lr}
- 167 0118 7047     		bx lr
- 168              	
- 169              	print_help_menu:
- 170 011a 344D     		ldr r5, =help_menu
- 171 011c 00B5     		push {lr}
+ 139              	do_clear_cmd:
+ 140 00d8 00B5     		push {lr}
+ 141              	
+ 142 00da 00F003F8 		bl clear_screen
+ 143              	
+ 144 00de 5DF804EB 		pop {lr}
+ 145 00e2 7047     		bx lr
+ 146              	
+ 147              	clear_screen:
+ 148 00e4 454D     		ldr r5, =clear_screen_seq
+ 149 00e6 00B5     		push {lr}
+ 150 00e8 00F02BF8 		bl uart4_tx_asciz
+ 151 00ec 5DF804EB 		pop {lr}
+ 152 00f0 7047     		bx lr
+ 153              	
+ 154              	print_command_prompt:
+ 155              	
+ 156 00f2 00B5     		push {lr}
+ 157 00f4 424D     		ldr r5, =command_prompt
+ 158 00f6 00F024F8 		bl uart4_tx_asciz
+ 159 00fa 5DF804EB 		pop {lr}
+ 160 00fe 7047     		bx lr
+ 161              	
+ 162              	
+ 163              	print_copyright_text:
+ 164 0100 404D     		ldr r5, =copyright_text
+ 165 0102 00B5     		push {lr}
+ 166 0104 00F01DF8 		bl uart4_tx_asciz
+ 167 0108 5DF804EB 		pop {lr}
+ 168 010c 7047     		bx lr
+ 169              	
+ 170              	print_pepsico_logo:
+ 171 010e 3E4D     		ldr r5, =pepsico_logo
 ARM GAS  src/uart.asm 			page 4
 
 
- 172 011e 00F003F8 		bl uart4_tx_asciz
- 173 0122 5DF804EB 		pop {lr}
- 174 0126 7047     		bx lr
- 175              	
- 176              	uart4_tx_asciz:
- 177 0128 15F8010B 		ldrb r0, [r5], #1 
- 178 012c 0028     		cmp r0, #0
- 179 012e 05D0     		beq uart4_tx_asciz_exit
- 180 0130 00B5     		push {lr}
- 181 0132 00F016F8 		bl uart4_tx_char
- 182 0136 5DF804EB 		pop {lr}
- 183 013a F5E7     		b uart4_tx_asciz 
- 184              	uart4_tx_asciz_exit:
- 185 013c 7047     		bx lr
- 186              	
- 187              	uart4_rx_asciz:
- 188 013e 00B5     		push {lr}
- 189 0140 224D     		ldr r5, =uart4_rx_buffer
- 190              	
- 191              	uart4_rx_asciz_loop:
+ 172 0110 00B5     		push {lr}
+ 173 0112 00F016F8 		bl uart4_tx_asciz
+ 174 0116 5DF804EB 		pop {lr}
+ 175 011a 7047     		bx lr
+ 176              	
+ 177              	print_ln:
+ 178 011c 4FF00D00 		mov r0, #'\r'
+ 179 0120 00B5     		push {lr}
+ 180 0122 00F02BF8 		bl uart4_tx_char
+ 181 0126 4FF00A00 		mov r0, #'\n'
+ 182 012a 00F027F8 		bl uart4_tx_char
+ 183 012e 5DF804EB 		pop {lr}
+ 184 0132 7047     		bx lr
+ 185              	
+ 186              	print_help_menu:
+ 187 0134 354D     		ldr r5, =help_menu
+ 188 0136 00B5     		push {lr}
+ 189 0138 00F003F8 		bl uart4_tx_asciz
+ 190 013c 5DF804EB 		pop {lr}
+ 191 0140 7047     		bx lr
  192              	
- 193 0142 00F016F8 		bl uart4_rx_char
- 194              	
- 195 0146 0A28     		cmp r0, #'\n'
- 196 0148 05D0     		beq uart4_rx_asciz_exit
- 197              	
- 198 014a 0D28     		cmp r0, #'\r'
- 199 014c 03D0     		beq uart4_rx_asciz_exit
- 200              	
- 201 014e 2870     		strb r0, [r5]
- 202 0150 05F10105 		add r5, r5, #1
+ 193              	uart4_tx_asciz:
+ 194 0142 15F8010B 		ldrb r0, [r5], #1 
+ 195 0146 0028     		cmp r0, #0
+ 196 0148 05D0     		beq uart4_tx_asciz_exit
+ 197 014a 00B5     		push {lr}
+ 198 014c 00F016F8 		bl uart4_tx_char
+ 199 0150 5DF804EB 		pop {lr}
+ 200 0154 F5E7     		b uart4_tx_asciz 
+ 201              	uart4_tx_asciz_exit:
+ 202 0156 7047     		bx lr
  203              	
- 204 0154 F5E7     		b uart4_rx_asciz_loop
- 205              	
- 206              	uart4_rx_asciz_exit:
- 207 0156 4FF00000 		mov r0, #0
- 208 015a 2870     		strb r0, [r5]
- 209 015c 5DF804EB 		pop {lr}
- 210 0160 7047     		bx lr
+ 204              	uart4_rx_asciz:
+ 205 0158 00B5     		push {lr}
+ 206 015a 224D     		ldr r5, =uart4_rx_buffer
+ 207              	
+ 208              	uart4_rx_asciz_loop:
+ 209              	
+ 210 015c 00F016F8 		bl uart4_rx_char
  211              	
- 212              	uart4_tx_char:
- 213 0162 2349     		ldr r1, =UART4_ISR
- 214 0164 0B68     		ldr r3, [r1]
- 215 0166 13F0800F 		tst r3, #(1 << 7)
- 216 016a FAD0     		beq uart4_tx_char
- 217 016c 214A     		ldr r2, =UART4_TDR
- 218 016e 1070     		strb r0, [r2]
- 219 0170 7047     		bx lr
- 220              		
- 221              	uart4_rx_char:
- 222 0172 1F49     		ldr r1, =UART4_ISR
- 223 0174 0B68     		ldr r3, [r1]
- 224 0176 13F0200F 		tst r3, #(1 << 5)
- 225 017a FAD0     		beq uart4_rx_char
- 226 017c 1E4A     		ldr r2, =UART4_RDR
- 227 017e 1088     		ldrh r0, [r2]
- 228 0180 7047     		bx lr
+ 212 0160 0A28     		cmp r0, #'\n'
+ 213 0162 05D0     		beq uart4_rx_asciz_exit
+ 214              	
+ 215 0164 0D28     		cmp r0, #'\r'
+ 216 0166 03D0     		beq uart4_rx_asciz_exit
+ 217              	
+ 218 0168 2870     		strb r0, [r5]
+ 219 016a 05F10105 		add r5, r5, #1
+ 220              	
+ 221 016e F5E7     		b uart4_rx_asciz_loop
+ 222              	
+ 223              	uart4_rx_asciz_exit:
+ 224 0170 4FF00000 		mov r0, #0
+ 225 0174 2870     		strb r0, [r5]
+ 226 0176 5DF804EB 		pop {lr}
+ 227 017a 7047     		bx lr
+ 228              	
 ARM GAS  src/uart.asm 			page 5
 
 
- 229              	
- 230              	uart4_config:
- 231              		@ enable gpio C clock
- 232 0182 1E48     		ldr r0, =RCC_AHBENR
- 233 0184 0168     		ldr r1, [r0]
- 234 0186 41F40021 		orr r1, #(0b0001 << 19)
- 235 018a 0160     		str r1, [r0]
- 236              	
- 237              		@ enable uart4 clock
- 238 018c 1C48     		ldr r0, =RCC_APB1ENR
- 239 018e 0168     		ldr r1, [r0]
- 240 0190 41F40021 		orr r1, #(0b0001 << 19)
- 241 0194 0160     		str r1, [r0]
- 242              	
- 243              		@ set pins PC10 and PC11 to alternate function mode
- 244 0196 1B48     		ldr r0, =GPIOC_MODER
- 245 0198 0168     		ldr r1, [r0]
- 246 019a 41F42001 		orr r1, #(0b1010 << 20)
- 247 019e 0160     		str r1, [r0]
- 248              	
- 249              		@ set uart4 tx, rx as the alternate function for pins PC10 and PC11
- 250 01a0 1948     		ldr r0, =GPIOC_AFRH
- 251 01a2 0168     		ldr r1, [r0]
- 252 01a4 4FF4AA42 		ldr r2, =(0b0101010100000000)		
- 253 01a8 41EA0201 		orr r1, r2
- 254 01ac 0160     		str r1, [r0]	
- 255              	
- 256              		@ set uart4 baud rate to 9600 bps, oversampling by 16
- 257 01ae 1748     		ldr r0, =UART4_BRR
- 258 01b0 0168     		ldr r1, [r0]
- 259 01b2 40F24131 		mov r1, #833		@ replace r1 with #833
- 260 01b6 0160     		str r1, [r0]
- 261              	
- 262              		@ enable TE, RE and UE
- 263 01b8 1548     		ldr r0, =UART4_CR1
- 264 01ba 0168     		ldr r1, [r0]
- 265 01bc 41F00101 		orr r1, 0x01	
- 266 01c0 0160     		str r1, [r0]		@ enable UE
- 267 01c2 41F00C01 		orr r1, #0b1100
- 268 01c6 0160     		str r1, [r0]		@ enable TE and RE
- 269              	
- 270 01c8 7047     		bx lr
- 271              	
- 272              		
- 273              	.include "stm32f303xDE.inc"
+ 229              	uart4_tx_char:
+ 230 017c 2449     		ldr r1, =UART4_ISR
+ 231 017e 0B68     		ldr r3, [r1]
+ 232 0180 13F0800F 		tst r3, #(1 << 7)
+ 233 0184 FAD0     		beq uart4_tx_char
+ 234 0186 234A     		ldr r2, =UART4_TDR
+ 235 0188 1070     		strb r0, [r2]
+ 236 018a 7047     		bx lr
+ 237              		
+ 238              	uart4_rx_char:
+ 239 018c 2049     		ldr r1, =UART4_ISR
+ 240 018e 0B68     		ldr r3, [r1]
+ 241 0190 13F0200F 		tst r3, #(1 << 5)
+ 242 0194 FAD0     		beq uart4_rx_char
+ 243 0196 204A     		ldr r2, =UART4_RDR
+ 244 0198 1088     		ldrh r0, [r2]
+ 245 019a 7047     		bx lr
+ 246              	
+ 247              	uart4_config:
+ 248              		@ enable gpio C clock
+ 249 019c 1F48     		ldr r0, =RCC_AHBENR
+ 250 019e 0168     		ldr r1, [r0]
+ 251 01a0 41F40021 		orr r1, #(0b0001 << 19)
+ 252 01a4 0160     		str r1, [r0]
+ 253              	
+ 254              		@ enable uart4 clock
+ 255 01a6 1E48     		ldr r0, =RCC_APB1ENR
+ 256 01a8 0168     		ldr r1, [r0]
+ 257 01aa 41F40021 		orr r1, #(0b0001 << 19)
+ 258 01ae 0160     		str r1, [r0]
+ 259              	
+ 260              		@ set pins PC10 and PC11 to alternate function mode
+ 261 01b0 1C48     		ldr r0, =GPIOC_MODER
+ 262 01b2 0168     		ldr r1, [r0]
+ 263 01b4 41F42001 		orr r1, #(0b1010 << 20)
+ 264 01b8 0160     		str r1, [r0]
+ 265              	
+ 266              		@ set uart4 tx, rx as the alternate function for pins PC10 and PC11
+ 267 01ba 1B48     		ldr r0, =GPIOC_AFRH
+ 268 01bc 0168     		ldr r1, [r0]
+ 269 01be 4FF4AA42 		ldr r2, =(0b0101010100000000)		
+ 270 01c2 41EA0201 		orr r1, r2
+ 271 01c6 0160     		str r1, [r0]	
+ 272              	
+ 273              		@ set uart4 baud rate to 9600 bps, oversampling by 16
+ 274 01c8 1848     		ldr r0, =UART4_BRR
+ 275 01ca 0168     		ldr r1, [r0]
+ 276 01cc 40F24131 		mov r1, #833		@ replace r1 with #833
+ 277 01d0 0160     		str r1, [r0]
+ 278              	
+ 279              		@ enable TE, RE and UE
+ 280 01d2 1748     		ldr r0, =UART4_CR1
+ 281 01d4 0168     		ldr r1, [r0]
+ 282 01d6 41F00101 		orr r1, 0x01	
+ 283 01da 0160     		str r1, [r0]		@ enable UE
+ 284 01dc 41F00C01 		orr r1, #0b1100
+ 285 01e0 0160     		str r1, [r0]		@ enable TE and RE
+ARM GAS  src/uart.asm 			page 6
+
+
+ 286              	
+ 287 01e2 7047     		bx lr
+ 288              	
+ 289              		
+ 290              	.include "stm32f303xDE.inc"
    1              	@ BUSES
    2              	APB1                = 0x40000000 
    3              	APB2 				= 0x40010000
@@ -298,9 +318,6 @@ ARM GAS  src/uart.asm 			page 1
   10              	
   11              	@ PERIPHERALS
   12              	
-ARM GAS  src/uart.asm 			page 6
-
-
   13              	BOOT_CONFIG         = 0x00000000
   14              	MAIN_FLASH	        = 0x08000000
   15              	CCM_SRAM	        = 0x10000000
@@ -341,6 +358,9 @@ ARM GAS  src/uart.asm 			page 1
   50              	SPI1				= APB2 + 0x3000
   51              	TIM8				= APB2 + 0x3400
   52              	USART1				= APB2 + 0x3800
+ARM GAS  src/uart.asm 			page 7
+
+
   53              	SPI4				= APB2 + 0x3C00
   54              	TIM15				= APB2 + 0x4000
   55              	TIM16				= APB2 + 0x4400
@@ -358,9 +378,6 @@ ARM GAS  src/uart.asm 			page 1
   67              	GPIOB 				= AHB2 + 0x0400
   68              	GPIOC				= AHB2 + 0x0800
   69              	GPIOD				= AHB2 + 0x0C00
-ARM GAS  src/uart.asm 			page 7
-
-
   70              	GPIOE				= AHB2 + 0x1000
   71              	GPIOF				= AHB2 + 0x1400
   72              	GPIOG				= AHB2 + 0x1800
@@ -401,6 +418,9 @@ ARM GAS  src/uart.asm 			page 1
  107              	GPIOB_LCKR     = GPIOB + 0x001C
  108              	GPIOB_AFRL     = GPIOB + 0x0020
  109              	GPIOB_AFRH     = GPIOB + 0x0024
+ARM GAS  src/uart.asm 			page 8
+
+
  110              	GPIOB_BRR      = GPIOB + 0x0028
  111              	
  112              	GPIOC_MODER    = GPIOC + 0x0000
@@ -418,9 +438,6 @@ ARM GAS  src/uart.asm 			page 1
  124              	GPIOD_MODER    = GPIOD + 0x0000
  125              	GPIOD_OTYPER   = GPIOD + 0x0004
  126              	GPIOD_OSPEEDR  = GPIOD + 0x0008
-ARM GAS  src/uart.asm 			page 8
-
-
  127              	GPIOD_PUPDR    = GPIOD + 0x000C
  128              	GPIOD_IDR      = GPIOD + 0x0010
  129              	GPIOD_ODR      = GPIOD + 0x0014
@@ -461,6 +478,9 @@ ARM GAS  src/uart.asm 			page 1
  164              	GPIOG_IDR      = GPIOG + 0x0010
  165              	GPIOG_ODR      = GPIOG + 0x0014
  166              	GPIOG_BSRR     = GPIOG + 0x0018
+ARM GAS  src/uart.asm 			page 9
+
+
  167              	GPIOG_LCKR     = GPIOG + 0x001C
  168              	GPIOG_AFRL     = GPIOG + 0x0020
  169              	GPIOG_AFRH     = GPIOG + 0x0024
@@ -478,9 +498,6 @@ ARM GAS  src/uart.asm 			page 1
  181              	GPIOH_AFRH     = GPIOH + 0x0024
  182              	GPIOH_BRR      = GPIOH + 0x0028
  183              	
-ARM GAS  src/uart.asm 			page 9
-
-
  184              	@ ADVANCED TIMER REGISTERS
  185              	
  186              	TIM1_CR1        =   TIM1 + 0x0000
@@ -521,6 +538,9 @@ ARM GAS  src/uart.asm 			page 1
  221              	TIM8_PSC        =   TIM8 + 0x0028
  222              	TIM8_ARR        =   TIM8 + 0x002C
  223              	TIM8_RCR        =   TIM8 + 0x0030
+ARM GAS  src/uart.asm 			page 10
+
+
  224              	TIM8_CCR1       =   TIM8 + 0x0034
  225              	TIM8_CCR2       =   TIM8 + 0x0038
  226              	TIM8_CCR3       =   TIM8 + 0x003C
@@ -538,9 +558,6 @@ ARM GAS  src/uart.asm 			page 1
  238              	TIM20_SMCR       =   TIM20 + 0x0008
  239              	TIM20_DIER       =   TIM20 + 0x000C
  240              	TIM20_SR         =   TIM20 + 0x0010
-ARM GAS  src/uart.asm 			page 10
-
-
  241              	TIM20_EGR        =   TIM20 + 0x0014
  242              	TIM20_CCMR1      =   TIM20 + 0x0018
  243              	TIM20_CCMR2      =   TIM20 + 0x001C
@@ -581,6 +598,9 @@ ARM GAS  src/uart.asm 			page 1
  278              	TIM2_CCR3       =   TIM2 + 0x003C
  279              	TIM2_CCR4       =   TIM2 + 0x0040
  280              	TIM2_DCR        =   TIM2 + 0x0048
+ARM GAS  src/uart.asm 			page 11
+
+
  281              	TIM2_DMAR       =   TIM2 + 0x004C
  282              	
  283              	TIM3_CR1        =   TIM3 + 0x0000
@@ -598,9 +618,6 @@ ARM GAS  src/uart.asm 			page 1
  295              	TIM3_RCR        =   TIM3 + 0x0030
  296              	TIM3_CCR1       =   TIM3 + 0x0034
  297              	TIM3_CCR2       =   TIM3 + 0x0038
-ARM GAS  src/uart.asm 			page 11
-
-
  298              	TIM3_CCR3       =   TIM3 + 0x003C
  299              	TIM3_CCR4       =   TIM3 + 0x0040
  300              	TIM3_DCR        =   TIM3 + 0x0048
@@ -641,6 +658,9 @@ ARM GAS  src/uart.asm 			page 1
  335              	TIM7_CR2        =   TIM7 + 0x0004
  336              	TIM7_DIER       =   TIM7 + 0x000C
  337              	TIM7_SR         =   TIM7 + 0x0010
+ARM GAS  src/uart.asm 			page 12
+
+
  338              	TIM7_EGR        =   TIM7 + 0x0014
  339              	TIM7_CNT        =   TIM7 + 0x0024
  340              	TIM7_PSC        =   TIM7 + 0x0028
@@ -658,9 +678,6 @@ ARM GAS  src/uart.asm 			page 1
  352              	TIM15_CCER       =   TIM15 + 0x0020
  353              	TIM15_CNT        =   TIM15 + 0x0024
  354              	TIM15_PSC        =   TIM15 + 0x0028
-ARM GAS  src/uart.asm 			page 12
-
-
  355              	TIM15_ARR        =   TIM15 + 0x002C
  356              	TIM15_RCR        =   TIM15 + 0x0030
  357              	TIM15_CCR1       =   TIM15 + 0x0034
@@ -701,6 +718,9 @@ ARM GAS  src/uart.asm 			page 1
  392              	TIM17_BDTR       =   TIM17 + 0x0044
  393              	TIM17_DCR        =   TIM17 + 0x0048
  394              	TIM17_DMAR       =   TIM17 + 0x004C
+ARM GAS  src/uart.asm 			page 13
+
+
  395              	TIM17_OR         =   TIM17 + 0x0050
  396              	
  397              	@ MASTER ADC REGISTERS
@@ -718,9 +738,6 @@ ARM GAS  src/uart.asm 			page 1
  409              	ADC1_SQR2       =   ADC1 + 0x0034
  410              	ADC1_SQR3       =   ADC1 + 0x0038
  411              	ADC1_SQR4       =   ADC1 + 0x003C
-ARM GAS  src/uart.asm 			page 13
-
-
  412              	ADC1_DR         =   ADC1 + 0x0040
  413              	ADC1_JSQR       =   ADC1 + 0x004C
  414              	ADC1_OFR1       =   ADC1 + 0x0060
@@ -761,6 +778,9 @@ ARM GAS  src/uart.asm 			page 1
  449              	ADC3_JDR1       =   ADC3 + 0x0080
  450              	ADC3_JDR2       =   ADC3 + 0x0084
  451              	ADC3_JDR3       =   ADC3 + 0x0088
+ARM GAS  src/uart.asm 			page 14
+
+
  452              	ADC3_JDR4       =   ADC3 + 0x008C
  453              	ADC3_AWD2CR     =   ADC3 + 0x00A0
  454              	ADC3_AWD3CR     =   ADC3 + 0x00A4
@@ -778,9 +798,6 @@ ARM GAS  src/uart.asm 			page 1
  466              	ADC2_CFGR       =   ADC2 + 0x010C
  467              	ADC2_SMPR1      =   ADC2 + 0x0114
  468              	ADC2_SMPR2      =   ADC2 + 0x0118
-ARM GAS  src/uart.asm 			page 14
-
-
  469              	ADC2_TR1        =   ADC2 + 0x0120
  470              	ADC2_TR2        =   ADC2 + 0x0124
  471              	ADC2_TR3        =   ADC2 + 0x0128
@@ -821,6 +838,9 @@ ARM GAS  src/uart.asm 			page 1
  506              	ADC4_SQR4       =   ADC4 + 0x013C
  507              	ADC4_DR         =   ADC4 + 0x0140
  508              	ADC4_JSQR       =   ADC4 + 0x014C
+ARM GAS  src/uart.asm 			page 15
+
+
  509              	ADC4_OFR1       =   ADC4 + 0x0160
  510              	ADC4_OFR2       =   ADC4 + 0x0164
  511              	ADC4_OFR3       =   ADC4 + 0x0168
@@ -838,9 +858,6 @@ ARM GAS  src/uart.asm 			page 1
  523              	ADC4_CDR        =   ADC4 + 0x030C
  524              	
  525              	@ TSC REGISTERS
-ARM GAS  src/uart.asm 			page 15
-
-
  526              	
  527              	TSC_CR          =   TSC + 0x0000
  528              	TSC_IER         =   TSC + 0x0004
@@ -881,6 +898,9 @@ ARM GAS  src/uart.asm 			page 1
  563              	
  564              	@ RCC REGISTERS
  565              	
+ARM GAS  src/uart.asm 			page 16
+
+
  566              	RCC_CR          =   RCC + 0x0000
  567              	RCC_CFGR        =   RCC + 0x0004
  568              	RCC_CIR         =   RCC + 0x0008
@@ -898,9 +918,6 @@ ARM GAS  src/uart.asm 			page 1
  580              	@ DMA REGISTERS
  581              	
  582              	DMA1_ISR        =   DMA1 + 0x0000
-ARM GAS  src/uart.asm 			page 16
-
-
  583              	DMA1_IFCR       =   DMA1 + 0x0004
  584              	DMA1_CCR1       =   DMA1 + 0x0008
  585              	DMA1_CNDTR1     =   DMA1 + 0x000C
@@ -941,6 +958,9 @@ ARM GAS  src/uart.asm 			page 1
  620              	DMA2_CMAR1      =   DMA2 + 0x0014
  621              	DMA2_CCR2       =   DMA2 + 0x001C
  622              	DMA2_CNDTR2     =   DMA2 + 0x0020
+ARM GAS  src/uart.asm 			page 17
+
+
  623              	DMA2_CPAR2      =   DMA2 + 0x0024
  624              	DMA2_CMAR2      =   DMA2 + 0x0028
  625              	DMA2_CCR3       =   DMA2 + 0x0030
@@ -958,9 +978,6 @@ ARM GAS  src/uart.asm 			page 1
  637              	
  638              	@ USART/UART REGISTERS
  639              	
-ARM GAS  src/uart.asm 			page 17
-
-
  640              	USART1_CR1      =   USART1 + 0x0000
  641              	USART1_CR2      =   USART1 + 0x0004
  642              	USART1_CR3      =   USART1 + 0x0008
@@ -1001,6 +1018,9 @@ ARM GAS  src/uart.asm 			page 1
  677              	UART4_CR2      =   UART4 + 0x0004
  678              	UART4_CR3      =   UART4 + 0x0008
  679              	UART4_BRR      =   UART4 + 0x000C
+ARM GAS  src/uart.asm 			page 18
+
+
  680              	UART4_GTPR     =   UART4 + 0x0010
  681              	UART4_RTOR     =   UART4 + 0x0014
  682              	UART4_RQR      =   UART4 + 0x0018
@@ -1018,9 +1038,6 @@ ARM GAS  src/uart.asm 			page 1
  694              	UART5_RQR      =   UART5 + 0x0018
  695              	UART5_ISR      =   UART5 + 0x001C
  696              	UART5_ICR      =   UART5 + 0x0020
-ARM GAS  src/uart.asm 			page 18
-
-
  697              	UART5_RDR      =   UART5 + 0x0024
  698              	UART5_TDR      =   UART5 + 0x0028
  699              	
@@ -1061,6 +1078,9 @@ ARM GAS  src/uart.asm 			page 1
  734              	SPI4_SR         =   SPI4 + 0x0008
  735              	SPI4_DR         =   SPI4 + 0x000C
  736              	SPI4_CRCPR      =   SPI4 + 0x0010
+ARM GAS  src/uart.asm 			page 19
+
+
  737              	SPI4_RXCRCR     =   SPI4 + 0x0014
  738              	SPI4_TXCRCR     =   SPI4 + 0x0018
  739              	SPI4_I2SCFGR    =   SPI4 + 0x001C
@@ -1078,9 +1098,6 @@ ARM GAS  src/uart.asm 			page 1
  751              	FMC_BTR4        =   FMC + 0x001C
  752              	FMC_BWTR1       =   FMC + 0x0104
  753              	FMC_BWTR2       =   FMC + 0x010C
-ARM GAS  src/uart.asm 			page 19
-
-
  754              	FMC_BWTR3       =   FMC + 0x0114
  755              	FMC_BWTR4       =   FMC + 0x011C
  756              	FMC_PCR2        =   FMC + 0x0060
@@ -1121,6 +1138,9 @@ ARM GAS  src/uart.asm 			page 1
  791              	SYSCFG_EXTICR1  =   SYSCFG + 0x0008
  792              	SYSCFG_EXTICR2  =   SYSCFG + 0x000C
  793              	SYSCFG_EXTICR3  =   SYSCFG + 0x0010
+ARM GAS  src/uart.asm 			page 20
+
+
  794              	SYSCFG_EXTICR4  =   SYSCFG + 0x0014
  795              	SYSCFG_CFGR2    =   SYSCFG + 0x0018
  796              	SYSCFG_CFGR3    =   SYSCFG + 0x0050
@@ -1138,9 +1158,6 @@ ARM GAS  src/uart.asm 			page 1
  808              	
  809              	@ OPAMP REGISTERS
  810              	
-ARM GAS  src/uart.asm 			page 20
-
-
  811              	OPAMP1_CSR      =   OPAMP + 0x0038
  812              	OPAMP2_CSR      =   OPAMP + 0x003C
  813              	OPAMP3_CSR      =   OPAMP + 0x0040
@@ -1181,6 +1198,9 @@ ARM GAS  src/uart.asm 			page 1
  848              	I2C3_ISR        =   I2C3 + 0x0018
  849              	I2C3_ICR        =   I2C3 + 0x001C
  850              	I2C3_PECR       =   I2C3 + 0x0020
+ARM GAS  src/uart.asm 			page 21
+
+
  851              	I2C3_RXDR       =   I2C3 + 0x0024
  852              	I2C3_TXDR       =   I2C3 + 0x0028
  853              	
@@ -1198,9 +1218,6 @@ ARM GAS  src/uart.asm 			page 1
  865              	DAC_DHR12LD     =   DAC1 + 0x0024
  866              	DAC_DHR8RD      =   DAC1 + 0x0028
  867              	DAC_DOR1        =   DAC1 + 0x002C
-ARM GAS  src/uart.asm 			page 21
-
-
  868              	DAC_DOR2        =   DAC1 + 0x0030
  869              	DAC_SR          =   DAC1 + 0x0034
  870              	
@@ -1241,6 +1258,9 @@ ARM GAS  src/uart.asm 			page 1
  905              	CAN_RDH1R       =   BXCAN + 0x01CC
  906              	CAN_FMR         =   BXCAN + 0x0200
  907              	CAN_FM1R        =   BXCAN + 0x0204
+ARM GAS  src/uart.asm 			page 22
+
+
  908              	CAN_FS1R        =   BXCAN + 0x020C
  909              	CAN_FFA1R       =   BXCAN + 0x0214
  910              	CAN_FA1R        =   BXCAN + 0x021C
@@ -1258,9 +1278,6 @@ ARM GAS  src/uart.asm 			page 1
  922              	USB_EP2R        =   USB + 0x0008
  923              	USB_EP3R        =   USB + 0x000C
  924              	USB_EP4R        =   USB + 0x0010
-ARM GAS  src/uart.asm 			page 22
-
-
  925              	USB_EP5R        =   USB + 0x0014
  926              	USB_EP6R        =   USB + 0x0018
  927              	USB_EP7R        =   USB + 0x001C
@@ -1301,6 +1318,9 @@ ARM GAS  src/uart.asm 			page 1
  962              	RTC_TSTR        =   RTC + 0x0030
  963              	RTC_TSDR        =   RTC + 0x0034
  964              	RTC_TSSSR       =   RTC + 0x0038
+ARM GAS  src/uart.asm 			page 23
+
+
  965              	RTC_CALR        =   RTC + 0x003C
  966              	RTC_TAFCR       =   RTC + 0x0040
  967              	RTC_ALRMASSR    =   RTC + 0x0044
@@ -1318,9 +1338,6 @@ ARM GAS  src/uart.asm 			page 1
  979              	RTC_BKP9R       =   RTC + 0x0074
  980              	RTC_BKP10R       =   RTC + 0x0078
  981              	RTC_BKP11R       =   RTC + 0x007C
-ARM GAS  src/uart.asm 			page 23
-
-
  982              	RTC_BKP12R       =   RTC + 0x0080
  983              	RTC_BKP13R       =   RTC + 0x0084
  984              	RTC_BKP14R       =   RTC + 0x0088
@@ -1342,174 +1359,184 @@ ARM GAS  src/uart.asm 			page 1
  1000              	
  1001              	
  1002              	
- 274              	
- 275 01ca 0000     	.section .rodata
- 276              	
- 277              	pepsico_logo:
- 278 0000 09092020 		.ascii "\t\t  _____               _           \r\n"
- 278      5F5F5F5F 
- 278      5F202020 
- 278      20202020 
- 278      20202020 
- 279 0026 0909207C 		.ascii "\t\t |  __ \\             (_)          \r\n"
- 279      20205F5F 
- 279      205C2020 
- 279      20202020 
- 279      20202020 
- 280 004c 0909207C 		.ascii "\t\t | |__) |__ _ __  ___ _  ___ ___  \r\n"
- 280      207C5F5F 
- 280      29207C5F 
- 280      5F205F20 
- 280      5F5F2020 
- 281 0072 0909207C 		.ascii "\t\t |  ___/ _ \\ '_ \\/ __| |/ __/ _ \\ \r\n"
- 281      20205F5F 
- 281      5F2F205F 
- 281      205C2027 
- 281      5F205C2F 
- 282 0098 0909207C 		.ascii "\t\t | |  |  __/ |_) \\__ \\ | (_| (_) |\r\n"
- 282      207C2020 
- 282      7C20205F 
- 282      5F2F207C 
- 282      5F29205C 
- 283 00be 0909207C 		.ascii "\t\t |_|   \\___| .__/|___/_|\\___\\___/ \r\n"
- 283      5F7C2020 
- 283      205C5F5F 
- 283      5F7C202E 
- 283      5F5F2F7C 
- 284 00e4 09092020 		.ascii "\t\t       ____| |      _____          \r\n"
- 284      20202020 
+ 291              	
+ 292              	.section .rodata
+ 293              	
+ 294              	pepsico_logo:
+ 295 0000 09092020 		.ascii "\t\t  _____               _           \r\n"
+ 295      5F5F5F5F 
+ 295      5F202020 
+ 295      20202020 
+ 295      20202020 
+ 296 0026 0909207C 		.ascii "\t\t |  __ \\             (_)          \r\n"
+ 296      20205F5F 
+ 296      205C2020 
+ 296      20202020 
+ 296      20202020 
+ 297 004c 0909207C 		.ascii "\t\t | |__) |__ _ __  ___ _  ___ ___  \r\n"
+ 297      207C5F5F 
+ 297      29207C5F 
+ 297      5F205F20 
+ 297      5F5F2020 
 ARM GAS  src/uart.asm 			page 24
 
 
- 284      205F5F5F 
- 284      5F7C207C 
- 284      20202020 
- 285 010b 09092020 		.ascii "\t\t      |  __ \\|__   |  __ \\         \r\n"
- 285      20202020 
- 285      7C20205F 
- 285      5F205C7C 
- 285      5F5F2020 
- 286 0132 09092020 		.ascii "\t\t      | |__) ( _ ) | |  | |        \r\n"
- 286      20202020 
- 286      7C207C5F 
- 286      5F292028 
- 286      205F2029 
- 287 0159 09092020 		.ascii "\t\t      |  _  // _ \\/\\ |  | |        \r\n"
- 287      20202020 
- 287      7C20205F 
- 287      20202F2F 
- 287      205F205C 
- 288 0180 09092020 		.ascii "\t\t      | | \\ \\ (_>  < |__| |        \r\n"
- 288      20202020 
- 288      7C207C20 
- 288      5C205C20 
- 288      285F3E20 
- 289 01a7 09092020 		.ascii "\t\t      |_|  \\_\\___/\\/_____/         \r\n"
- 289      20202020 
- 289      7C5F7C20 
- 289      205C5F5C 
- 289      5F5F5F2F 
- 290 01ce 00       		.byte 0                                  
- 291              	                                  
- 292              	
- 293              	help_menu:
- 294 01cf 0948656C 		.ascii "\tHelp Menu\r\n\r\n"
- 294      70204D65 
- 294      6E750D0A 
- 294      0D0A
- 295 01dd 0968656C 		.ascii "\thelp:      print this menu.\r\n"
- 295      703A2020 
- 295      20202020 
- 295      7072696E 
- 295      74207468 
- 296 01fb 096C6973 		.ascii "\tlist:      print list of available applications.\r\n"
- 296      743A2020 
- 296      20202020 
- 296      7072696E 
- 296      74206C69 
- 297 022e 0972756E 		.ascii "\trun [app]: run application.\r\n"
- 297      205B6170 
- 297      705D3A20 
- 297      72756E20 
- 297      6170706C 
- 298 024c 00       		.byte 0
- 299              	
- 300              	copyright_text:
- 301 024d 09436F70 		.asciz "\tCopyright © 2025 Pepsico. All rights reserved.\r\n"
- 301      79726967 
- 301      687420C2 
+ 298 0072 0909207C 		.ascii "\t\t |  ___/ _ \\ '_ \\/ __| |/ __/ _ \\ \r\n"
+ 298      20205F5F 
+ 298      5F2F205F 
+ 298      205C2027 
+ 298      5F205C2F 
+ 299 0098 0909207C 		.ascii "\t\t | |  |  __/ |_) \\__ \\ | (_| (_) |\r\n"
+ 299      207C2020 
+ 299      7C20205F 
+ 299      5F2F207C 
+ 299      5F29205C 
+ 300 00be 0909207C 		.ascii "\t\t |_|   \\___| .__/|___/_|\\___\\___/ \r\n"
+ 300      5F7C2020 
+ 300      205C5F5F 
+ 300      5F7C202E 
+ 300      5F5F2F7C 
+ 301 00e4 09092020 		.ascii "\t\t       ____| |      _____          \r\n"
+ 301      20202020 
+ 301      205F5F5F 
+ 301      5F7C207C 
+ 301      20202020 
+ 302 010b 09092020 		.ascii "\t\t      |  __ \\|__   |  __ \\         \r\n"
+ 302      20202020 
+ 302      7C20205F 
+ 302      5F205C7C 
+ 302      5F5F2020 
+ 303 0132 09092020 		.ascii "\t\t      | |__) ( _ ) | |  | |        \r\n"
+ 303      20202020 
+ 303      7C207C5F 
+ 303      5F292028 
+ 303      205F2029 
+ 304 0159 09092020 		.ascii "\t\t      |  _  // _ \\/\\ |  | |        \r\n"
+ 304      20202020 
+ 304      7C20205F 
+ 304      20202F2F 
+ 304      205F205C 
+ 305 0180 09092020 		.ascii "\t\t      | | \\ \\ (_>  < |__| |        \r\n"
+ 305      20202020 
+ 305      7C207C20 
+ 305      5C205C20 
+ 305      285F3E20 
+ 306 01a7 09092020 		.ascii "\t\t      |_|  \\_\\___/\\/_____/         \r\n"
+ 306      20202020 
+ 306      7C5F7C20 
+ 306      205C5F5C 
+ 306      5F5F5F2F 
+ 307 01ce 00       		.byte 0                                  
+ 308              	                                  
+ 309              	
+ 310              	help_menu:
+ 311 01cf 0948656C 		.ascii "\tHelp Menu\r\n\r\n"
+ 311      70204D65 
+ 311      6E750D0A 
+ 311      0D0A
+ 312 01dd 0968656C 		.ascii "\thelp:      print this menu.\r\n"
+ 312      703A2020 
+ 312      20202020 
+ 312      7072696E 
 ARM GAS  src/uart.asm 			page 25
 
 
- 301      A9203230 
- 301      32352050 
- 302              	
- 303              	command_prompt:
- 304 0280 5226443E 		.asciz "R&D> "
- 304      2000
- 305              	
- 306              	clear_screen_seq:
- 307 0286 1B5B324A 		.asciz "\x1B[2J\x1B[H"
- 307      1B5B4800 
- 308              	
- 309              	help_cmd_txt:
- 310 028e 68656C70 		.asciz "help command received."
- 310      20636F6D 
- 310      6D616E64 
- 310      20726563 
- 310      65697665 
- 311              	
- 312              	list_cmd_txt:
- 313 02a5 6C697374 		.asciz "list command received."
- 313      20636F6D 
- 313      6D616E64 
- 313      20726563 
- 313      65697665 
- 314              	
- 315              	invalid_cmd_txt:
- 316 02bc 696E7661 		.asciz "invalid command."
- 316      6C696420 
- 316      636F6D6D 
- 316      616E642E 
- 316      00
- 317              	
- 318              	help_str:
- 319 02cd 68656C70 		.asciz "help"
- 319      00
- 320              	list_str:
- 321 02d2 6C697374 		.asciz "list"
- 321      00
- 322              	
- 323              	equal_str:
- 324 02d7 65717561 		.asciz "equal"
- 324      6C00
+ 312      74207468 
+ 313 01fb 096C6973 		.ascii "\tlist:      print list of available applications.\r\n"
+ 313      743A2020 
+ 313      20202020 
+ 313      7072696E 
+ 313      74206C69 
+ 314 022e 0972756E 		.ascii "\trun [app]: run application.\r\n"
+ 314      205B6170 
+ 314      705D3A20 
+ 314      72756E20 
+ 314      6170706C 
+ 315 024c 00       		.byte 0
+ 316              	
+ 317              	app_menu:
+ 318 024d 09417070 		.ascii "\tApplication 1\r\n"
+ 318      6C696361 
+ 318      74696F6E 
+ 318      20310D0A 
+ 319 025d 09417070 		.ascii "\tApplication 2\r\n"
+ 319      6C696361 
+ 319      74696F6E 
+ 319      20320D0A 
+ 320 026d 09417070 		.ascii "\tApplication 3\r\n"
+ 320      6C696361 
+ 320      74696F6E 
+ 320      20330D0A 
+ 321 027d 09417070 		.ascii "\tApplication 4\r\n"
+ 321      6C696361 
+ 321      74696F6E 
+ 321      20340D0A 
+ 322 028d 09417070 		.ascii "\tApplication 5\r\n"
+ 322      6C696361 
+ 322      74696F6E 
+ 322      20350D0A 
+ 323 029d 00       		.byte 0
+ 324              	
  325              	
- 326              	less_than_str:
- 327 02dd 6C657373 		.asciz "less than"
- 327      20746861 
- 327      6E00
- 328              	greater_than_str:
- 329 02e7 67726561 		.asciz "greater than"
- 329      74657220 
- 329      7468616E 
- 329      00
- 330              	
- 331              	.section .data
- 332              	
- 333              	uart4_rx_buffer:
- 334 0000 00000000 		.space 4096 * 10
+ 326              	copyright_text:
+ 327 029e 09202020 		.asciz "\t    Copyright © 2025 Pepsico. All rights reserved.\r\n"
+ 327      20436F70 
+ 327      79726967 
+ 327      687420C2 
+ 327      A9203230 
+ 328              	
+ 329              	command_prompt:
+ 330 02d5 5226443E 		.asciz "R&D> "
+ 330      2000
+ 331              	
+ 332              	clear_screen_seq:
+ 333 02db 1B5B324A 		.asciz "\x1B[2J\x1B[H"
+ 333      1B5B4800 
+ 334              	
+ 335              	help_cmd_txt:
+ 336 02e3 68656C70 		.asciz "help command received."
+ 336      20636F6D 
+ 336      6D616E64 
+ 336      20726563 
 ARM GAS  src/uart.asm 			page 26
 
 
- 334      00000000 
- 334      00000000 
- 334      00000000 
- 334      00000000 
- 335              	
- 336              	
+ 336      65697665 
  337              	
- 338              	
- 339              	
+ 338              	ls_cmd_txt:
+ 339 02fa 6C697374 		.asciz "list command received."
+ 339      20636F6D 
+ 339      6D616E64 
+ 339      20726563 
+ 339      65697665 
+ 340              	
+ 341              	invalid_cmd_txt:
+ 342 0311 3F202052 		.asciz "?  Really?"
+ 342      65616C6C 
+ 342      793F00
+ 343              	
+ 344              	help_str:
+ 345 031c 68656C70 		.asciz "help"
+ 345      00
+ 346              	ls_str:
+ 347 0321 6C7300   		.asciz "ls"
+ 348              	clear_str:
+ 349 0324 636C6561 		.asciz "clear"
+ 349      7200
+ 350              	
+ 351              	.section .data
+ 352              	
+ 353              	uart4_rx_buffer:
+ 354 0000 00000000 		.space 4096 * 10
+ 354      00000000 
+ 354      00000000 
+ 354      00000000 
+ 354      00000000 
+ 355              	
+ 356              	
+ 357              	
+ 358              	
+ 359              	
 ARM GAS  src/uart.asm 			page 27
 
 
@@ -1518,43 +1545,47 @@ DEFINED SYMBOLS
         src/uart.asm:11     *ABS*:00000002 LIST_CMD_CODE
         src/uart.asm:12     *ABS*:00000000 INVALID_CMD_CODE
         src/uart.asm:16     .text:00000000 main
-        src/uart.asm:230    .text:00000182 uart4_config
+        src/uart.asm:247    .text:0000019c uart4_config
         src/uart.asm:17     .text:00000000 $t
-        src/uart.asm:130    .text:000000ca clear_screen
-        src/uart.asm:153    .text:000000f4 print_pepsico_logo
-        src/uart.asm:160    .text:00000102 print_ln
-        src/uart.asm:146    .text:000000e6 print_copyright_text
-        src/uart.asm:169    .text:0000011a print_help_menu
+        src/uart.asm:147    .text:000000e4 clear_screen
+        src/uart.asm:170    .text:0000010e print_pepsico_logo
+        src/uart.asm:177    .text:0000011c print_ln
+        src/uart.asm:163    .text:00000100 print_copyright_text
+        src/uart.asm:186    .text:00000134 print_help_menu
         src/uart.asm:30     .text:00000028 command_prompt_loop
-        src/uart.asm:137    .text:000000d8 print_command_prompt
-        src/uart.asm:187    .text:0000013e uart4_rx_asciz
-        src/uart.asm:333    .data:00000000 uart4_rx_buffer
-        src/uart.asm:318    .rodata:000002cd help_str
-        src/uart.asm:70     .text:0000005e strcmp
-        src/uart.asm:51     .text:0000004a process_help_cmd
-        src/uart.asm:320    .rodata:000002d2 list_str
-        src/uart.asm:55     .text:00000050 process_list_cmd
-        src/uart.asm:59     .text:00000056 process_invalid_cmd
-        src/uart.asm:111    .text:000000a8 do_help_cmd
-        src/uart.asm:120    .text:000000b8 do_list_cmd
-        src/uart.asm:101    .text:0000008e do_invalid_cmd
-        src/uart.asm:63     .text:0000005c halt
-        src/uart.asm:75     .text:00000068 strcmp_loop
-        src/uart.asm:90     .text:0000007e strcmp_equal
-        src/uart.asm:86     .text:00000078 strcmp_lessthan
-        src/uart.asm:96     .text:00000088 strcmp_exit
-        src/uart.asm:176    .text:00000128 uart4_tx_asciz
-        src/uart.asm:212    .text:00000162 uart4_tx_char
-        src/uart.asm:312    .rodata:000002a5 list_cmd_txt
-        src/uart.asm:306    .rodata:00000286 clear_screen_seq
-        src/uart.asm:303    .rodata:00000280 command_prompt
-        src/uart.asm:300    .rodata:0000024d copyright_text
-        src/uart.asm:277    .rodata:00000000 pepsico_logo
-        src/uart.asm:293    .rodata:000001cf help_menu
-        src/uart.asm:184    .text:0000013c uart4_tx_asciz_exit
-        src/uart.asm:191    .text:00000142 uart4_rx_asciz_loop
-        src/uart.asm:221    .text:00000172 uart4_rx_char
-        src/uart.asm:206    .text:00000156 uart4_rx_asciz_exit
+        src/uart.asm:154    .text:000000f2 print_command_prompt
+        src/uart.asm:204    .text:00000158 uart4_rx_asciz
+        src/uart.asm:353    .data:00000000 uart4_rx_buffer
+        src/uart.asm:344    .rodata:0000031c help_str
+        src/uart.asm:79     .text:0000006e strcmp
+        src/uart.asm:56     .text:00000054 process_help_cmd
+        src/uart.asm:346    .rodata:00000321 ls_str
+        src/uart.asm:60     .text:0000005a process_ls_cmd
+        src/uart.asm:348    .rodata:00000324 clear_str
+        src/uart.asm:64     .text:00000060 process_clear_cmd
+        src/uart.asm:68     .text:00000066 process_invalid_cmd
+        src/uart.asm:120    .text:000000b6 do_help_cmd
+        src/uart.asm:129    .text:000000c6 do_ls_cmd
+        src/uart.asm:139    .text:000000d8 do_clear_cmd
+        src/uart.asm:110    .text:0000009e do_invalid_cmd
+        src/uart.asm:72     .text:0000006c halt
+        src/uart.asm:84     .text:00000078 strcmp_loop
+        src/uart.asm:99     .text:0000008e strcmp_equal
+        src/uart.asm:95     .text:00000088 strcmp_lessthan
+        src/uart.asm:105    .text:00000098 strcmp_exit
+        src/uart.asm:193    .text:00000142 uart4_tx_asciz
+        src/uart.asm:341    .rodata:00000311 invalid_cmd_txt
+        src/uart.asm:317    .rodata:0000024d app_menu
+        src/uart.asm:332    .rodata:000002db clear_screen_seq
+        src/uart.asm:329    .rodata:000002d5 command_prompt
+        src/uart.asm:326    .rodata:0000029e copyright_text
+        src/uart.asm:294    .rodata:00000000 pepsico_logo
+        src/uart.asm:229    .text:0000017c uart4_tx_char
+        src/uart.asm:310    .rodata:000001cf help_menu
+        src/uart.asm:201    .text:00000156 uart4_tx_asciz_exit
+        src/uart.asm:208    .text:0000015c uart4_rx_asciz_loop
+        src/uart.asm:238    .text:0000018c uart4_rx_char
+        src/uart.asm:223    .text:00000170 uart4_rx_asciz_exit
                             *ABS*:40004c1c UART4_ISR
                             *ABS*:40004c28 UART4_TDR
                             *ABS*:40004c24 UART4_RDR
@@ -1566,13 +1597,13 @@ DEFINED SYMBOLS
                             *ABS*:40004c00 UART4_CR1
 ../inc/stm32f303xDE.inc:2      *ABS*:40000000 APB1
 ../inc/stm32f303xDE.inc:3      *ABS*:40010000 APB2
+ARM GAS  src/uart.asm 			page 28
+
+
 ../inc/stm32f303xDE.inc:4      *ABS*:40020000 AHB1
 ../inc/stm32f303xDE.inc:5      *ABS*:48000000 AHB2
 ../inc/stm32f303xDE.inc:6      *ABS*:50000000 AHB3
 ../inc/stm32f303xDE.inc:7      *ABS*:60000000 AHB4_1
-ARM GAS  src/uart.asm 			page 28
-
-
 ../inc/stm32f303xDE.inc:8      *ABS*:80000000 AHB4_2
 ../inc/stm32f303xDE.inc:9      *ABS*:a0000000 AHB4_3
 ../inc/stm32f303xDE.inc:13     *ABS*:00000000 BOOT_CONFIG
@@ -1626,13 +1657,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:64     *ABS*:40024000 TSC
 ../inc/stm32f303xDE.inc:66     *ABS*:48000000 GPIOA
 ../inc/stm32f303xDE.inc:67     *ABS*:48000400 GPIOB
+ARM GAS  src/uart.asm 			page 29
+
+
 ../inc/stm32f303xDE.inc:68     *ABS*:48000800 GPIOC
 ../inc/stm32f303xDE.inc:69     *ABS*:48000c00 GPIOD
 ../inc/stm32f303xDE.inc:70     *ABS*:48001000 GPIOE
 ../inc/stm32f303xDE.inc:71     *ABS*:48001400 GPIOF
-ARM GAS  src/uart.asm 			page 29
-
-
 ../inc/stm32f303xDE.inc:72     *ABS*:48001800 GPIOG
 ../inc/stm32f303xDE.inc:73     *ABS*:48001c00 GPIOH
 ../inc/stm32f303xDE.inc:75     *ABS*:50000000 ADC1
@@ -1686,13 +1717,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:132    *ABS*:48000c20 GPIOD_AFRL
 ../inc/stm32f303xDE.inc:133    *ABS*:48000c24 GPIOD_AFRH
 ../inc/stm32f303xDE.inc:134    *ABS*:48000c28 GPIOD_BRR
+ARM GAS  src/uart.asm 			page 30
+
+
 ../inc/stm32f303xDE.inc:136    *ABS*:48001000 GPIOE_MODER
 ../inc/stm32f303xDE.inc:137    *ABS*:48001004 GPIOE_OTYPER
 ../inc/stm32f303xDE.inc:138    *ABS*:48001008 GPIOE_OSPEEDR
 ../inc/stm32f303xDE.inc:139    *ABS*:4800100c GPIOE_PUPDR
-ARM GAS  src/uart.asm 			page 30
-
-
 ../inc/stm32f303xDE.inc:140    *ABS*:48001010 GPIOE_IDR
 ../inc/stm32f303xDE.inc:141    *ABS*:48001014 GPIOE_ODR
 ../inc/stm32f303xDE.inc:142    *ABS*:48001018 GPIOE_BSRR
@@ -1746,13 +1777,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:196    *ABS*:40012c28 TIM1_PSC
 ../inc/stm32f303xDE.inc:197    *ABS*:40012c2c TIM1_ARR
 ../inc/stm32f303xDE.inc:198    *ABS*:40012c30 TIM1_RCR
+ARM GAS  src/uart.asm 			page 31
+
+
 ../inc/stm32f303xDE.inc:199    *ABS*:40012c34 TIM1_CCR1
 ../inc/stm32f303xDE.inc:200    *ABS*:40012c38 TIM1_CCR2
 ../inc/stm32f303xDE.inc:201    *ABS*:40012c3c TIM1_CCR3
 ../inc/stm32f303xDE.inc:202    *ABS*:40012c40 TIM1_CCR4
-ARM GAS  src/uart.asm 			page 31
-
-
 ../inc/stm32f303xDE.inc:203    *ABS*:40012c44 TIM1_BDTR
 ../inc/stm32f303xDE.inc:204    *ABS*:40012c48 TIM1_DCR
 ../inc/stm32f303xDE.inc:205    *ABS*:40012c4c TIM1_DMAR
@@ -1806,13 +1837,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:255    *ABS*:4001504c TIM20_DMAR
 ../inc/stm32f303xDE.inc:256    *ABS*:40015050 TIM20_OR
 ../inc/stm32f303xDE.inc:257    *ABS*:40015054 TIM20_CCMR3
+ARM GAS  src/uart.asm 			page 32
+
+
 ../inc/stm32f303xDE.inc:258    *ABS*:40015058 TIM20_CCR5
 ../inc/stm32f303xDE.inc:259    *ABS*:4001505c TIM20_CCR6
 ../inc/stm32f303xDE.inc:263    *ABS*:40000000 TIM2_CR1
 ../inc/stm32f303xDE.inc:264    *ABS*:40000004 TIM2_CR2
-ARM GAS  src/uart.asm 			page 32
-
-
 ../inc/stm32f303xDE.inc:265    *ABS*:40000008 TIM2_SMCR
 ../inc/stm32f303xDE.inc:266    *ABS*:4000000c TIM2_DIER
 ../inc/stm32f303xDE.inc:267    *ABS*:40000010 TIM2_SR
@@ -1866,13 +1897,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:317    *ABS*:40000838 TIM4_CCR2
 ../inc/stm32f303xDE.inc:318    *ABS*:4000083c TIM4_CCR3
 ../inc/stm32f303xDE.inc:319    *ABS*:40000840 TIM4_CCR4
+ARM GAS  src/uart.asm 			page 33
+
+
 ../inc/stm32f303xDE.inc:320    *ABS*:40000848 TIM4_DCR
 ../inc/stm32f303xDE.inc:321    *ABS*:4000084c TIM4_DMAR
 ../inc/stm32f303xDE.inc:325    *ABS*:40001000 TIM6_CR1
 ../inc/stm32f303xDE.inc:326    *ABS*:40001004 TIM6_CR2
-ARM GAS  src/uart.asm 			page 33
-
-
 ../inc/stm32f303xDE.inc:327    *ABS*:4000100c TIM6_DIER
 ../inc/stm32f303xDE.inc:328    *ABS*:40001010 TIM6_SR
 ../inc/stm32f303xDE.inc:329    *ABS*:40001014 TIM6_EGR
@@ -1926,13 +1957,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:383    *ABS*:40014810 TIM17_SR
 ../inc/stm32f303xDE.inc:384    *ABS*:40014814 TIM17_EGR
 ../inc/stm32f303xDE.inc:385    *ABS*:40014818 TIM17_CCMR1
+ARM GAS  src/uart.asm 			page 34
+
+
 ../inc/stm32f303xDE.inc:386    *ABS*:40014820 TIM17_CCER
 ../inc/stm32f303xDE.inc:387    *ABS*:40014824 TIM17_CNT
 ../inc/stm32f303xDE.inc:388    *ABS*:40014828 TIM17_PSC
 ../inc/stm32f303xDE.inc:389    *ABS*:4001482c TIM17_ARR
-ARM GAS  src/uart.asm 			page 34
-
-
 ../inc/stm32f303xDE.inc:390    *ABS*:40014830 TIM17_RCR
 ../inc/stm32f303xDE.inc:391    *ABS*:40014834 TIM17_CCR1
 ../inc/stm32f303xDE.inc:392    *ABS*:40014844 TIM17_BDTR
@@ -1986,13 +2017,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:444    *ABS*:5000044c ADC3_JSQR
 ../inc/stm32f303xDE.inc:445    *ABS*:50000460 ADC3_OFR1
 ../inc/stm32f303xDE.inc:446    *ABS*:50000464 ADC3_OFR2
+ARM GAS  src/uart.asm 			page 35
+
+
 ../inc/stm32f303xDE.inc:447    *ABS*:50000468 ADC3_OFR3
 ../inc/stm32f303xDE.inc:448    *ABS*:5000046c ADC3_OFR4
 ../inc/stm32f303xDE.inc:449    *ABS*:50000480 ADC3_JDR1
 ../inc/stm32f303xDE.inc:450    *ABS*:50000484 ADC3_JDR2
-ARM GAS  src/uart.asm 			page 35
-
-
 ../inc/stm32f303xDE.inc:451    *ABS*:50000488 ADC3_JDR3
 ../inc/stm32f303xDE.inc:452    *ABS*:5000048c ADC3_JDR4
 ../inc/stm32f303xDE.inc:453    *ABS*:500004a0 ADC3_AWD2CR
@@ -2046,13 +2077,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:505    *ABS*:50000538 ADC4_SQR3
 ../inc/stm32f303xDE.inc:506    *ABS*:5000053c ADC4_SQR4
 ../inc/stm32f303xDE.inc:507    *ABS*:50000540 ADC4_DR
+ARM GAS  src/uart.asm 			page 36
+
+
 ../inc/stm32f303xDE.inc:508    *ABS*:5000054c ADC4_JSQR
 ../inc/stm32f303xDE.inc:509    *ABS*:50000560 ADC4_OFR1
 ../inc/stm32f303xDE.inc:510    *ABS*:50000564 ADC4_OFR2
 ../inc/stm32f303xDE.inc:511    *ABS*:50000568 ADC4_OFR3
-ARM GAS  src/uart.asm 			page 36
-
-
 ../inc/stm32f303xDE.inc:512    *ABS*:5000056c ADC4_OFR4
 ../inc/stm32f303xDE.inc:513    *ABS*:50000580 ADC4_JDR1
 ../inc/stm32f303xDE.inc:514    *ABS*:50000584 ADC4_JDR2
@@ -2106,13 +2137,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:576    *ABS*:40021028 RCC_AHBRSTR
 ../inc/stm32f303xDE.inc:577    *ABS*:4002102c RCC_CFGR2
 ../inc/stm32f303xDE.inc:578    *ABS*:40021030 RCC_CFGR3
+ARM GAS  src/uart.asm 			page 37
+
+
 ../inc/stm32f303xDE.inc:582    *ABS*:40020000 DMA1_ISR
 ../inc/stm32f303xDE.inc:583    *ABS*:40020004 DMA1_IFCR
 ../inc/stm32f303xDE.inc:584    *ABS*:40020008 DMA1_CCR1
 ../inc/stm32f303xDE.inc:585    *ABS*:4002000c DMA1_CNDTR1
-ARM GAS  src/uart.asm 			page 37
-
-
 ../inc/stm32f303xDE.inc:586    *ABS*:40020010 DMA1_CPAR1
 ../inc/stm32f303xDE.inc:587    *ABS*:40020014 DMA1_CMAR1
 ../inc/stm32f303xDE.inc:588    *ABS*:4002001c DMA1_CCR2
@@ -2166,13 +2197,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:642    *ABS*:40013808 USART1_CR3
 ../inc/stm32f303xDE.inc:643    *ABS*:4001380c USART1_BRR
 ../inc/stm32f303xDE.inc:644    *ABS*:40013810 USART1_GTPR
+ARM GAS  src/uart.asm 			page 38
+
+
 ../inc/stm32f303xDE.inc:645    *ABS*:40013814 USART1_RTOR
 ../inc/stm32f303xDE.inc:646    *ABS*:40013818 USART1_RQR
 ../inc/stm32f303xDE.inc:647    *ABS*:4001381c USART1_ISR
 ../inc/stm32f303xDE.inc:648    *ABS*:40013820 USART1_ICR
-ARM GAS  src/uart.asm 			page 38
-
-
 ../inc/stm32f303xDE.inc:649    *ABS*:40013824 USART1_RDR
 ../inc/stm32f303xDE.inc:650    *ABS*:40013828 USART1_TDR
 ../inc/stm32f303xDE.inc:652    *ABS*:40004400 USART2_CR1
@@ -2226,13 +2257,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:712    *ABS*:40003800 SPI2_I2S2_CR1
 ../inc/stm32f303xDE.inc:713    *ABS*:40003804 SPI2_I2S2_CR2
 ../inc/stm32f303xDE.inc:714    *ABS*:40003808 SPI2_I2S2_SR
+ARM GAS  src/uart.asm 			page 39
+
+
 ../inc/stm32f303xDE.inc:715    *ABS*:4000380c SPI2_I2S2_DR
 ../inc/stm32f303xDE.inc:716    *ABS*:40003810 SPI2_I2S2_CRCPR
 ../inc/stm32f303xDE.inc:717    *ABS*:40003814 SPI2_I2S2_RXCRCR
 ../inc/stm32f303xDE.inc:718    *ABS*:40003818 SPI2_I2S2_TXCRCR
-ARM GAS  src/uart.asm 			page 39
-
-
 ../inc/stm32f303xDE.inc:719    *ABS*:4000381c SPI2_I2S2_I2SCFGR
 ../inc/stm32f303xDE.inc:720    *ABS*:40003820 SPI2_I2S2_I2SPR
 ../inc/stm32f303xDE.inc:722    *ABS*:40003c00 SPI3_I2S3_CR1
@@ -2286,13 +2317,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:777    *ABS*:4001040c EXTI_FTSR1
 ../inc/stm32f303xDE.inc:778    *ABS*:40010410 EXTI_SWIER1
 ../inc/stm32f303xDE.inc:779    *ABS*:40010414 EXTI_PR1
+ARM GAS  src/uart.asm 			page 40
+
+
 ../inc/stm32f303xDE.inc:780    *ABS*:40010420 EXTI_IMR2
 ../inc/stm32f303xDE.inc:781    *ABS*:40010424 EXTI_EMR2
 ../inc/stm32f303xDE.inc:782    *ABS*:40010428 EXTI_RTSR2
 ../inc/stm32f303xDE.inc:783    *ABS*:4001042c EXTI_FTSR2
-ARM GAS  src/uart.asm 			page 40
-
-
 ../inc/stm32f303xDE.inc:784    *ABS*:40010430 EXTI_SWIER2
 ../inc/stm32f303xDE.inc:785    *ABS*:40010434 EXTI_PR2
 ../inc/stm32f303xDE.inc:789    *ABS*:40014001 SYSCFG_CFGR1
@@ -2346,13 +2377,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:848    *ABS*:40007818 I2C3_ISR
 ../inc/stm32f303xDE.inc:849    *ABS*:4000781c I2C3_ICR
 ../inc/stm32f303xDE.inc:850    *ABS*:40007820 I2C3_PECR
+ARM GAS  src/uart.asm 			page 41
+
+
 ../inc/stm32f303xDE.inc:851    *ABS*:40007824 I2C3_RXDR
 ../inc/stm32f303xDE.inc:852    *ABS*:40007828 I2C3_TXDR
 ../inc/stm32f303xDE.inc:856    *ABS*:40007400 DAC_CR
 ../inc/stm32f303xDE.inc:857    *ABS*:40007404 DAC_SWTRIGR
-ARM GAS  src/uart.asm 			page 41
-
-
 ../inc/stm32f303xDE.inc:858    *ABS*:40007408 DAC_DHR12R1
 ../inc/stm32f303xDE.inc:859    *ABS*:4000740c DAC_DHR12L1
 ../inc/stm32f303xDE.inc:860    *ABS*:40007410 DAC_DHR8R1
@@ -2406,13 +2437,13 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:914    *ABS*:4000664c CAN_F1R2
 ../inc/stm32f303xDE.inc:915    *ABS*:400066ab CAN_F13R1
 ../inc/stm32f303xDE.inc:916    *ABS*:400066ac CAN_F13R2
+ARM GAS  src/uart.asm 			page 42
+
+
 ../inc/stm32f303xDE.inc:920    *ABS*:40005c00 USB_EP0R
 ../inc/stm32f303xDE.inc:921    *ABS*:40005c04 USB_EP1R
 ../inc/stm32f303xDE.inc:922    *ABS*:40005c08 USB_EP2R
 ../inc/stm32f303xDE.inc:923    *ABS*:40005c0c USB_EP3R
-ARM GAS  src/uart.asm 			page 42
-
-
 ../inc/stm32f303xDE.inc:924    *ABS*:40005c10 USB_EP4R
 ../inc/stm32f303xDE.inc:925    *ABS*:40005c14 USB_EP5R
 ../inc/stm32f303xDE.inc:926    *ABS*:40005c18 USB_EP6R
@@ -2466,16 +2497,12 @@ DEFINED SYMBOLS
 ../inc/stm32f303xDE.inc:983    *ABS*:40002884 RTC_BKP13R
 ../inc/stm32f303xDE.inc:984    *ABS*:40002888 RTC_BKP14R
 ../inc/stm32f303xDE.inc:985    *ABS*:4000288c RTC_BKP15R
-        src/uart.asm:309    .rodata:0000028e help_cmd_txt
-        src/uart.asm:315    .rodata:000002bc invalid_cmd_txt
-        src/uart.asm:323    .rodata:000002d7 equal_str
-        src/uart.asm:326    .rodata:000002dd less_than_str
 ARM GAS  src/uart.asm 			page 43
 
 
-        src/uart.asm:328    .rodata:000002e7 greater_than_str
-        src/uart.asm:334    .data:00000000 $d
-        src/uart.asm:275    .text:000001ca $d
-        src/uart.asm:339    .text:000001cc $d
+        src/uart.asm:335    .rodata:000002e3 help_cmd_txt
+        src/uart.asm:338    .rodata:000002fa ls_cmd_txt
+        src/uart.asm:354    .data:00000000 $d
+        src/uart.asm:359    .text:000001e4 $d
 
 NO UNDEFINED SYMBOLS

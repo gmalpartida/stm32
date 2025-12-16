@@ -24,169 +24,170 @@ LOAD bin/startup.o
                 0x08000000                g_pfnVectors
                 0x08000194                        . = ALIGN (0x4)
 
-.text           0x08000194      0x274
+.text           0x08000194      0x294
                 0x08000194                        . = ALIGN (0x4)
  *(.text)
- .text          0x08000194      0x214 bin/uart.o
+ .text          0x08000194      0x234 bin/uart.o
                 0x08000194                main
- .text          0x080003a8       0x14 bin/startup.o
+ .text          0x080003c8       0x14 bin/startup.o
  *(.text*)
  .text.Reset_Handler
-                0x080003bc       0x48 bin/startup.o
-                0x080003bc                Reset_Handler
+                0x080003dc       0x48 bin/startup.o
+                0x080003dc                Reset_Handler
  .text.Default_Handler
-                0x08000404        0x2 bin/startup.o
-                0x08000404                RTC_Alarm_IRQHandler
-                0x08000404                TIM8_TRG_COM_IRQHandler
-                0x08000404                TIM8_CC_IRQHandler
-                0x08000404                DebugMon_Handler
-                0x08000404                SPI4_IRQHandler
-                0x08000404                TIM1_CC_IRQHandler
-                0x08000404                HardFault_Handler
-                0x08000404                USB_HP_IRQHandler
-                0x08000404                SysTick_Handler
-                0x08000404                PVD_IRQHandler
-                0x08000404                TAMP_STAMP_IRQHandler
-                0x08000404                PendSV_Handler
-                0x08000404                NMI_Handler
-                0x08000404                EXTI3_IRQHandler
-                0x08000404                I2C3_ER_IRQHandler
-                0x08000404                USB_HP_CAN_TX_IRQHandler
-                0x08000404                EXTI0_IRQHandler
-                0x08000404                I2C2_EV_IRQHandler
-                0x08000404                FPU_IRQHandler
-                0x08000404                TIM1_UP_TIM16_IRQHandler
-                0x08000404                UsageFault_Handler
-                0x08000404                ADC1_2_IRQHandler
-                0x08000404                SPI1_IRQHandler
-                0x08000404                CAN_SCE_IRQHandler
-                0x08000404                TIM6_DAC_IRQHandler
-                0x08000404                TIM8_UP_IRQHandler
-                0x08000404                DMA2_Channel2_IRQHandler
-                0x08000404                DMA1_Channel4_IRQHandler
-                0x08000404                TIM20_TRG_COM_IRQHandler
-                0x08000404                USART3_IRQHandler
-                0x08000404                DMA1_Channel7_IRQHandler
-                0x08000404                UART5_IRQHandler
-                0x08000404                ADC3_IRQHandler
-                0x08000404                TIM4_IRQHandler
-                0x08000404                CAN_RX1_IRQHandler
-                0x08000404                DMA2_Channel1_IRQHandler
-                0x08000404                I2C1_EV_IRQHandler
-                0x08000404                DMA1_Channel6_IRQHandler
-                0x08000404                UART4_IRQHandler
-                0x08000404                DMA2_Channel4_IRQHandler
-                0x08000404                TIM3_IRQHandler
-                0x08000404                RCC_IRQHandler
-                0x08000404                TIM20_UP_IRQHandler
-                0x08000404                DMA1_Channel1_IRQHandler
-                0x08000404                Default_Handler
-                0x08000404                USBWakeUp_RMP_IRQHandler
-                0x08000404                EXTI15_10_IRQHandler
-                0x08000404                TIM7_IRQHandler
-                0x08000404                I2C3_EV_IRQHandler
-                0x08000404                EXTI9_5_IRQHandler
-                0x08000404                RTC_WKUP_IRQHandler
-                0x08000404                SPI2_IRQHandler
-                0x08000404                USB_LP_CAN_RX0_IRQHandler
-                0x08000404                MemManage_Handler
-                0x08000404                SVC_Handler
-                0x08000404                DMA2_Channel5_IRQHandler
-                0x08000404                DMA1_Channel5_IRQHandler
-                0x08000404                USB_LP_IRQHandler
-                0x08000404                EXTI4_IRQHandler
-                0x08000404                TIM1_TRG_COM_TIM17_IRQHandler
-                0x08000404                DMA1_Channel3_IRQHandler
-                0x08000404                ADC4_IRQHandler
-                0x08000404                WWDG_IRQHandler
-                0x08000404                TIM2_IRQHandler
-                0x08000404                COMP7_IRQHandler
-                0x08000404                COMP1_2_3_IRQHandler
-                0x08000404                EXTI1_IRQHandler
-                0x08000404                USART2_IRQHandler
-                0x08000404                COMP4_5_6_IRQHandler
-                0x08000404                TIM20_BRK_IRQHandler
-                0x08000404                I2C2_ER_IRQHandler
-                0x08000404                DMA1_Channel2_IRQHandler
-                0x08000404                TIM8_BRK_IRQHandler
-                0x08000404                FLASH_IRQHandler
-                0x08000404                TIM20_CC_IRQHandler
-                0x08000404                BusFault_Handler
-                0x08000404                USART1_IRQHandler
-                0x08000404                SPI3_IRQHandler
-                0x08000404                I2C1_ER_IRQHandler
-                0x08000404                FMC_IRQHandler
-                0x08000404                USBWakeUp_IRQHandler
-                0x08000404                DMA2_Channel3_IRQHandler
-                0x08000404                EXTI2_TSC_IRQHandler
-                0x08000404                TIM1_BRK_TIM15_IRQHandler
+                0x08000424        0x2 bin/startup.o
+                0x08000424                RTC_Alarm_IRQHandler
+                0x08000424                TIM8_TRG_COM_IRQHandler
+                0x08000424                TIM8_CC_IRQHandler
+                0x08000424                DebugMon_Handler
+                0x08000424                SPI4_IRQHandler
+                0x08000424                TIM1_CC_IRQHandler
+                0x08000424                HardFault_Handler
+                0x08000424                USB_HP_IRQHandler
+                0x08000424                SysTick_Handler
+                0x08000424                PVD_IRQHandler
+                0x08000424                TAMP_STAMP_IRQHandler
+                0x08000424                PendSV_Handler
+                0x08000424                NMI_Handler
+                0x08000424                EXTI3_IRQHandler
+                0x08000424                I2C3_ER_IRQHandler
+                0x08000424                USB_HP_CAN_TX_IRQHandler
+                0x08000424                EXTI0_IRQHandler
+                0x08000424                I2C2_EV_IRQHandler
+                0x08000424                FPU_IRQHandler
+                0x08000424                TIM1_UP_TIM16_IRQHandler
+                0x08000424                UsageFault_Handler
+                0x08000424                ADC1_2_IRQHandler
+                0x08000424                SPI1_IRQHandler
+                0x08000424                CAN_SCE_IRQHandler
+                0x08000424                TIM6_DAC_IRQHandler
+                0x08000424                TIM8_UP_IRQHandler
+                0x08000424                DMA2_Channel2_IRQHandler
+                0x08000424                DMA1_Channel4_IRQHandler
+                0x08000424                TIM20_TRG_COM_IRQHandler
+                0x08000424                USART3_IRQHandler
+                0x08000424                DMA1_Channel7_IRQHandler
+                0x08000424                UART5_IRQHandler
+                0x08000424                ADC3_IRQHandler
+                0x08000424                TIM4_IRQHandler
+                0x08000424                CAN_RX1_IRQHandler
+                0x08000424                DMA2_Channel1_IRQHandler
+                0x08000424                I2C1_EV_IRQHandler
+                0x08000424                DMA1_Channel6_IRQHandler
+                0x08000424                UART4_IRQHandler
+                0x08000424                DMA2_Channel4_IRQHandler
+                0x08000424                TIM3_IRQHandler
+                0x08000424                RCC_IRQHandler
+                0x08000424                TIM20_UP_IRQHandler
+                0x08000424                DMA1_Channel1_IRQHandler
+                0x08000424                Default_Handler
+                0x08000424                USBWakeUp_RMP_IRQHandler
+                0x08000424                EXTI15_10_IRQHandler
+                0x08000424                TIM7_IRQHandler
+                0x08000424                I2C3_EV_IRQHandler
+                0x08000424                EXTI9_5_IRQHandler
+                0x08000424                RTC_WKUP_IRQHandler
+                0x08000424                SPI2_IRQHandler
+                0x08000424                USB_LP_CAN_RX0_IRQHandler
+                0x08000424                MemManage_Handler
+                0x08000424                SVC_Handler
+                0x08000424                DMA2_Channel5_IRQHandler
+                0x08000424                DMA1_Channel5_IRQHandler
+                0x08000424                USB_LP_IRQHandler
+                0x08000424                EXTI4_IRQHandler
+                0x08000424                TIM1_TRG_COM_TIM17_IRQHandler
+                0x08000424                DMA1_Channel3_IRQHandler
+                0x08000424                ADC4_IRQHandler
+                0x08000424                WWDG_IRQHandler
+                0x08000424                TIM2_IRQHandler
+                0x08000424                COMP7_IRQHandler
+                0x08000424                COMP1_2_3_IRQHandler
+                0x08000424                EXTI1_IRQHandler
+                0x08000424                USART2_IRQHandler
+                0x08000424                COMP4_5_6_IRQHandler
+                0x08000424                TIM20_BRK_IRQHandler
+                0x08000424                I2C2_ER_IRQHandler
+                0x08000424                DMA1_Channel2_IRQHandler
+                0x08000424                TIM8_BRK_IRQHandler
+                0x08000424                FLASH_IRQHandler
+                0x08000424                TIM20_CC_IRQHandler
+                0x08000424                BusFault_Handler
+                0x08000424                USART1_IRQHandler
+                0x08000424                SPI3_IRQHandler
+                0x08000424                I2C1_ER_IRQHandler
+                0x08000424                FMC_IRQHandler
+                0x08000424                USBWakeUp_IRQHandler
+                0x08000424                DMA2_Channel3_IRQHandler
+                0x08000424                EXTI2_TSC_IRQHandler
+                0x08000424                TIM1_BRK_TIM15_IRQHandler
  *(.glue_7)
- .glue_7        0x08000406        0x0 linker stubs
+ .glue_7        0x08000426        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x08000406        0x0 linker stubs
+ .glue_7t       0x08000426        0x0 linker stubs
  *(.eh_frame)
  *(.init)
  *(.fini)
-                0x08000408                        . = ALIGN (0x4)
- *fill*         0x08000406        0x2 
-                0x08000408                        _etext = .
+                0x08000428                        . = ALIGN (0x4)
+ *fill*         0x08000426        0x2 
+                0x08000428                        _etext = .
 
-.vfp11_veneer   0x08000408        0x0
- .vfp11_veneer  0x08000408        0x0 linker stubs
+.vfp11_veneer   0x08000428        0x0
+ .vfp11_veneer  0x08000428        0x0 linker stubs
 
-.v4_bx          0x08000408        0x0
- .v4_bx         0x08000408        0x0 linker stubs
+.v4_bx          0x08000428        0x0
+ .v4_bx         0x08000428        0x0 linker stubs
 
-.iplt           0x08000408        0x0
- .iplt          0x08000408        0x0 bin/uart.o
+.iplt           0x08000428        0x0
+ .iplt          0x08000428        0x0 bin/uart.o
 
-.rodata         0x08000408      0x2f4
-                0x08000408                        . = ALIGN (0x4)
+.rodata         0x08000428      0x32c
+                0x08000428                        . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x08000408      0x2f4 bin/uart.o
+ .rodata        0x08000428      0x32a bin/uart.o
  *(.rodata*)
-                0x080006fc                        . = ALIGN (0x4)
+                0x08000754                        . = ALIGN (0x4)
+ *fill*         0x08000752        0x2 
 
-.rel.dyn        0x080006fc        0x0
- .rel.iplt      0x080006fc        0x0 bin/uart.o
+.rel.dyn        0x08000754        0x0
+ .rel.iplt      0x08000754        0x0 bin/uart.o
 
-.ARM.extab      0x080006fc        0x0
-                0x080006fc                        . = ALIGN (0x4)
+.ARM.extab      0x08000754        0x0
+                0x08000754                        . = ALIGN (0x4)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x080006fc                        . = ALIGN (0x4)
+                0x08000754                        . = ALIGN (0x4)
 
-.ARM            0x080006fc        0x0
-                0x080006fc                        . = ALIGN (0x4)
-                0x080006fc                        __exidx_start = .
+.ARM            0x08000754        0x0
+                0x08000754                        . = ALIGN (0x4)
+                0x08000754                        __exidx_start = .
  *(.ARM.exidx*)
-                0x080006fc                        __exidx_end = .
-                0x080006fc                        . = ALIGN (0x4)
+                0x08000754                        __exidx_end = .
+                0x08000754                        . = ALIGN (0x4)
 
-.preinit_array  0x080006fc        0x0
-                0x080006fc                        . = ALIGN (0x4)
+.preinit_array  0x08000754        0x0
+                0x08000754                        . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
                 [!provide]                        PROVIDE (__preinit_array_end = .)
-                0x080006fc                        . = ALIGN (0x4)
+                0x08000754                        . = ALIGN (0x4)
 
-.init_array     0x080006fc        0x0
-                0x080006fc                        . = ALIGN (0x4)
+.init_array     0x08000754        0x0
+                0x08000754                        . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array*)
                 [!provide]                        PROVIDE (__init_array_end = .)
-                0x080006fc                        . = ALIGN (0x4)
+                0x08000754                        . = ALIGN (0x4)
 
-.fini_array     0x080006fc        0x0
-                0x080006fc                        . = ALIGN (0x4)
+.fini_array     0x08000754        0x0
+                0x08000754                        . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
                 [!provide]                        PROVIDE (__fini_array_end = .)
-                0x080006fc                        . = ALIGN (0x4)
-                0x080006fc                        _sidata = LOADADDR (.data)
+                0x08000754                        . = ALIGN (0x4)
+                0x08000754                        _sidata = LOADADDR (.data)
 
-.data           0x20000000     0xa000 load address 0x080006fc
+.data           0x20000000     0xa000 load address 0x08000754
                 0x20000000                        . = ALIGN (0x4)
                 0x20000000                        _sdata = .
  *(.data)
@@ -197,12 +198,12 @@ LOAD bin/startup.o
  *(.RamFunc*)
                 0x2000a000                        . = ALIGN (0x4)
                 0x2000a000                        _edata = .
-                0x0800a6fc                        _siccmram = LOADADDR (.ccmram)
+                0x0800a754                        _siccmram = LOADADDR (.ccmram)
 
-.igot.plt       0x2000a000        0x0 load address 0x0800a6fc
+.igot.plt       0x2000a000        0x0 load address 0x0800a754
  .igot.plt      0x2000a000        0x0 bin/uart.o
 
-.ccmram         0x10000000        0x0 load address 0x0800a6fc
+.ccmram         0x10000000        0x0 load address 0x0800a754
                 0x10000000                        . = ALIGN (0x4)
                 0x10000000                        _sccmram = .
  *(.ccmram)
@@ -244,9 +245,9 @@ LOAD bin/startup.o
 OUTPUT(bin/uart.elf elf32-littlearm)
 LOAD linker stubs
 
-.debug_line     0x00000000      0x167
- .debug_line    0x00000000       0xfc bin/uart.o
- .debug_line    0x000000fc       0x6b bin/startup.o
+.debug_line     0x00000000      0x177
+ .debug_line    0x00000000      0x10c bin/uart.o
+ .debug_line    0x0000010c       0x6b bin/startup.o
 
 .debug_info     0x00000000       0x56
  .debug_info    0x00000000       0x26 bin/uart.o

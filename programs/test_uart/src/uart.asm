@@ -39,10 +39,15 @@ command_prompt_loop:
 	beq process_help_cmd
 	
 	ldr r0, =uart4_rx_buffer
-	ldr r1, =list_str
+	ldr r1, =ls_str
 	bl strcmp
 
-	beq process_list_cmd
+	beq process_ls_cmd
+
+	ldr r0, =uart4_rx_buffer
+	ldr r1, =clear_str
+	bl strcmp
+	beq process_clear_cmd
 
 	b process_invalid_cmd
 
@@ -52,8 +57,12 @@ process_help_cmd:
 	bl do_help_cmd
 	b command_prompt_loop
 
-process_list_cmd:
-	bl do_list_cmd
+process_ls_cmd:
+	bl do_ls_cmd
+	b command_prompt_loop
+
+process_clear_cmd:
+	bl do_clear_cmd
 	b command_prompt_loop
 
 process_invalid_cmd:
@@ -102,8 +111,8 @@ do_invalid_cmd:
 	push {lr}
 	ldr r5, =uart4_rx_buffer
 	bl uart4_tx_asciz
-	mov r0, #'?'
-	bl uart4_tx_char
+	ldr r5, =invalid_cmd_txt
+	bl uart4_tx_asciz
 	bl print_ln
 	pop {lr}
 	bx lr
@@ -117,12 +126,20 @@ do_help_cmd:
 	pop {lr}
 	bx lr
 
-do_list_cmd:
+do_ls_cmd:
 	push {lr}
 
-	ldr r5, =list_cmd_txt
+	ldr r5, =app_menu
 	bl uart4_tx_asciz
 	bl print_ln
+
+	pop {lr}
+	bx lr
+
+do_clear_cmd:
+	push {lr}
+
+	bl clear_screen
 
 	pop {lr}
 	bx lr
@@ -297,8 +314,17 @@ help_menu:
 	.ascii "\trun [app]: run application.\r\n"
 	.byte 0
 
+app_menu:
+	.ascii "\tApplication 1\r\n"
+	.ascii "\tApplication 2\r\n"
+	.ascii "\tApplication 3\r\n"
+	.ascii "\tApplication 4\r\n"
+	.ascii "\tApplication 5\r\n"
+	.byte 0
+
+
 copyright_text:
-	.asciz "\tCopyright © 2025 Pepsico. All rights reserved.\r\n"
+	.asciz "\t    Copyright © 2025 Pepsico. All rights reserved.\r\n"
 
 command_prompt:
 	.asciz "R&D> "
@@ -309,24 +335,18 @@ clear_screen_seq:
 help_cmd_txt:
 	.asciz "help command received."
 
-list_cmd_txt:
+ls_cmd_txt:
 	.asciz "list command received."
 
 invalid_cmd_txt:
-	.asciz "invalid command."
+	.asciz "?  Really?"
 
 help_str:
 	.asciz "help"
-list_str:
-	.asciz "list"
-
-equal_str:
-	.asciz "equal"
-
-less_than_str:
-	.asciz "less than"
-greater_than_str:
-	.asciz "greater than"
+ls_str:
+	.asciz "ls"
+clear_str:
+	.asciz "clear"
 
 .section .data
 
