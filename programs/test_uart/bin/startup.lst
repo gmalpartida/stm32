@@ -1,4 +1,4 @@
-ARM GAS  src/startup.asm 			page 1
+ARM GAS  src/startup.s 			page 1
 
 
    1              	/**
@@ -58,7 +58,7 @@ ARM GAS  src/startup.asm 			page 1
   55              	 * @retval : None
   56              	*/
   57              	
-ARM GAS  src/startup.asm 			page 2
+ARM GAS  src/startup.s 			page 2
 
 
   58              	    .section	.text.Reset_Handler
@@ -118,7 +118,7 @@ ARM GAS  src/startup.asm 			page 1
  112              	 *
  113              	 * @param  None
  114              	 * @retval : None
-ARM GAS  src/startup.asm 			page 3
+ARM GAS  src/startup.s 			page 3
 
 
  115              	*/
@@ -178,7 +178,7 @@ ARM GAS  src/startup.asm 			page 1
  169 008c 00000000 		.word	USB_HP_CAN_TX_IRQHandler
  170 0090 00000000 		.word	USB_LP_CAN_RX0_IRQHandler
  171 0094 00000000 		.word	CAN_RX1_IRQHandler
-ARM GAS  src/startup.asm 			page 4
+ARM GAS  src/startup.s 			page 4
 
 
  172 0098 00000000 		.word	CAN_SCE_IRQHandler
@@ -238,7 +238,7 @@ ARM GAS  src/startup.asm 			page 1
  226 0170 00000000 		.word	USBWakeUp_RMP_IRQHandler
  227 0174 00000000 		.word	TIM20_BRK_IRQHandler
  228 0178 00000000 		.word	TIM20_UP_IRQHandler
-ARM GAS  src/startup.asm 			page 5
+ARM GAS  src/startup.s 			page 5
 
 
  229 017c 00000000 		.word	TIM20_TRG_COM_IRQHandler
@@ -298,7 +298,7 @@ ARM GAS  src/startup.asm 			page 1
  283              		.weak	FLASH_IRQHandler
  284              		.thumb_set FLASH_IRQHandler,Default_Handler
  285              	
-ARM GAS  src/startup.asm 			page 6
+ARM GAS  src/startup.s 			page 6
 
 
  286              		.weak	RCC_IRQHandler
@@ -358,7 +358,7 @@ ARM GAS  src/startup.asm 			page 1
  340              		.weak	EXTI9_5_IRQHandler
  341              		.thumb_set EXTI9_5_IRQHandler,Default_Handler
  342              	
-ARM GAS  src/startup.asm 			page 7
+ARM GAS  src/startup.s 			page 7
 
 
  343              		.weak	TIM1_BRK_TIM15_IRQHandler
@@ -418,7 +418,7 @@ ARM GAS  src/startup.asm 			page 1
  397              		.weak	USBWakeUp_IRQHandler
  398              		.thumb_set USBWakeUp_IRQHandler,Default_Handler
  399              	
-ARM GAS  src/startup.asm 			page 8
+ARM GAS  src/startup.s 			page 8
 
 
  400              		.weak	TIM8_BRK_IRQHandler
@@ -478,7 +478,7 @@ ARM GAS  src/startup.asm 			page 1
  454              		.weak	COMP4_5_6_IRQHandler
  455              		.thumb_set COMP4_5_6_IRQHandler,Default_Handler
  456              		
-ARM GAS  src/startup.asm 			page 9
+ARM GAS  src/startup.s 			page 9
 
 
  457              		.weak	COMP7_IRQHandler
@@ -517,109 +517,109 @@ ARM GAS  src/startup.asm 			page 1
  490              		.weak	SPI4_IRQHandler
  491              		.thumb_set SPI4_IRQHandler,Default_Handler
  492              	/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-ARM GAS  src/startup.asm 			page 10
+ARM GAS  src/startup.s 			page 10
 
 
 DEFINED SYMBOLS
-     src/startup.asm:133    .isr_vector:00000000 g_pfnVectors
-     src/startup.asm:117    .text.Default_Handler:00000000 Default_Handler
-     src/startup.asm:48     *ABS*:f1e0f85f BootRAM
-     src/startup.asm:61     .text.Reset_Handler:00000000 Reset_Handler
-     src/startup.asm:62     .text.Reset_Handler:00000000 $t
-     src/startup.asm:79     .text.Reset_Handler:00000014 LoopCopyDataInit
-     src/startup.asm:74     .text.Reset_Handler:0000000e CopyDataInit
-     src/startup.asm:94     .text.Reset_Handler:00000026 LoopFillZerobss
-     src/startup.asm:90     .text.Reset_Handler:00000022 FillZerobss
-     src/startup.asm:103    .text.Reset_Handler:0000002e LoopForever
-     src/startup.asm:118    .text.Default_Handler:00000000 Infinite_Loop
-     src/startup.asm:119    .text.Default_Handler:00000000 $t
-     src/startup.asm:117    .text.Default_Handler:00000000 NMI_Handler
-     src/startup.asm:117    .text.Default_Handler:00000000 HardFault_Handler
-     src/startup.asm:117    .text.Default_Handler:00000000 MemManage_Handler
-     src/startup.asm:117    .text.Default_Handler:00000000 BusFault_Handler
-     src/startup.asm:117    .text.Default_Handler:00000000 UsageFault_Handler
-     src/startup.asm:117    .text.Default_Handler:00000000 SVC_Handler
-     src/startup.asm:117    .text.Default_Handler:00000000 DebugMon_Handler
-     src/startup.asm:117    .text.Default_Handler:00000000 PendSV_Handler
-     src/startup.asm:117    .text.Default_Handler:00000000 SysTick_Handler
-     src/startup.asm:117    .text.Default_Handler:00000000 WWDG_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 PVD_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TAMP_STAMP_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 RTC_WKUP_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 FLASH_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 RCC_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 EXTI0_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 EXTI1_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 EXTI2_TSC_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 EXTI3_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 EXTI4_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA1_Channel1_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA1_Channel2_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA1_Channel3_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA1_Channel4_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA1_Channel5_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA1_Channel6_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA1_Channel7_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 ADC1_2_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 USB_HP_CAN_TX_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 USB_LP_CAN_RX0_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 CAN_RX1_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 CAN_SCE_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 EXTI9_5_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM1_BRK_TIM15_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM1_UP_TIM16_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM1_TRG_COM_TIM17_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM1_CC_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM2_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM3_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM4_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 I2C1_EV_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 I2C1_ER_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 I2C2_EV_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 I2C2_ER_IRQHandler
-ARM GAS  src/startup.asm 			page 11
+       src/startup.s:133    .isr_vector:00000000 g_pfnVectors
+       src/startup.s:117    .text.Default_Handler:00000000 Default_Handler
+       src/startup.s:48     *ABS*:f1e0f85f BootRAM
+       src/startup.s:61     .text.Reset_Handler:00000000 Reset_Handler
+       src/startup.s:62     .text.Reset_Handler:00000000 $t
+       src/startup.s:79     .text.Reset_Handler:00000014 LoopCopyDataInit
+       src/startup.s:74     .text.Reset_Handler:0000000e CopyDataInit
+       src/startup.s:94     .text.Reset_Handler:00000026 LoopFillZerobss
+       src/startup.s:90     .text.Reset_Handler:00000022 FillZerobss
+       src/startup.s:103    .text.Reset_Handler:0000002e LoopForever
+       src/startup.s:118    .text.Default_Handler:00000000 Infinite_Loop
+       src/startup.s:119    .text.Default_Handler:00000000 $t
+       src/startup.s:117    .text.Default_Handler:00000000 NMI_Handler
+       src/startup.s:117    .text.Default_Handler:00000000 HardFault_Handler
+       src/startup.s:117    .text.Default_Handler:00000000 MemManage_Handler
+       src/startup.s:117    .text.Default_Handler:00000000 BusFault_Handler
+       src/startup.s:117    .text.Default_Handler:00000000 UsageFault_Handler
+       src/startup.s:117    .text.Default_Handler:00000000 SVC_Handler
+       src/startup.s:117    .text.Default_Handler:00000000 DebugMon_Handler
+       src/startup.s:117    .text.Default_Handler:00000000 PendSV_Handler
+       src/startup.s:117    .text.Default_Handler:00000000 SysTick_Handler
+       src/startup.s:117    .text.Default_Handler:00000000 WWDG_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 PVD_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TAMP_STAMP_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 RTC_WKUP_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 FLASH_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 RCC_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 EXTI0_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 EXTI1_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 EXTI2_TSC_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 EXTI3_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 EXTI4_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA1_Channel1_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA1_Channel2_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA1_Channel3_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA1_Channel4_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA1_Channel5_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA1_Channel6_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA1_Channel7_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 ADC1_2_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 USB_HP_CAN_TX_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 USB_LP_CAN_RX0_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 CAN_RX1_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 CAN_SCE_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 EXTI9_5_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM1_BRK_TIM15_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM1_UP_TIM16_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM1_TRG_COM_TIM17_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM1_CC_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM2_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM3_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM4_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 I2C1_EV_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 I2C1_ER_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 I2C2_EV_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 I2C2_ER_IRQHandler
+ARM GAS  src/startup.s 			page 11
 
 
-     src/startup.asm:117    .text.Default_Handler:00000000 SPI1_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 SPI2_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 USART1_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 USART2_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 USART3_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 EXTI15_10_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 RTC_Alarm_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 USBWakeUp_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM8_BRK_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM8_UP_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM8_TRG_COM_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM8_CC_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 ADC3_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 FMC_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 SPI3_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 UART4_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 UART5_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM6_DAC_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM7_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA2_Channel1_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA2_Channel2_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA2_Channel3_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA2_Channel4_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 DMA2_Channel5_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 ADC4_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 COMP1_2_3_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 COMP4_5_6_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 COMP7_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 I2C3_EV_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 I2C3_ER_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 USB_HP_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 USB_LP_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 USBWakeUp_RMP_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM20_BRK_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM20_UP_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM20_TRG_COM_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 TIM20_CC_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 FPU_IRQHandler
-     src/startup.asm:117    .text.Default_Handler:00000000 SPI4_IRQHandler
-     src/startup.asm:492    .text.Reset_Handler:00000030 $d
+       src/startup.s:117    .text.Default_Handler:00000000 SPI1_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 SPI2_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 USART1_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 USART2_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 USART3_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 EXTI15_10_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 RTC_Alarm_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 USBWakeUp_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM8_BRK_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM8_UP_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM8_TRG_COM_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM8_CC_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 ADC3_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 FMC_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 SPI3_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 UART4_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 UART5_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM6_DAC_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM7_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA2_Channel1_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA2_Channel2_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA2_Channel3_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA2_Channel4_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 DMA2_Channel5_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 ADC4_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 COMP1_2_3_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 COMP4_5_6_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 COMP7_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 I2C3_EV_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 I2C3_ER_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 USB_HP_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 USB_LP_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 USBWakeUp_RMP_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM20_BRK_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM20_UP_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM20_TRG_COM_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 TIM20_CC_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 FPU_IRQHandler
+       src/startup.s:117    .text.Default_Handler:00000000 SPI4_IRQHandler
+       src/startup.s:492    .text.Reset_Handler:00000030 $d
                             .text:00000000 $d
 
 UNDEFINED SYMBOLS

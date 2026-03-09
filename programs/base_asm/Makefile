@@ -10,6 +10,7 @@ GDB=/opt/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gdb
 #GDB=/opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gdb
 VI=vi
 OPENOCD=openocd
+MINICOM=minicom
 
 SRC=src/test.asm
 TARGET=bin/test
@@ -20,6 +21,7 @@ BIN=$(TARGET).bin
 ASFLAGS=-g -I ../inc -I inc/
 OPENOCD_FLAGS=-f interface/stlink-v2.cfg -f target/stm32f3x.cfg 
 FLASH_FLAGS= --reset write $< 0x08000000
+MINICOM_FLAGS= -D /dev/ttyUSB0 -b 9600
 
 all: link
 
@@ -43,6 +45,9 @@ debug: link
 
 edit:
 	$(VI) $(SRC)
+
+uart:
+	$(MINICOM) $(MINICOM_FLAGS)
 
 clean:
 	rm -f bin/*

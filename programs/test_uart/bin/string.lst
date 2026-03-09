@@ -1,0 +1,219 @@
+ARM GAS  src/string.s 			page 1
+
+
+   1              	
+   2              	.syntax unified
+   3              	.cpu cortex-m4
+   4              	.thumb
+   5              	
+   6              	.section .text
+   7              	
+   8              	.equ	NULL,	0
+   9              	
+  10              	
+  11              	.global strcmp
+  12              	.type strcmp, %function
+  13              	
+  14              	@ compares two strings
+  15              	@ --> r0: address of first string
+  16              	@ --> r1: address of second string
+  17              	@ <-- r0: 0 if equal, 1 if r0 > r1, 2 if r0 < r1
+  18              	strcmp:
+  19 0000 30B4     		push {r4, r5}
+  20 0002 4FF00004 		mov r4, #0
+  21 0006 4FF00005 		mov r5, #0
+  22              	
+  23              	strcmp_loop:
+  24 000a 025D     		ldrb r2, [r0, r4]
+  25 000c 0B5D     		ldrb r3, [r1, r4]
+  26              	
+  27 000e 9A42     		cmp r2, r3
+  28 0010 06D0     		beq strcmp_equal
+  29 0012 02D3     		blo strcmp_lessthan
+  30              	
+  31 0014 4FF00105 		mov r5, #1
+  32 0018 07E0     		b strcmp_exit
+  33              		
+  34              	strcmp_lessthan:
+  35 001a 4FF00205 		mov r5, #2
+  36 001e 04E0     		b strcmp_exit
+  37              	
+  38              	strcmp_equal:
+  39 0020 002A     		cmp r2, #0
+  40 0022 02D0     		beq strcmp_exit
+  41 0024 04F10104 		add r4, r4, #1
+  42 0028 EFE7     		b strcmp_loop
+  43              	
+  44              	strcmp_exit:
+  45 002a 2846     		mov r0, r5
+  46 002c 30BC     		pop {r4, r5}
+  47 002e 7047     		bx lr
+  48              	
+  49              	.global strncmp
+  50              	.type strncmp, %function
+  51              	
+  52              	@ compare the first n bytes of two strings
+  53              	@ --> r0: address of first string
+  54              	@ --> r1: address of second string
+  55              	@ --> r2: how many bytes to compare
+  56              	@ --> r0: 0 if equal, otherwise 1
+  57              	strncmp:
+ARM GAS  src/string.s 			page 2
+
+
+  58              		
+  59              	strncmp_loop:
+  60 0030 0378     		ldrb r3, [r0]
+  61 0032 91F800C0 		ldrb r12, [r1]
+  62 0036 6345     		cmp r3, r12
+  63 0038 06D1     		bne strncmp_no_match
+  64 003a 013A     		subs r2, r2, #1
+  65 003c 3AB1     		cbz r2, strncmp_exit
+  66 003e 00F10100 		add r0, r0, #1
+  67 0042 01F10101 		add r1, r1, #1
+  68 0046 F3E7     		b strncmp_loop
+  69              	
+  70              	strncmp_no_match:
+  71 0048 4FF00100 		mov r0, #1
+  72 004c 7047     		bx lr
+  73              	strncmp_exit:
+  74 004e 4FF00000 		mov r0, #0
+  75 0052 7047     		bx lr
+  76              	
+  77              	
+  78              	
+  79              	
+  80              	
+  81              	@ searches for first occurrence of a character in the first bytes of a memory area
+  82              	@ --> r0: contains address of memory to be searched
+  83              	@ --> r1: contains character to search for
+  84              	@ --> r2: contains how many bytes to be included in search
+  85              	@ <-- r0: contains address at which character was found.  Otherwise contains NULL
+  86              	.global memchr
+  87              	.type memchr, %function	
+  88              	
+  89              	memchr:
+  90 0054 3AB1     		cbz r2, 2f				@ exit immediately if count of bytes is 0
+  91              	
+  92              	1:	@loop
+  93 0056 0378     		ldrb r3, [r0]	
+  94 0058 8B42     		cmp r3, r1
+  95 005a 06D0     		beq 3f						@ chr found, exit, r0 points to location of char
+  96 005c 00F10100 		add r0, r0, #1				@ move on to next byte
+  97 0060 013A     		subs r2, r2, #1
+  98 0062 00D0     		beq 2f						@ chr not found and count of bytes exhausted, exit
+  99 0064 F7E7     		b 1b						@ loop
+ 100              	
+ 101              	2: @ not found, return 0 in r0
+ 102 0066 4FF00000 		mov r0, #0
+ 103              	3: @ if found, r0 will contain location of char
+ 104 006a 7047     		bx lr
+ 105              	
+ 106              	@ copies a character to the first n bytes of a buffer
+ 107              	@ --> r0: contains address of buffer
+ 108              	@ --> r1: character to copy
+ 109              	@ --> r2: count of bytes
+ 110              	
+ 111              	.global memset
+ 112              	.type memset,%function
+ 113              	
+ 114              	memset:
+ARM GAS  src/string.s 			page 3
+
+
+ 115              	.Lmemset_loop:
+ 116 006c 22B1     		cbz r2, .Lmemset_exit
+ 117              			
+ 118 006e 0160     		str r1, [r0]				@ copy char to memory location given in r0
+ 119              	
+ 120 0070 00F10100 		add r0, r0, #1				@ advance to next location
+ 121 0074 013A     		subs r2, r2, #1				@ decrement count of bytes set
+ 122 0076 F9E7     		b .Lmemset_loop
+ 123              	
+ 124              	.Lmemset_exit:
+ 125              	
+ 126 0078 7047     		bx lr
+ 127              	
+ 128              	@ compares the first n bytes of two memory buffers
+ 129              	@ --> r0: addresss of first buffer
+ 130              	@ --> r1: addresss of second buffer
+ 131              	@ --> r2: how many bytes to compare
+ 132              	@ <-- r0: 0 if equal, -1 if first buffer is less than second buffer, 1 if first buffer is
+ 133              	@			greater than second buffer
+ 134              	.global memcmp
+ 135              	.type memcmp, %function
+ 136              	memcmp:
+ 137 007a 4FF00005 		mov r5, #0
+ 138              	.Lmemcmp_loop:
+ 139 007e 7AB1     		cbz r2, .Lmemcmp_exit
+ 140 0080 0368     		ldr r3, [r0]
+ 141 0082 0C68     		ldr r4, [r1]
+ 142 0084 A342     		cmp r3, r4
+ 143 0086 06D4     		bmi .Lmemcmp_less
+ 144 0088 08D5     		bpl .Lmemcmp_greater
+ 145 008a 00F10100 		add r0, r0, #1
+ 146 008e 01F10101 		add r1, r1, #1
+ 147 0092 013A     		subs r2, r2, #1
+ 148 0094 F3E7     		b .Lmemcmp_loop
+ 149              	
+ 150              	.Lmemcmp_less:
+ 151 0096 4FF0FF35 		mov r5, -1
+ 152 009a 01E0     		b .Lmemcmp_exit
+ 153              	.Lmemcmp_greater:
+ 154 009c 4FF00105 		mov r5, 1
+ 155              	.Lmemcmp_exit:
+ 156 00a0 2846     		mov r0, r5
+ 157              	
+ 158 00a2 7047     		bx lr
+ 159              	
+ 160              	
+ 161              	@ copies the first n bytes from one memory buffer to another
+ 162              	@ --> r0: address of source buffer
+ 163              	@ --> r1: address of destination buffer
+ 164              	@ --> r2: how many bytes to copy
+ 165              	.global memcpy
+ 166              	.type memcpy, %function
+ 167              	memcpy:
+ 168              		
+ 169              	.Lmemcpy_loop:
+ 170 00a4 2AB1     		cbz r2, .Lmemcpy_exit
+ 171 00a6 0368     		ldr r3, [r0]
+ARM GAS  src/string.s 			page 4
+
+
+ 172 00a8 0B60     		str r3, [r1]
+ 173 00aa 00F10100 		add r0, r0, #1
+ 174 00ae 013A     		subs r2, r2, #1
+ 175 00b0 F8E7     		b .Lmemcpy_loop
+ 176              	
+ 177              	.Lmemcpy_exit:
+ 178 00b2 7047     		bx lr
+ 179              	
+ 180              	
+ 181              	
+ 182              	
+ 183              	
+ 184              	
+ 185              	
+ 186              	
+ARM GAS  src/string.s 			page 5
+
+
+DEFINED SYMBOLS
+        src/string.s:8      *ABS*:00000000 NULL
+        src/string.s:18     .text:00000000 strcmp
+        src/string.s:19     .text:00000000 $t
+        src/string.s:23     .text:0000000a strcmp_loop
+        src/string.s:38     .text:00000020 strcmp_equal
+        src/string.s:34     .text:0000001a strcmp_lessthan
+        src/string.s:44     .text:0000002a strcmp_exit
+        src/string.s:57     .text:00000030 strncmp
+        src/string.s:59     .text:00000030 strncmp_loop
+        src/string.s:70     .text:00000048 strncmp_no_match
+        src/string.s:73     .text:0000004e strncmp_exit
+        src/string.s:89     .text:00000054 memchr
+        src/string.s:114    .text:0000006c memset
+        src/string.s:136    .text:0000007a memcmp
+        src/string.s:167    .text:000000a4 memcpy
+
+NO UNDEFINED SYMBOLS
