@@ -12,7 +12,6 @@
 .global clear_str
 .global pepsico_logo
 .global help_menu
-.global app_menu
 .global copyright_text
 .global command_prompt
 .global clear_screen_seq
@@ -48,14 +47,6 @@ help_menu:
 	.ascii "\treset:		soft-resets the system.\r\n"
 	.byte 0
 
-app_menu:
-	.ascii "\tpwm\r\n"
-	.ascii "\tApplication 2\r\n"
-	.ascii "\tApplication 3\r\n"
-	.ascii "\tApplication 4\r\n"
-	.ascii "\tApplication 5\r\n"
-	.byte 0
-
 copyright_text:
 	.asciz "\t    Copyright © 2025 Pepsico. All rights reserved.\r\n"
 
@@ -85,23 +76,26 @@ app1_name:	.asciz "pwm"
 app2_name:	.asciz "adc"
 app3_name:	.asciz "dac"
 app4_name:	.asciz "spi"
+app5_name:	.asciz "counter"
 
 app1_desc:	.asciz "Configures PWM"
 app2_desc:	.asciz "Configures ADC"
 app3_desc:	.asciz "Configures DAC"
 app4_desc:	.asciz "Configures SPI"
+app5_desc:	.asciz "Configure Counter"
 
 .equ APP1_ENTRY, timer2_pwm_config
 .equ APP2_ENTRY, timer2_pwm_config
 .equ APP3_ENTRY, timer2_pwm_config
 .equ APP4_ENTRY, timer2_pwm_config
-
+.equ APP5_ENTRY, timer2_pwm_config
 
 app_table:
 	.word app1_name, app1_desc, APP1_ENTRY
 	.word app2_name, app2_desc, APP2_ENTRY
 	.word app3_name, app3_desc, APP3_ENTRY
 	.word app4_name, app4_desc, APP4_ENTRY
+	.word app5_name, app5_desc, APP5_ENTRY
 	.word 0, 0						@ end of table
 
 
@@ -110,3 +104,6 @@ processing_help_cmd_msg:	.asciz	"processing help_command..."
 processing_ls_cmd_msg:		.asciz	"processing ls command..."
 processing_reset_cmd_msg:	.asciz	"processing reset command..."
 processing_clear_cmd_msg:	.asciz	"processing clear command..."
+
+
+

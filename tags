@@ -79,7 +79,7 @@ LoopForever	programs/test_uart/src/startup.s	/^LoopForever:$/;"	l
 MINICOM	programs/base_asm/Makefile	/^MINICOM=minicom$/;"	m
 MINICOM	programs/test_uart/Makefile	/^MINICOM=minicom$/;"	m
 MINICOM_FLAGS	programs/base_asm/Makefile	/^MINICOM_FLAGS= -D \/dev\/ttyUSB0 -b 9600$/;"	m
-MINICOM_FLAGS	programs/test_uart/Makefile	/^MINICOM_FLAGS=-D \/dev\/ttyUSB0 -b 9600$/;"	m
+MINICOM_FLAGS	programs/test_uart/Makefile	/^MINICOM_FLAGS=-D \/dev\/ttyUSB0 -b 57600$/;"	m
 MODER	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
 MainLoop	programs/blink_led/src/blink_led.s	/^MainLoop:$/;"	l
 OBJ	programs/bare-blinky/Makefile	/^OBJ=bin\/main.o$/;"	m
@@ -137,7 +137,8 @@ app3_desc	programs/test_uart/src/constants.s	/^app3_desc:	.asciz "Configures DAC
 app3_name	programs/test_uart/src/constants.s	/^app3_name:	.asciz "dac"$/;"	l
 app4_desc	programs/test_uart/src/constants.s	/^app4_desc:	.asciz "Configures SPI"$/;"	l
 app4_name	programs/test_uart/src/constants.s	/^app4_name:	.asciz "spi"$/;"	l
-app_menu	programs/test_uart/src/constants.s	/^app_menu:$/;"	l
+app5_desc	programs/test_uart/src/constants.s	/^app5_desc:	.asciz "Configure Counter"$/;"	l
+app5_name	programs/test_uart/src/constants.s	/^app5_name:	.asciz "counter"$/;"	l
 app_table	programs/test_uart/src/constants.s	/^app_table:$/;"	l
 atoi	programs/test_uart/src/ascii.s	/^atoi:$/;"	l
 clear_screen	programs/test_uart/src/test_uart.s	/^clear_screen:$/;"	l

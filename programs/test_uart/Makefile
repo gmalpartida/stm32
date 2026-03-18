@@ -26,7 +26,7 @@ ASFLAGS=-mcpu=cortex-m4 -g -I ../inc -I inc/
 OPENOCD_FLAGS=-f interface/stlink-v2.cfg -f target/stm32f3x.cfg 
 FLASH_FLAGS= --reset --connect-under-reset write $(ELF) 0x08000000
 ST_PROGRAMMER_FLAGS=--connect port=SWD -d 
-MINICOM_FLAGS=-D /dev/ttyUSB0 -b 9600
+MINICOM_FLAGS=-D /dev/ttyUSB0 -b 57600
 OBJCOPY_FLAGS=-O binary
 
 .phony: all, link, build, openocd, debug, flash, edit, uart, bin, clean

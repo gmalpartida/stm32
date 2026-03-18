@@ -338,7 +338,9 @@ uart4_config:
 	@ set uart4 baud rate to 9600 bps, oversampling by 16
 	ldr r0, =UART4_BRR
 	ldr r1, [r0]
-	mov r1, #833		@ replace r1 with #833
+	@mov r1, #833		@ replace r1 with #833
+	mov r1, #139		@ set to 57600 bps
+	@mov r1, #69			@ set to 115200 bps
 	str r1, [r0]
 
 	@ enable TE, RE and UE
