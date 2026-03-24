@@ -210,6 +210,7 @@ strcmp_equal	programs/test_uart/src/string.s	/^strcmp_equal:$/;"	l
 strcmp_exit	programs/test_uart/src/string.s	/^strcmp_exit:$/;"	l
 strcmp_lessthan	programs/test_uart/src/string.s	/^strcmp_lessthan:$/;"	l
 strcmp_loop	programs/test_uart/src/string.s	/^strcmp_loop:$/;"	l
+strlen	programs/test_uart/src/string.s	/^strlen:$/;"	l
 strncmp	programs/test_uart/src/string.s	/^strncmp:$/;"	l
 strncmp_exit	programs/test_uart/src/string.s	/^strncmp_exit:$/;"	l
 strncmp_loop	programs/test_uart/src/string.s	/^strncmp_loop:$/;"	l

@@ -48,6 +48,12 @@ command_prompt_loop:
 	cmp r1, #0
 	beq command_prompt_loop
 
+	push {r0}
+	bl strlen
+	cmp r0, #0
+	pop {r0}
+	beq command_prompt_loop
+
 	@ldr r0, =uart4_rx_buffer
 	ldr r1, =run_str
 	mov r2, #3
@@ -473,9 +479,4 @@ uart4_rx_buffer:
 	.space 256
 
 
-
-
-
-
-
-
+	

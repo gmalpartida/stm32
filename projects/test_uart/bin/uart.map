@@ -1,0 +1,329 @@
+
+There are no discarded input sections
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+CCMRAM           0x10000000         0x00004000         xrw
+RAM              0x20000000         0x00010000         xrw
+FLASH            0x08000000         0x00080000         xr
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD bin/test_uart.o
+LOAD bin/startup.o
+LOAD bin/string.o
+LOAD bin/constants.o
+LOAD bin/ascii.o
+                0x20010000                        _estack = (ORIGIN (RAM) + LENGTH (RAM))
+                0x00000200                        _Min_Heap_Size = 0x200
+                0x00000400                        _Min_Stack_Size = 0x400
+
+.isr_vector     0x08000000      0x194
+                0x08000000                        . = ALIGN (0x4)
+ *(.isr_vector)
+ .isr_vector    0x08000000      0x194 bin/startup.o
+                0x08000000                g_pfnVectors
+                0x08000194                        . = ALIGN (0x4)
+
+.text           0x08000194      0x504
+                0x08000194                        . = ALIGN (0x4)
+ *(.text)
+ .text          0x08000194      0x3b0 bin/test_uart.o
+                0x08000194                main
+                0x08000400                timer2_pwm_config
+ .text          0x08000544       0x14 bin/startup.o
+ .text          0x08000558       0xd0 bin/string.o
+                0x08000558                strcmp
+                0x08000588                strncmp
+                0x080005ac                memchr
+                0x080005c4                memset
+                0x080005d2                memcmp
+                0x080005fc                memcpy
+                0x0800060c                strlen
+ .text          0x08000628        0x0 bin/constants.o
+ .text          0x08000628       0x22 bin/ascii.o
+                0x08000628                atoi
+ *(.text*)
+ *fill*         0x0800064a        0x2 
+ .text.Reset_Handler
+                0x0800064c       0x48 bin/startup.o
+                0x0800064c                Reset_Handler
+ .text.Default_Handler
+                0x08000694        0x2 bin/startup.o
+                0x08000694                RTC_Alarm_IRQHandler
+                0x08000694                TIM8_TRG_COM_IRQHandler
+                0x08000694                TIM8_CC_IRQHandler
+                0x08000694                DebugMon_Handler
+                0x08000694                SPI4_IRQHandler
+                0x08000694                TIM1_CC_IRQHandler
+                0x08000694                HardFault_Handler
+                0x08000694                USB_HP_IRQHandler
+                0x08000694                SysTick_Handler
+                0x08000694                PVD_IRQHandler
+                0x08000694                TAMP_STAMP_IRQHandler
+                0x08000694                PendSV_Handler
+                0x08000694                NMI_Handler
+                0x08000694                EXTI3_IRQHandler
+                0x08000694                I2C3_ER_IRQHandler
+                0x08000694                USB_HP_CAN_TX_IRQHandler
+                0x08000694                EXTI0_IRQHandler
+                0x08000694                I2C2_EV_IRQHandler
+                0x08000694                FPU_IRQHandler
+                0x08000694                TIM1_UP_TIM16_IRQHandler
+                0x08000694                UsageFault_Handler
+                0x08000694                ADC1_2_IRQHandler
+                0x08000694                SPI1_IRQHandler
+                0x08000694                CAN_SCE_IRQHandler
+                0x08000694                TIM6_DAC_IRQHandler
+                0x08000694                TIM8_UP_IRQHandler
+                0x08000694                DMA2_Channel2_IRQHandler
+                0x08000694                DMA1_Channel4_IRQHandler
+                0x08000694                TIM20_TRG_COM_IRQHandler
+                0x08000694                USART3_IRQHandler
+                0x08000694                DMA1_Channel7_IRQHandler
+                0x08000694                UART5_IRQHandler
+                0x08000694                ADC3_IRQHandler
+                0x08000694                TIM4_IRQHandler
+                0x08000694                CAN_RX1_IRQHandler
+                0x08000694                DMA2_Channel1_IRQHandler
+                0x08000694                I2C1_EV_IRQHandler
+                0x08000694                DMA1_Channel6_IRQHandler
+                0x08000694                UART4_IRQHandler
+                0x08000694                DMA2_Channel4_IRQHandler
+                0x08000694                TIM3_IRQHandler
+                0x08000694                RCC_IRQHandler
+                0x08000694                TIM20_UP_IRQHandler
+                0x08000694                DMA1_Channel1_IRQHandler
+                0x08000694                Default_Handler
+                0x08000694                USBWakeUp_RMP_IRQHandler
+                0x08000694                EXTI15_10_IRQHandler
+                0x08000694                TIM7_IRQHandler
+                0x08000694                I2C3_EV_IRQHandler
+                0x08000694                EXTI9_5_IRQHandler
+                0x08000694                RTC_WKUP_IRQHandler
+                0x08000694                SPI2_IRQHandler
+                0x08000694                USB_LP_CAN_RX0_IRQHandler
+                0x08000694                MemManage_Handler
+                0x08000694                SVC_Handler
+                0x08000694                DMA2_Channel5_IRQHandler
+                0x08000694                DMA1_Channel5_IRQHandler
+                0x08000694                USB_LP_IRQHandler
+                0x08000694                EXTI4_IRQHandler
+                0x08000694                TIM1_TRG_COM_TIM17_IRQHandler
+                0x08000694                DMA1_Channel3_IRQHandler
+                0x08000694                ADC4_IRQHandler
+                0x08000694                WWDG_IRQHandler
+                0x08000694                TIM2_IRQHandler
+                0x08000694                COMP7_IRQHandler
+                0x08000694                COMP1_2_3_IRQHandler
+                0x08000694                EXTI1_IRQHandler
+                0x08000694                USART2_IRQHandler
+                0x08000694                COMP4_5_6_IRQHandler
+                0x08000694                TIM20_BRK_IRQHandler
+                0x08000694                I2C2_ER_IRQHandler
+                0x08000694                DMA1_Channel2_IRQHandler
+                0x08000694                TIM8_BRK_IRQHandler
+                0x08000694                FLASH_IRQHandler
+                0x08000694                TIM20_CC_IRQHandler
+                0x08000694                BusFault_Handler
+                0x08000694                USART1_IRQHandler
+                0x08000694                SPI3_IRQHandler
+                0x08000694                I2C1_ER_IRQHandler
+                0x08000694                FMC_IRQHandler
+                0x08000694                USBWakeUp_IRQHandler
+                0x08000694                DMA2_Channel3_IRQHandler
+                0x08000694                EXTI2_TSC_IRQHandler
+                0x08000694                TIM1_BRK_TIM15_IRQHandler
+ *(.glue_7)
+ .glue_7        0x08000696        0x0 linker stubs
+ *(.glue_7t)
+ .glue_7t       0x08000696        0x0 linker stubs
+ *(.eh_frame)
+ *(.init)
+ *(.fini)
+                0x08000698                        . = ALIGN (0x4)
+ *fill*         0x08000696        0x2 
+                0x08000698                        _etext = .
+
+.vfp11_veneer   0x08000698        0x0
+ .vfp11_veneer  0x08000698        0x0 linker stubs
+
+.v4_bx          0x08000698        0x0
+ .v4_bx         0x08000698        0x0 linker stubs
+
+.iplt           0x08000698        0x0
+ .iplt          0x08000698        0x0 bin/test_uart.o
+
+.rodata         0x08000698      0x430
+                0x08000698                        . = ALIGN (0x4)
+ *(.rodata)
+ .rodata        0x08000698      0x42f bin/constants.o
+                0x08000698                pepsico_logo
+                0x08000867                help_menu
+                0x0800092f                copyright_text
+                0x08000966                command_prompt
+                0x0800096c                clear_screen_seq
+                0x08000974                invalid_cmd_txt
+                0x0800097f                help_str
+                0x08000984                ls_str
+                0x08000987                clear_str
+                0x0800098d                run_str
+                0x08000991                reset_str
+                0x080009fd                app_table
+                0x08000a41                processing_run_cmd_msg
+                0x08000a5b                processing_help_cmd_msg
+                0x08000a76                processing_ls_cmd_msg
+                0x08000a8f                processing_reset_cmd_msg
+                0x08000aab                processing_clear_cmd_msg
+ *(.rodata*)
+                0x08000ac8                        . = ALIGN (0x4)
+ *fill*         0x08000ac7        0x1 
+
+.rel.dyn        0x08000ac8        0x0
+ .rel.iplt      0x08000ac8        0x0 bin/test_uart.o
+
+.ARM.extab      0x08000ac8        0x0
+                0x08000ac8                        . = ALIGN (0x4)
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+                0x08000ac8                        . = ALIGN (0x4)
+
+.ARM            0x08000ac8        0x0
+                0x08000ac8                        . = ALIGN (0x4)
+                0x08000ac8                        __exidx_start = .
+ *(.ARM.exidx*)
+                0x08000ac8                        __exidx_end = .
+                0x08000ac8                        . = ALIGN (0x4)
+
+.preinit_array  0x08000ac8        0x0
+                0x08000ac8                        . = ALIGN (0x4)
+                [!provide]                        PROVIDE (__preinit_array_start = .)
+ *(.preinit_array*)
+                [!provide]                        PROVIDE (__preinit_array_end = .)
+                0x08000ac8                        . = ALIGN (0x4)
+
+.init_array     0x08000ac8        0x0
+                0x08000ac8                        . = ALIGN (0x4)
+                [!provide]                        PROVIDE (__init_array_start = .)
+ *(SORT_BY_NAME(.init_array.*))
+ *(.init_array*)
+                [!provide]                        PROVIDE (__init_array_end = .)
+                0x08000ac8                        . = ALIGN (0x4)
+
+.fini_array     0x08000ac8        0x0
+                0x08000ac8                        . = ALIGN (0x4)
+                [!provide]                        PROVIDE (__fini_array_start = .)
+ *(SORT_BY_NAME(.fini_array.*))
+ *(.fini_array*)
+                [!provide]                        PROVIDE (__fini_array_end = .)
+                0x08000ac8                        . = ALIGN (0x4)
+                0x08000ac8                        _sidata = LOADADDR (.data)
+
+.data           0x20000000      0x100 load address 0x08000ac8
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _sdata = .
+ *(.data)
+ .data          0x20000000      0x100 bin/test_uart.o
+ .data          0x20000100        0x0 bin/startup.o
+ .data          0x20000100        0x0 bin/string.o
+ .data          0x20000100        0x0 bin/constants.o
+ .data          0x20000100        0x0 bin/ascii.o
+ *(.data*)
+ *(.RamFunc)
+ *(.RamFunc*)
+                0x20000100                        . = ALIGN (0x4)
+                0x20000100                        _edata = .
+                0x08000bc8                        _siccmram = LOADADDR (.ccmram)
+
+.igot.plt       0x20000100        0x0 load address 0x08000bc8
+ .igot.plt      0x20000100        0x0 bin/test_uart.o
+
+.ccmram         0x10000000        0x0 load address 0x08000bc8
+                0x10000000                        . = ALIGN (0x4)
+                0x10000000                        _sccmram = .
+ *(.ccmram)
+ *(.ccmram*)
+                0x10000000                        . = ALIGN (0x4)
+                0x10000000                        _eccmram = .
+                0x10000000                        . = ALIGN (0x4)
+
+.bss            0x20000100        0x0
+                0x20000100                        _sbss = .
+                0x20000100                        __bss_start__ = _sbss
+ *(.bss)
+ .bss           0x20000100        0x0 bin/test_uart.o
+ .bss           0x20000100        0x0 bin/startup.o
+ .bss           0x20000100        0x0 bin/string.o
+ .bss           0x20000100        0x0 bin/constants.o
+ .bss           0x20000100        0x0 bin/ascii.o
+ *(.bss*)
+ *(COMMON)
+                0x20000100                        . = ALIGN (0x4)
+                0x20000100                        _ebss = .
+                0x20000100                        __bss_end__ = _ebss
+
+._user_heap_stack
+                0x20000100      0x600
+                0x20000100                        . = ALIGN (0x8)
+                [!provide]                        PROVIDE (end = .)
+                [!provide]                        PROVIDE (_end = .)
+                0x20000300                        . = (. + _Min_Heap_Size)
+ *fill*         0x20000100      0x200 
+                0x20000700                        . = (. + _Min_Stack_Size)
+ *fill*         0x20000300      0x400 
+                0x20000700                        . = ALIGN (0x8)
+
+.ARM.attributes
+                0x00000000       0x21
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x00000000       0x21 bin/test_uart.o
+ .ARM.attributes
+                0x00000021       0x21 bin/startup.o
+ .ARM.attributes
+                0x00000042       0x21 bin/string.o
+ .ARM.attributes
+                0x00000063       0x21 bin/constants.o
+ .ARM.attributes
+                0x00000084       0x21 bin/ascii.o
+OUTPUT(bin/test_uart.elf elf32-littlearm)
+LOAD linker stubs
+
+.debug_line     0x00000000      0x2de
+ .debug_line    0x00000000      0x19e bin/test_uart.o
+ .debug_line    0x0000019e       0x69 bin/startup.o
+ .debug_line    0x00000207       0x94 bin/string.o
+ .debug_line    0x0000029b       0x43 bin/ascii.o
+
+.debug_info     0x00000000       0xa2
+ .debug_info    0x00000000       0x26 bin/test_uart.o
+ .debug_info    0x00000026       0x30 bin/startup.o
+ .debug_info    0x00000056       0x26 bin/string.o
+ .debug_info    0x0000007c       0x26 bin/ascii.o
+
+.debug_abbrev   0x00000000       0x59
+ .debug_abbrev  0x00000000       0x14 bin/test_uart.o
+ .debug_abbrev  0x00000014       0x1d bin/startup.o
+ .debug_abbrev  0x00000031       0x14 bin/string.o
+ .debug_abbrev  0x00000045       0x14 bin/ascii.o
+
+.debug_aranges  0x00000000       0x88
+ .debug_aranges
+                0x00000000       0x20 bin/test_uart.o
+ .debug_aranges
+                0x00000020       0x28 bin/startup.o
+ .debug_aranges
+                0x00000048       0x20 bin/string.o
+ .debug_aranges
+                0x00000068       0x20 bin/ascii.o
+
+.debug_str      0x00000000       0x8d
+ .debug_str     0x00000000       0x8d bin/test_uart.o
+                                 0x58 (size before relaxing)
+ .debug_str     0x0000008d       0x64 bin/startup.o
+ .debug_str     0x0000008d       0x55 bin/string.o
+ .debug_str     0x0000008d       0x54 bin/ascii.o
+
+.debug_ranges   0x00000000       0x20
+ .debug_ranges  0x00000000       0x20 bin/startup.o

@@ -177,7 +177,26 @@ memcpy:
 .Lmemcpy_exit:
 	bx lr
 
+@ determines the length of an asciz string
+@ --> r0: address of source buffer
+@ <-- r0: length of string
+.global strlen
+.type strlen, %function
+strlen:
+	push {r2}
+	mov r2, #0
+.Lstrlen_loop:
+	ldr r1, [r0]
+	cmp r1, #0
+	beq .Lstrlen_exit
+	add r2, r2, #1
+	add r0, r0, #1
+	b .Lstrlen_loop
 
+.Lstrlen_exit:
+	mov r0, r2
+	pop {r2}
+	bx lr
 
 
 
