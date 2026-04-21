@@ -17,11 +17,6 @@
 .global clear_screen_seq
 .global invalid_cmd_txt
 .global app_table
-.global processing_run_cmd_msg
-.global processing_reset_cmd_msg
-.global processing_ls_cmd_msg
-.global processing_help_cmd_msg
-.global processing_clear_cmd_msg
 
 pepsico_logo:
 	.ascii "\t\t  _____               _           \r\n"
@@ -97,13 +92,5 @@ app_table:
 	.word app4_name, app4_desc, APP4_ENTRY
 	.word app5_name, app5_desc, APP5_ENTRY
 	.word 0, 0						@ end of table
-
-
-processing_run_cmd_msg:		.asciz	"processing run command..."
-processing_help_cmd_msg:	.asciz	"processing help_command..."
-processing_ls_cmd_msg:		.asciz	"processing ls command..."
-processing_reset_cmd_msg:	.asciz	"processing reset command..."
-processing_clear_cmd_msg:	.asciz	"processing clear command..."
-
 
 

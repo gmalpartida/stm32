@@ -4,227 +4,222 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-AFRH	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-AFRL	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-AHBENR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-AHBRSTR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-APB1ENR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-APB1RSTR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-APB2ENR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-APB2RSTR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-AS	programs/base_asm/Makefile	/^AS=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as $/;"	m
-AS	programs/blink_led/Makefile	/^AS=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as$/;"	m
-AS	programs/test_uart/Makefile	/^AS=arm-none-eabi-as$/;"	m
-ASFLAGS	programs/base_asm/Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
-ASFLAGS	programs/blink_led/Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
-ASFLAGS	programs/test_uart/Makefile	/^ASFLAGS=-mcpu=cortex-m4 -g -I ..\/inc -I inc\/$/;"	m
-BDCR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-BIC	programs/blink_led/src/blink_led.s	/^BIC R1, R1, #(3 << (5 * 2)) @ Clear bits for PA5 mode$/;"	l
-BIN	programs/bare-blinky/Makefile	/^BIN=bin\/bare_blinky.bin$/;"	m
-BIN	programs/base_asm/Makefile	/^BIN=$(TARGET).bin$/;"	m
-BIN	programs/blink_led/Makefile	/^BIN=$(TARGET).bin$/;"	m
-BIN_DIR	programs/test_uart/Makefile	/^BIN_DIR=bin$/;"	m
-BIN_FILE	programs/test_uart/Makefile	/^BIN_FILE=$(BIN_DIR)\/$(TARGET).bin$/;"	m
-BIT	programs/bare-blinky/src/main.c	33;"	d	file:
-BRR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-BSRR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-CC	programs/bare-blinky/Makefile	/^CC = \/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gcc$/;"	m
-CFGR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-CFGR2	programs/bare-blinky/src/main.c	/^			 			CFGR2, CFGR3; $/;"	m	struct:rcc	file:
-CFGR3	programs/bare-blinky/src/main.c	/^			 			CFGR2, CFGR3; $/;"	m	struct:rcc	file:
-CFLAGS	programs/bare-blinky/Makefile	/^CFLAGS = -mcpu=cortex-m4 -mthumb -Wall -Wextra -Wshadow -Werror -Wundef -Wfloat-equal$/;"	m
-CHIPS	programs/bare-blinky/Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
-CHIPS	programs/base_asm/Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
-CHIPS	programs/blink_led/Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
-CHIPS	programs/test_uart/Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
-CIR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-CR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-CSR	programs/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
-CopyDataInit	programs/test_uart/src/startup.s	/^CopyDataInit:$/;"	l
-Default_Handler	programs/test_uart/src/startup.s	/^Default_Handler:$/;"	l
-Delay	programs/blink_led/src/blink_led.s	/^Delay:$/;"	l
-DelayLoop	programs/blink_led/src/blink_led.s	/^DelayLoop:$/;"	l
-ELF	programs/bare-blinky/Makefile	/^ELF=bin\/main.elf$/;"	m
-ELF	programs/base_asm/Makefile	/^ELF=$(TARGET).elf$/;"	m
-ELF	programs/blink_led/Makefile	/^ELF=$(TARGET).elf$/;"	m
-ELF_FILE	programs/test_uart/Makefile	/^ELF_FILE=$(BIN_DIR)\/$(TARGET).elf$/;"	m
-FLASH_FLAGS	programs/base_asm/Makefile	/^FLASH_FLAGS= --reset write $< 0x08000000$/;"	m
-FLASH_FLAGS	programs/blink_led/Makefile	/^FLASH_FLAGS= --reset write $< 0x08000000$/;"	m
-FLASH_FLAGS	programs/test_uart/Makefile	/^FLASH_FLAGS= --reset --connect-under-reset write $(ELF) 0x08000000$/;"	m
-FillZerobss	programs/test_uart/src/startup.s	/^FillZerobss:$/;"	l
-GDB	programs/base_asm/Makefile	/^GDB=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
-GDB	programs/blink_led/Makefile	/^GDB=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
-GDB	programs/test_uart/Makefile	/^GDB=gdb-multiarch$/;"	m
-GPIO	programs/bare-blinky/src/main.c	34;"	d	file:
-GPIO_AF_MODE	programs/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
-GPIO_ANALOG_MODE	programs/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
-GPIO_INPUT_MODE	programs/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
-GPIO_OUTPUT_MODE	programs/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
-IDR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-INC_DIR	programs/test_uart/Makefile	/^INC_DIR=inc$/;"	m
-Infinite_Loop	programs/test_uart/src/startup.s	/^Infinite_Loop:$/;"	l
-LCKR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-LD	programs/base_asm/Makefile	/^LD=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
-LD	programs/blink_led/Makefile	/^LD=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
-LD	programs/test_uart/Makefile	/^LD=arm-none-eabi-ld$/;"	m
-LDFLAGS	programs/bare-blinky/Makefile	/^LDFLAGS = -T src\/link.ld -nostdlib$/;"	m
-LDR	programs/blink_led/src/blink_led.s	/^LDR R0, =GPIOA_MODER$/;"	l
-LDR	programs/blink_led/src/blink_led.s	/^LDR R1, [R0]$/;"	l
-LDR	programs/blink_led/src/blink_led.s	/^LDR R1, [r0]$/;"	l
-LIBS	programs/bare-blinky/Makefile	/^LIBS = -lc -lm -lgcc$/;"	m
-LST_FILE	programs/test_uart/Makefile	/^LST_FILE=$(BIN_DIR)\/$(TARGET).lst$/;"	m
-LoopCopyDataInit	programs/test_uart/src/startup.s	/^LoopCopyDataInit:$/;"	l
-LoopFillZerobss	programs/test_uart/src/startup.s	/^LoopFillZerobss:$/;"	l
-LoopForever	programs/test_uart/src/startup.s	/^LoopForever:$/;"	l
-MINICOM	programs/base_asm/Makefile	/^MINICOM=minicom$/;"	m
-MINICOM	programs/test_uart/Makefile	/^MINICOM=minicom$/;"	m
-MINICOM_FLAGS	programs/base_asm/Makefile	/^MINICOM_FLAGS= -D \/dev\/ttyUSB0 -b 9600$/;"	m
-MINICOM_FLAGS	programs/test_uart/Makefile	/^MINICOM_FLAGS=-D \/dev\/ttyUSB0 -b 57600$/;"	m
-MODER	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-MainLoop	programs/blink_led/src/blink_led.s	/^MainLoop:$/;"	l
-OBJ	programs/bare-blinky/Makefile	/^OBJ=bin\/main.o$/;"	m
-OBJ	programs/base_asm/Makefile	/^OBJ=$(TARGET).o$/;"	m
-OBJ	programs/blink_led/Makefile	/^OBJ=$(TARGET).o$/;"	m
-OBJCOPY	programs/bare-blinky/Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
-OBJCOPY	programs/base_asm/Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
-OBJCOPY	programs/blink_led/Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
-OBJCOPY	programs/test_uart/Makefile	/^OBJCOPY=arm-none-eabi-objcopy$/;"	m
-OBJCOPY_FLAGS	programs/test_uart/Makefile	/^OBJCOPY_FLAGS=-O binary$/;"	m
-OBJ_FILE	programs/test_uart/Makefile	/^OBJ_FILE=$(BIN_DIR)\/$(TARGET).o$/;"	m
-ODR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-OPENOCD	programs/base_asm/Makefile	/^OPENOCD=openocd$/;"	m
-OPENOCD	programs/blink_led/Makefile	/^OPENOCD=openocd$/;"	m
-OPENOCD	programs/test_uart/Makefile	/^OPENOCD=openocd$/;"	m
-OPENOCD_FLAGS	programs/base_asm/Makefile	/^OPENOCD_FLAGS=-f interface\/stlink-v2.cfg -f target\/stm32f3x.cfg $/;"	m
-OPENOCD_FLAGS	programs/blink_led/Makefile	/^OPENOCD_FLAGS=-f interface\/stlink-v2.cfg -f target\/stm32f3x.cfg $/;"	m
-OPENOCD_FLAGS	programs/test_uart/Makefile	/^OPENOCD_FLAGS=-f interface\/stlink-v2.cfg -f target\/stm32f3x.cfg $/;"	m
-ORR	programs/blink_led/src/blink_led.s	/^ORR R1, R1, #(1 << (5 * 2)) @ Set bits for output mode$/;"	l
-ORR	programs/blink_led/src/blink_led.s	/^ORR R1, R1, #(1 << 17) @ Set bit for GPIOA enable$/;"	l
-OSPEEDR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-OTYPER	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-PIN	programs/bare-blinky/src/main.c	35;"	d	file:
-PINBANK	programs/bare-blinky/src/main.c	37;"	d	file:
-PINNO	programs/bare-blinky/src/main.c	36;"	d	file:
-PUPDR	programs/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
-RCC	programs/bare-blinky/src/main.c	55;"	d	file:
-Reset_Handler	programs/test_uart/src/startup.s	/^Reset_Handler:$/;"	l
-SRC	programs/bare-blinky/Makefile	/^SRC=src\/main.c$/;"	m
-SRC	programs/base_asm/Makefile	/^SRC=src\/test.asm$/;"	m
-SRC	programs/blink_led/Makefile	/^SRC=src\/blink_led.s$/;"	m
-SRC_DIR	programs/test_uart/Makefile	/^SRC_DIR=src$/;"	m
-SRC_FILE	programs/test_uart/Makefile	/^SRC_FILE=$(SRC_DIR)\/$(TARGET).s$/;"	m
-STARTUP_FILE	programs/test_uart/Makefile	/^STARTUP_FILE=$(SRC_DIR)\/startup.s$/;"	m
-STFLASH	programs/bare-blinky/Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
-STFLASH	programs/base_asm/Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
-STFLASH	programs/blink_led/Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
-STFLASH	programs/test_uart/Makefile	/^STFLASH=st-flash$/;"	m
-STR	programs/blink_led/src/blink_led.s	/^STR R1, [R0]$/;"	l
-STR	programs/blink_led/src/blink_led.s	/^STR R1, [r0]$/;"	l
-ST_PROGRAMMER	programs/test_uart/Makefile	/^ST_PROGRAMMER=~\/STMicroelectronics\/STM32Cube\/STM32CubeProgrammer\/bin\/STM32_Programmer_CLI$/;"	m
-ST_PROGRAMMER_FLAGS	programs/test_uart/Makefile	/^ST_PROGRAMMER_FLAGS=--connect port=SWD -d $/;"	m
-TARGET	programs/base_asm/Makefile	/^TARGET=bin\/test$/;"	m
-TARGET	programs/blink_led/Makefile	/^TARGET=bin\/blink_led$/;"	m
-TARGET	programs/test_uart/Makefile	/^TARGET := $(notdir $(patsubst %\/,%,$(CURDIR)))$/;"	m
-VI	programs/base_asm/Makefile	/^VI=vi$/;"	m
-VI	programs/blink_led/Makefile	/^VI=vi$/;"	m
-VI	programs/test_uart/Makefile	/^VI=vi$/;"	m
-_reset	programs/bare-blinky/src/main.c	/^__attribute__((naked, noreturn)) void _reset(void){$/;"	f
-app1_desc	programs/test_uart/src/constants.s	/^app1_desc:	.asciz "Configures PWM"$/;"	l
-app1_name	programs/test_uart/src/constants.s	/^app1_name:	.asciz "pwm"$/;"	l
-app2_desc	programs/test_uart/src/constants.s	/^app2_desc:	.asciz "Configures ADC"$/;"	l
-app2_name	programs/test_uart/src/constants.s	/^app2_name:	.asciz "adc"$/;"	l
-app3_desc	programs/test_uart/src/constants.s	/^app3_desc:	.asciz "Configures DAC"$/;"	l
-app3_name	programs/test_uart/src/constants.s	/^app3_name:	.asciz "dac"$/;"	l
-app4_desc	programs/test_uart/src/constants.s	/^app4_desc:	.asciz "Configures SPI"$/;"	l
-app4_name	programs/test_uart/src/constants.s	/^app4_name:	.asciz "spi"$/;"	l
-app5_desc	programs/test_uart/src/constants.s	/^app5_desc:	.asciz "Configure Counter"$/;"	l
-app5_name	programs/test_uart/src/constants.s	/^app5_name:	.asciz "counter"$/;"	l
-app_table	programs/test_uart/src/constants.s	/^app_table:$/;"	l
-atoi	programs/test_uart/src/ascii.s	/^atoi:$/;"	l
-clear_screen	programs/test_uart/src/test_uart.s	/^clear_screen:$/;"	l
-clear_screen_seq	programs/test_uart/src/constants.s	/^clear_screen_seq:$/;"	l
-clear_str	programs/test_uart/src/constants.s	/^clear_str:$/;"	l
-command_prompt	programs/test_uart/src/constants.s	/^command_prompt:$/;"	l
-command_prompt_loop	programs/test_uart/src/test_uart.s	/^command_prompt_loop:$/;"	l
-config_gpiob	programs/base_asm/src/test.asm	/^config_gpiob:$/;"	l
-config_hsi_clock	programs/base_asm/src/test.asm	/^config_hsi_clock:$/;"	l
-config_tim2	programs/base_asm/src/test.asm	/^config_tim2:$/;"	l
-config_uart4	programs/base_asm/src/test.asm	/^config_uart4:	$/;"	l
-copyright_text	programs/test_uart/src/constants.s	/^copyright_text:$/;"	l
-delay	programs/bare-blinky/src/main.c	/^static inline void delay(volatile uint32_t counter){$/;"	f	file:
-delay_loop	programs/base_asm/src/test.asm	/^delay_loop:$/;"	l
-delay_ms	programs/base_asm/src/test.asm	/^delay_ms:$/;"	l
-do_clear_cmd	programs/test_uart/src/test_uart.s	/^do_clear_cmd:$/;"	l
-do_help_cmd	programs/test_uart/src/test_uart.s	/^do_help_cmd:$/;"	l
-do_invalid_cmd	programs/test_uart/src/test_uart.s	/^do_invalid_cmd:$/;"	l
-do_ls_cmd	programs/test_uart/src/test_uart.s	/^do_ls_cmd:$/;"	l
-do_run_app	programs/test_uart/src/test_uart.s	/^do_run_app:$/;"	l
-do_run_cmd	programs/test_uart/src/test_uart.s	/^do_run_cmd:$/;"	l
-do_run_cmd_exit	programs/test_uart/src/test_uart.s	/^do_run_cmd_exit:$/;"	l
-do_run_cmd_loop	programs/test_uart/src/test_uart.s	/^do_run_cmd_loop:$/;"	l
-g_pfnVectors	programs/test_uart/src/startup.s	/^g_pfnVectors:$/;"	l
-gpio	programs/bare-blinky/src/main.c	/^struct gpio$/;"	s	file:
-gpio_set_mode	programs/bare-blinky/src/main.c	/^static inline void gpio_set_mode(uint16_t pin, uint8_t mode)$/;"	f	file:
-gpio_write	programs/bare-blinky/src/main.c	/^static inline void gpio_write(uint16_t pin, bool val){$/;"	f	file:
-halt	programs/test_uart/src/test_uart.s	/^halt:$/;"	l
-help_menu	programs/test_uart/src/constants.s	/^help_menu:$/;"	l
-help_str	programs/test_uart/src/constants.s	/^help_str:$/;"	l
-hsi_not_ready	programs/base_asm/src/test.asm	/^hsi_not_ready:				@ wait for HSI to be ready$/;"	l
-invalid_cmd_txt	programs/test_uart/src/constants.s	/^invalid_cmd_txt:$/;"	l
-ldr	programs/blink_led/src/blink_led.s	/^ldr r0, =RCC_AHBENR$/;"	l
-ls_str	programs/test_uart/src/constants.s	/^ls_str:$/;"	l
-main	programs/bare-blinky/src/main.c	/^int main(void)$/;"	f
-main	programs/test_uart/src/test_uart.s	/^main:$/;"	l
-memchr	programs/test_uart/src/string.s	/^memchr:$/;"	l
-memcmp	programs/test_uart/src/string.s	/^memcmp:$/;"	l
-memcpy	programs/test_uart/src/string.s	/^memcpy:$/;"	l
-memset	programs/test_uart/src/string.s	/^memset:$/;"	l
-pepsico_logo	programs/test_uart/src/constants.s	/^pepsico_logo:$/;"	l
-print_app_list	programs/test_uart/src/test_uart.s	/^print_app_list:$/;"	l
-print_app_list_exit	programs/test_uart/src/test_uart.s	/^print_app_list_exit:$/;"	l
-print_app_list_loop	programs/test_uart/src/test_uart.s	/^print_app_list_loop:$/;"	l
-print_command_prompt	programs/test_uart/src/test_uart.s	/^print_command_prompt:$/;"	l
-print_copyright_text	programs/test_uart/src/test_uart.s	/^print_copyright_text:$/;"	l
-print_help_menu	programs/test_uart/src/test_uart.s	/^print_help_menu:$/;"	l
-print_ln	programs/test_uart/src/test_uart.s	/^print_ln:$/;"	l
-print_pepsico_logo	programs/test_uart/src/test_uart.s	/^print_pepsico_logo:$/;"	l
-print_tab	programs/test_uart/src/test_uart.s	/^print_tab:$/;"	l
-process_clear_cmd	programs/test_uart/src/test_uart.s	/^process_clear_cmd:$/;"	l
-process_help_cmd	programs/test_uart/src/test_uart.s	/^process_help_cmd:$/;"	l
-process_invalid_cmd	programs/test_uart/src/test_uart.s	/^process_invalid_cmd:$/;"	l
-process_ls_cmd	programs/test_uart/src/test_uart.s	/^process_ls_cmd:$/;"	l
-process_reset_cmd	programs/test_uart/src/test_uart.s	/^process_reset_cmd:$/;"	l
-process_run_cmd	programs/test_uart/src/test_uart.s	/^process_run_cmd:$/;"	l
-processing_clear_cmd_msg	programs/test_uart/src/constants.s	/^processing_clear_cmd_msg:	.asciz	"processing clear command..."$/;"	l
-processing_help_cmd_msg	programs/test_uart/src/constants.s	/^processing_help_cmd_msg:	.asciz	"processing help_command..."$/;"	l
-processing_ls_cmd_msg	programs/test_uart/src/constants.s	/^processing_ls_cmd_msg:		.asciz	"processing ls command..."$/;"	l
-processing_reset_cmd_msg	programs/test_uart/src/constants.s	/^processing_reset_cmd_msg:	.asciz	"processing reset command..."$/;"	l
-processing_run_cmd_msg	programs/test_uart/src/constants.s	/^processing_run_cmd_msg:		.asciz	"processing run command..."$/;"	l
-rcc	programs/bare-blinky/src/main.c	/^struct rcc{$/;"	s	file:
-reset_str	programs/test_uart/src/constants.s	/^reset_str:$/;"	l
-run_str	programs/test_uart/src/constants.s	/^run_str:$/;"	l
-skip_blanks	programs/test_uart/src/test_uart.s	/^skip_blanks:$/;"	l
-skip_blanks_exit	programs/test_uart/src/test_uart.s	/^skip_blanks_exit:$/;"	l
-strcmp	programs/test_uart/src/string.s	/^strcmp:$/;"	l
-strcmp_equal	programs/test_uart/src/string.s	/^strcmp_equal:$/;"	l
-strcmp_exit	programs/test_uart/src/string.s	/^strcmp_exit:$/;"	l
-strcmp_lessthan	programs/test_uart/src/string.s	/^strcmp_lessthan:$/;"	l
-strcmp_loop	programs/test_uart/src/string.s	/^strcmp_loop:$/;"	l
-strlen	programs/test_uart/src/string.s	/^strlen:$/;"	l
-strncmp	programs/test_uart/src/string.s	/^strncmp:$/;"	l
-strncmp_exit	programs/test_uart/src/string.s	/^strncmp_exit:$/;"	l
-strncmp_loop	programs/test_uart/src/string.s	/^strncmp_loop:$/;"	l
-strncmp_no_match	programs/test_uart/src/string.s	/^strncmp_no_match:$/;"	l
-sysclk_not_ready	programs/base_asm/src/test.asm	/^sysclk_not_ready:$/;"	l
-tab	programs/bare-blinky/src/main.c	/^__attribute__((section(".vectors"))) void(*const tab[16 + 91])(void) = {$/;"	v
-timer2_pwm_config	programs/test_uart/src/test_uart.s	/^timer2_pwm_config:$/;"	l
-toggle_led	programs/base_asm/src/test.asm	/^toggle_led:$/;"	l
-uart4_config	programs/test_uart/src/test_uart.s	/^uart4_config:$/;"	l
-uart4_rx_asciz	programs/test_uart/src/test_uart.s	/^uart4_rx_asciz:$/;"	l
-uart4_rx_asciz_exit	programs/test_uart/src/test_uart.s	/^uart4_rx_asciz_exit:$/;"	l
-uart4_rx_asciz_loop	programs/test_uart/src/test_uart.s	/^uart4_rx_asciz_loop:$/;"	l
-uart4_rx_buffer	programs/test_uart/src/test_uart.s	/^uart4_rx_buffer:$/;"	l
-uart4_rx_char	programs/test_uart/src/test_uart.s	/^uart4_rx_char:$/;"	l
-uart4_tx_asciz	programs/test_uart/src/test_uart.s	/^uart4_tx_asciz:$/;"	l
-uart4_tx_asciz_exit	programs/test_uart/src/test_uart.s	/^uart4_tx_asciz_exit:$/;"	l
-uart4_tx_char	programs/test_uart/src/test_uart.s	/^uart4_tx_char:$/;"	l
+AFRH	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+AFRL	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+AHBENR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+AHBRSTR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+APB1ENR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+APB1RSTR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+APB2ENR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+APB2RSTR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+AS	projects/base_asm/Makefile	/^AS=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as $/;"	m
+AS	projects/blink_led/Makefile	/^AS=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-as$/;"	m
+AS	projects/g65/Makefile	/^AS=arm-none-eabi-as$/;"	m
+ASFLAGS	projects/base_asm/Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
+ASFLAGS	projects/blink_led/Makefile	/^ASFLAGS=-g -I ..\/inc -I inc\/$/;"	m
+ASFLAGS	projects/g65/Makefile	/^ASFLAGS=-mcpu=cortex-m4 -g -I ..\/inc -I inc\/$/;"	m
+BDCR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+BIC	projects/blink_led/src/blink_led.s	/^BIC R1, R1, #(3 << (5 * 2)) @ Clear bits for PA5 mode$/;"	l
+BIN	projects/bare-blinky/Makefile	/^BIN=bin\/bare_blinky.bin$/;"	m
+BIN	projects/base_asm/Makefile	/^BIN=$(TARGET).bin$/;"	m
+BIN	projects/blink_led/Makefile	/^BIN=$(TARGET).bin$/;"	m
+BIN_DIR	projects/g65/Makefile	/^BIN_DIR=bin$/;"	m
+BIN_FILE	projects/g65/Makefile	/^BIN_FILE=$(BIN_DIR)\/$(TARGET).bin$/;"	m
+BIT	projects/bare-blinky/src/main.c	33;"	d	file:
+BRR	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+BSRR	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+CC	projects/bare-blinky/Makefile	/^CC = \/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gcc$/;"	m
+CFGR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+CFGR2	projects/bare-blinky/src/main.c	/^			 			CFGR2, CFGR3; $/;"	m	struct:rcc	file:
+CFGR3	projects/bare-blinky/src/main.c	/^			 			CFGR2, CFGR3; $/;"	m	struct:rcc	file:
+CFLAGS	projects/bare-blinky/Makefile	/^CFLAGS = -mcpu=cortex-m4 -mthumb -Wall -Wextra -Wshadow -Werror -Wundef -Wfloat-equal$/;"	m
+CHIPS	projects/bare-blinky/Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
+CHIPS	projects/base_asm/Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
+CHIPS	projects/blink_led/Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
+CHIPS	projects/g65/Makefile	/^CHIPS=\/opt\/stlink\/config\/chips\/$/;"	m
+CIR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+CR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+CSR	projects/bare-blinky/src/main.c	/^	volatile uint32_t CR, CFGR, CIR, APB2RSTR, APB1RSTR, AHBENR, APB2ENR, APB1ENR, BDCR, CSR, AHBRSTR,$/;"	m	struct:rcc	file:
+CopyDataInit	projects/g65/src/startup.s	/^CopyDataInit:$/;"	l
+Default_Handler	projects/g65/src/startup.s	/^Default_Handler:$/;"	l
+Delay	projects/blink_led/src/blink_led.s	/^Delay:$/;"	l
+DelayLoop	projects/blink_led/src/blink_led.s	/^DelayLoop:$/;"	l
+ELF	projects/bare-blinky/Makefile	/^ELF=bin\/main.elf$/;"	m
+ELF	projects/base_asm/Makefile	/^ELF=$(TARGET).elf$/;"	m
+ELF	projects/blink_led/Makefile	/^ELF=$(TARGET).elf$/;"	m
+ELF_FILE	projects/g65/Makefile	/^ELF_FILE=$(BIN_DIR)\/$(TARGET).elf$/;"	m
+FLASH_FLAGS	projects/base_asm/Makefile	/^FLASH_FLAGS= --reset write $< 0x08000000$/;"	m
+FLASH_FLAGS	projects/blink_led/Makefile	/^FLASH_FLAGS= --reset write $< 0x08000000$/;"	m
+FLASH_FLAGS	projects/g65/Makefile	/^FLASH_FLAGS= --reset --connect-under-reset write $(ELF) 0x08000000$/;"	m
+FillZerobss	projects/g65/src/startup.s	/^FillZerobss:$/;"	l
+GDB	projects/base_asm/Makefile	/^GDB=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
+GDB	projects/blink_led/Makefile	/^GDB=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-gdb$/;"	m
+GDB	projects/g65/Makefile	/^GDB=gdb-multiarch$/;"	m
+GPIO	projects/bare-blinky/src/main.c	34;"	d	file:
+GPIO_AF_MODE	projects/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
+GPIO_ANALOG_MODE	projects/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
+GPIO_INPUT_MODE	projects/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
+GPIO_OUTPUT_MODE	projects/bare-blinky/src/main.c	/^enum {GPIO_INPUT_MODE, GPIO_OUTPUT_MODE, GPIO_AF_MODE, GPIO_ANALOG_MODE};$/;"	e	enum:__anon1	file:
+IDR	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+INC_DIR	projects/g65/Makefile	/^INC_DIR=inc$/;"	m
+Infinite_Loop	projects/g65/src/startup.s	/^Infinite_Loop:$/;"	l
+LCKR	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+LD	projects/base_asm/Makefile	/^LD=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
+LD	projects/blink_led/Makefile	/^LD=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-ld$/;"	m
+LD	projects/g65/Makefile	/^LD=arm-none-eabi-ld$/;"	m
+LDFLAGS	projects/bare-blinky/Makefile	/^LDFLAGS = -T src\/link.ld -nostdlib$/;"	m
+LDR	projects/blink_led/src/blink_led.s	/^LDR R0, =GPIOA_MODER$/;"	l
+LDR	projects/blink_led/src/blink_led.s	/^LDR R1, [R0]$/;"	l
+LDR	projects/blink_led/src/blink_led.s	/^LDR R1, [r0]$/;"	l
+LIBS	projects/bare-blinky/Makefile	/^LIBS = -lc -lm -lgcc$/;"	m
+LST_FILE	projects/g65/Makefile	/^LST_FILE=$(BIN_DIR)\/$(TARGET).lst$/;"	m
+LoopCopyDataInit	projects/g65/src/startup.s	/^LoopCopyDataInit:$/;"	l
+LoopFillZerobss	projects/g65/src/startup.s	/^LoopFillZerobss:$/;"	l
+LoopForever	projects/g65/src/startup.s	/^LoopForever:$/;"	l
+MINICOM	projects/base_asm/Makefile	/^MINICOM=minicom$/;"	m
+MINICOM	projects/g65/Makefile	/^MINICOM=minicom$/;"	m
+MINICOM_FLAGS	projects/base_asm/Makefile	/^MINICOM_FLAGS= -D \/dev\/ttyUSB0 -b 9600$/;"	m
+MINICOM_FLAGS	projects/g65/Makefile	/^MINICOM_FLAGS=-D \/dev\/ttyUSB0 -b 57600$/;"	m
+MODER	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+MainLoop	projects/blink_led/src/blink_led.s	/^MainLoop:$/;"	l
+OBJ	projects/bare-blinky/Makefile	/^OBJ=bin\/main.o$/;"	m
+OBJ	projects/base_asm/Makefile	/^OBJ=$(TARGET).o$/;"	m
+OBJ	projects/blink_led/Makefile	/^OBJ=$(TARGET).o$/;"	m
+OBJCOPY	projects/bare-blinky/Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
+OBJCOPY	projects/base_asm/Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
+OBJCOPY	projects/blink_led/Makefile	/^OBJCOPY=\/opt\/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi\/bin\/arm-none-eabi-objcopy$/;"	m
+OBJCOPY	projects/g65/Makefile	/^OBJCOPY=arm-none-eabi-objcopy$/;"	m
+OBJCOPY_FLAGS	projects/g65/Makefile	/^OBJCOPY_FLAGS=-O binary$/;"	m
+OBJ_FILE	projects/g65/Makefile	/^OBJ_FILE=$(BIN_DIR)\/$(TARGET).o$/;"	m
+ODR	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+OPENOCD	projects/base_asm/Makefile	/^OPENOCD=openocd$/;"	m
+OPENOCD	projects/blink_led/Makefile	/^OPENOCD=openocd$/;"	m
+OPENOCD	projects/g65/Makefile	/^OPENOCD=openocd$/;"	m
+OPENOCD_FLAGS	projects/base_asm/Makefile	/^OPENOCD_FLAGS=-f interface\/stlink-v2.cfg -f target\/stm32f3x.cfg $/;"	m
+OPENOCD_FLAGS	projects/blink_led/Makefile	/^OPENOCD_FLAGS=-f interface\/stlink-v2.cfg -f target\/stm32f3x.cfg $/;"	m
+OPENOCD_FLAGS	projects/g65/Makefile	/^OPENOCD_FLAGS=-f interface\/stlink-v2.cfg -f target\/stm32f3x.cfg $/;"	m
+ORR	projects/blink_led/src/blink_led.s	/^ORR R1, R1, #(1 << (5 * 2)) @ Set bits for output mode$/;"	l
+ORR	projects/blink_led/src/blink_led.s	/^ORR R1, R1, #(1 << 17) @ Set bit for GPIOA enable$/;"	l
+OSPEEDR	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+OTYPER	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+PIN	projects/bare-blinky/src/main.c	35;"	d	file:
+PINBANK	projects/bare-blinky/src/main.c	37;"	d	file:
+PINNO	projects/bare-blinky/src/main.c	36;"	d	file:
+PUPDR	projects/bare-blinky/src/main.c	/^	volatile uint32_t MODER, OTYPER, OSPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH, BRR;$/;"	m	struct:gpio	file:
+RCC	projects/bare-blinky/src/main.c	55;"	d	file:
+Reset_Handler	projects/g65/src/startup.s	/^Reset_Handler:$/;"	l
+SRC	projects/bare-blinky/Makefile	/^SRC=src\/main.c$/;"	m
+SRC	projects/base_asm/Makefile	/^SRC=src\/test.asm$/;"	m
+SRC	projects/blink_led/Makefile	/^SRC=src\/blink_led.s$/;"	m
+SRC_DIR	projects/g65/Makefile	/^SRC_DIR=src$/;"	m
+SRC_FILE	projects/g65/Makefile	/^SRC_FILE=$(SRC_DIR)\/$(TARGET).s$/;"	m
+STARTUP_FILE	projects/g65/Makefile	/^STARTUP_FILE=$(SRC_DIR)\/startup.s$/;"	m
+STFLASH	projects/bare-blinky/Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
+STFLASH	projects/base_asm/Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
+STFLASH	projects/blink_led/Makefile	/^STFLASH=\/opt\/stlink\/bin\/st-flash$/;"	m
+STFLASH	projects/g65/Makefile	/^STFLASH=st-flash$/;"	m
+STR	projects/blink_led/src/blink_led.s	/^STR R1, [R0]$/;"	l
+STR	projects/blink_led/src/blink_led.s	/^STR R1, [r0]$/;"	l
+ST_PROGRAMMER	projects/g65/Makefile	/^ST_PROGRAMMER=~\/STMicroelectronics\/STM32Cube\/STM32CubeProgrammer\/bin\/STM32_Programmer_CLI$/;"	m
+ST_PROGRAMMER_FLAGS	projects/g65/Makefile	/^ST_PROGRAMMER_FLAGS=--connect port=SWD -d $/;"	m
+TARGET	projects/base_asm/Makefile	/^TARGET=bin\/test$/;"	m
+TARGET	projects/blink_led/Makefile	/^TARGET=bin\/blink_led$/;"	m
+TARGET	projects/g65/Makefile	/^TARGET := $(notdir $(patsubst %\/,%,$(CURDIR)))$/;"	m
+VI	projects/base_asm/Makefile	/^VI=vi$/;"	m
+VI	projects/blink_led/Makefile	/^VI=vi$/;"	m
+VI	projects/g65/Makefile	/^VI=vi$/;"	m
+_reset	projects/bare-blinky/src/main.c	/^__attribute__((naked, noreturn)) void _reset(void){$/;"	f
+app1_desc	projects/g65/src/constants.s	/^app1_desc:	.asciz "Configures PWM"$/;"	l
+app1_name	projects/g65/src/constants.s	/^app1_name:	.asciz "pwm"$/;"	l
+app2_desc	projects/g65/src/constants.s	/^app2_desc:	.asciz "Configures ADC"$/;"	l
+app2_name	projects/g65/src/constants.s	/^app2_name:	.asciz "adc"$/;"	l
+app3_desc	projects/g65/src/constants.s	/^app3_desc:	.asciz "Configures DAC"$/;"	l
+app3_name	projects/g65/src/constants.s	/^app3_name:	.asciz "dac"$/;"	l
+app4_desc	projects/g65/src/constants.s	/^app4_desc:	.asciz "Configures SPI"$/;"	l
+app4_name	projects/g65/src/constants.s	/^app4_name:	.asciz "spi"$/;"	l
+app5_desc	projects/g65/src/constants.s	/^app5_desc:	.asciz "Configure Counter"$/;"	l
+app5_name	projects/g65/src/constants.s	/^app5_name:	.asciz "counter"$/;"	l
+app_table	projects/g65/src/constants.s	/^app_table:$/;"	l
+atoi	projects/g65/src/ascii.s	/^atoi:$/;"	l
+clear_screen	projects/g65/src/g65.s	/^clear_screen:$/;"	l
+clear_screen_seq	projects/g65/src/constants.s	/^clear_screen_seq:$/;"	l
+clear_str	projects/g65/src/constants.s	/^clear_str:$/;"	l
+command_prompt	projects/g65/src/constants.s	/^command_prompt:$/;"	l
+command_prompt_loop	projects/g65/src/g65.s	/^command_prompt_loop:$/;"	l
+config_gpiob	projects/base_asm/src/test.asm	/^config_gpiob:$/;"	l
+config_hsi_clock	projects/base_asm/src/test.asm	/^config_hsi_clock:$/;"	l
+config_tim2	projects/base_asm/src/test.asm	/^config_tim2:$/;"	l
+config_uart4	projects/base_asm/src/test.asm	/^config_uart4:	$/;"	l
+copyright_text	projects/g65/src/constants.s	/^copyright_text:$/;"	l
+delay	projects/bare-blinky/src/main.c	/^static inline void delay(volatile uint32_t counter){$/;"	f	file:
+delay_loop	projects/base_asm/src/test.asm	/^delay_loop:$/;"	l
+delay_ms	projects/base_asm/src/test.asm	/^delay_ms:$/;"	l
+do_clear_cmd	projects/g65/src/g65.s	/^do_clear_cmd:$/;"	l
+do_help_cmd	projects/g65/src/g65.s	/^do_help_cmd:$/;"	l
+do_invalid_cmd	projects/g65/src/g65.s	/^do_invalid_cmd:$/;"	l
+do_ls_cmd	projects/g65/src/g65.s	/^do_ls_cmd:$/;"	l
+do_run_app	projects/g65/src/g65.s	/^do_run_app:$/;"	l
+do_run_cmd	projects/g65/src/g65.s	/^do_run_cmd:$/;"	l
+do_run_cmd_exit	projects/g65/src/g65.s	/^do_run_cmd_exit:$/;"	l
+do_run_cmd_loop	projects/g65/src/g65.s	/^do_run_cmd_loop:$/;"	l
+g_pfnVectors	projects/g65/src/startup.s	/^g_pfnVectors:$/;"	l
+gpio	projects/bare-blinky/src/main.c	/^struct gpio$/;"	s	file:
+gpio_set_mode	projects/bare-blinky/src/main.c	/^static inline void gpio_set_mode(uint16_t pin, uint8_t mode)$/;"	f	file:
+gpio_write	projects/bare-blinky/src/main.c	/^static inline void gpio_write(uint16_t pin, bool val){$/;"	f	file:
+halt	projects/g65/src/g65.s	/^halt:$/;"	l
+help_menu	projects/g65/src/constants.s	/^help_menu:$/;"	l
+help_str	projects/g65/src/constants.s	/^help_str:$/;"	l
+hsi_not_ready	projects/base_asm/src/test.asm	/^hsi_not_ready:				@ wait for HSI to be ready$/;"	l
+invalid_cmd_txt	projects/g65/src/constants.s	/^invalid_cmd_txt:$/;"	l
+ldr	projects/blink_led/src/blink_led.s	/^ldr r0, =RCC_AHBENR$/;"	l
+ls_str	projects/g65/src/constants.s	/^ls_str:$/;"	l
+main	projects/bare-blinky/src/main.c	/^int main(void)$/;"	f
+main	projects/g65/src/g65.s	/^main:$/;"	l
+memchr	projects/g65/src/string.s	/^memchr:$/;"	l
+memcmp	projects/g65/src/string.s	/^memcmp:$/;"	l
+memcpy	projects/g65/src/string.s	/^memcpy:$/;"	l
+memset	projects/g65/src/string.s	/^memset:$/;"	l
+pepsico_logo	projects/g65/src/constants.s	/^pepsico_logo:$/;"	l
+print_app_list	projects/g65/src/g65.s	/^print_app_list:$/;"	l
+print_app_list_exit	projects/g65/src/g65.s	/^print_app_list_exit:$/;"	l
+print_app_list_loop	projects/g65/src/g65.s	/^print_app_list_loop:$/;"	l
+print_command_prompt	projects/g65/src/g65.s	/^print_command_prompt:$/;"	l
+print_copyright_text	projects/g65/src/g65.s	/^print_copyright_text:$/;"	l
+print_help_menu	projects/g65/src/g65.s	/^print_help_menu:$/;"	l
+print_ln	projects/g65/src/g65.s	/^print_ln:$/;"	l
+print_pepsico_logo	projects/g65/src/g65.s	/^print_pepsico_logo:$/;"	l
+print_tab	projects/g65/src/g65.s	/^print_tab:$/;"	l
+process_clear_cmd	projects/g65/src/g65.s	/^process_clear_cmd:$/;"	l
+process_help_cmd	projects/g65/src/g65.s	/^process_help_cmd:$/;"	l
+process_invalid_cmd	projects/g65/src/g65.s	/^process_invalid_cmd:$/;"	l
+process_ls_cmd	projects/g65/src/g65.s	/^process_ls_cmd:$/;"	l
+process_reset_cmd	projects/g65/src/g65.s	/^process_reset_cmd:$/;"	l
+process_run_cmd	projects/g65/src/g65.s	/^process_run_cmd:$/;"	l
+rcc	projects/bare-blinky/src/main.c	/^struct rcc{$/;"	s	file:
+reset_str	projects/g65/src/constants.s	/^reset_str:$/;"	l
+run_str	projects/g65/src/constants.s	/^run_str:$/;"	l
+skip_blanks	projects/g65/src/g65.s	/^skip_blanks:$/;"	l
+skip_blanks_exit	projects/g65/src/g65.s	/^skip_blanks_exit:$/;"	l
+strcmp	projects/g65/src/string.s	/^strcmp:$/;"	l
+strcmp_equal	projects/g65/src/string.s	/^strcmp_equal:$/;"	l
+strcmp_exit	projects/g65/src/string.s	/^strcmp_exit:$/;"	l
+strcmp_lessthan	projects/g65/src/string.s	/^strcmp_lessthan:$/;"	l
+strcmp_loop	projects/g65/src/string.s	/^strcmp_loop:$/;"	l
+strlen	projects/g65/src/string.s	/^strlen:$/;"	l
+strncmp	projects/g65/src/string.s	/^strncmp:$/;"	l
+strncmp_exit	projects/g65/src/string.s	/^strncmp_exit:$/;"	l
+strncmp_loop	projects/g65/src/string.s	/^strncmp_loop:$/;"	l
+strncmp_no_match	projects/g65/src/string.s	/^strncmp_no_match:$/;"	l
+sysclk_not_ready	projects/base_asm/src/test.asm	/^sysclk_not_ready:$/;"	l
+tab	projects/bare-blinky/src/main.c	/^__attribute__((section(".vectors"))) void(*const tab[16 + 91])(void) = {$/;"	v
+timer2_pwm_config	projects/g65/src/g65.s	/^timer2_pwm_config:$/;"	l
+toggle_led	projects/base_asm/src/test.asm	/^toggle_led:$/;"	l
+uart4_config	projects/g65/src/g65.s	/^uart4_config:$/;"	l
+uart4_rx_asciz	projects/g65/src/g65.s	/^uart4_rx_asciz:$/;"	l
+uart4_rx_asciz_exit	projects/g65/src/g65.s	/^uart4_rx_asciz_exit:$/;"	l
+uart4_rx_asciz_loop	projects/g65/src/g65.s	/^uart4_rx_asciz_loop:$/;"	l
+uart4_rx_buffer	projects/g65/src/g65.s	/^uart4_rx_buffer:$/;"	l
+uart4_rx_char	projects/g65/src/g65.s	/^uart4_rx_char:$/;"	l
+uart4_tx_asciz	projects/g65/src/g65.s	/^uart4_tx_asciz:$/;"	l
+uart4_tx_asciz_exit	projects/g65/src/g65.s	/^uart4_tx_asciz_exit:$/;"	l
+uart4_tx_char	projects/g65/src/g65.s	/^uart4_tx_char:$/;"	l

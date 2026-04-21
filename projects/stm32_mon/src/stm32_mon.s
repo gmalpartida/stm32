@@ -8,9 +8,6 @@
 @.space 0xe4			@ reserve this area for remaining of vector table
 
 .global timer2_pwm_config
-.equ HELP_CMD_CODE, 0x01
-.equ LIST_CMD_CODE, 0x02
-.equ INVALID_CMD_CODE, 0x00
 
 .section .text
 
@@ -477,6 +474,3 @@ print_app_list_exit:
 
 uart4_rx_buffer:
 	.space 256
-
-
-	

@@ -11,7 +11,7 @@ FLASH            0x08000000         0x00080000         xr
 
 Linker script and memory map
 
-LOAD bin/test_uart.o
+LOAD bin/stm32_mon.o
 LOAD bin/startup.o
 LOAD bin/string.o
 LOAD bin/constants.o
@@ -30,7 +30,7 @@ LOAD bin/ascii.o
 .text           0x08000194      0x504
                 0x08000194                        . = ALIGN (0x4)
  *(.text)
- .text          0x08000194      0x3b0 bin/test_uart.o
+ .text          0x08000194      0x3b0 bin/stm32_mon.o
                 0x08000194                main
                 0x08000400                timer2_pwm_config
  .text          0x08000544       0x14 bin/startup.o
@@ -154,12 +154,12 @@ LOAD bin/ascii.o
  .v4_bx         0x08000698        0x0 linker stubs
 
 .iplt           0x08000698        0x0
- .iplt          0x08000698        0x0 bin/test_uart.o
+ .iplt          0x08000698        0x0 bin/stm32_mon.o
 
-.rodata         0x08000698      0x430
+.rodata         0x08000698      0x3ac
                 0x08000698                        . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x08000698      0x42f bin/constants.o
+ .rodata        0x08000698      0x3a9 bin/constants.o
                 0x08000698                pepsico_logo
                 0x08000867                help_menu
                 0x0800092f                copyright_text
@@ -172,59 +172,54 @@ LOAD bin/ascii.o
                 0x0800098d                run_str
                 0x08000991                reset_str
                 0x080009fd                app_table
-                0x08000a41                processing_run_cmd_msg
-                0x08000a5b                processing_help_cmd_msg
-                0x08000a76                processing_ls_cmd_msg
-                0x08000a8f                processing_reset_cmd_msg
-                0x08000aab                processing_clear_cmd_msg
  *(.rodata*)
-                0x08000ac8                        . = ALIGN (0x4)
- *fill*         0x08000ac7        0x1 
+                0x08000a44                        . = ALIGN (0x4)
+ *fill*         0x08000a41        0x3 
 
-.rel.dyn        0x08000ac8        0x0
- .rel.iplt      0x08000ac8        0x0 bin/test_uart.o
+.rel.dyn        0x08000a44        0x0
+ .rel.iplt      0x08000a44        0x0 bin/stm32_mon.o
 
-.ARM.extab      0x08000ac8        0x0
-                0x08000ac8                        . = ALIGN (0x4)
+.ARM.extab      0x08000a44        0x0
+                0x08000a44                        . = ALIGN (0x4)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x08000ac8                        . = ALIGN (0x4)
+                0x08000a44                        . = ALIGN (0x4)
 
-.ARM            0x08000ac8        0x0
-                0x08000ac8                        . = ALIGN (0x4)
-                0x08000ac8                        __exidx_start = .
+.ARM            0x08000a44        0x0
+                0x08000a44                        . = ALIGN (0x4)
+                0x08000a44                        __exidx_start = .
  *(.ARM.exidx*)
-                0x08000ac8                        __exidx_end = .
-                0x08000ac8                        . = ALIGN (0x4)
+                0x08000a44                        __exidx_end = .
+                0x08000a44                        . = ALIGN (0x4)
 
-.preinit_array  0x08000ac8        0x0
-                0x08000ac8                        . = ALIGN (0x4)
+.preinit_array  0x08000a44        0x0
+                0x08000a44                        . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
                 [!provide]                        PROVIDE (__preinit_array_end = .)
-                0x08000ac8                        . = ALIGN (0x4)
+                0x08000a44                        . = ALIGN (0x4)
 
-.init_array     0x08000ac8        0x0
-                0x08000ac8                        . = ALIGN (0x4)
+.init_array     0x08000a44        0x0
+                0x08000a44                        . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array*)
                 [!provide]                        PROVIDE (__init_array_end = .)
-                0x08000ac8                        . = ALIGN (0x4)
+                0x08000a44                        . = ALIGN (0x4)
 
-.fini_array     0x08000ac8        0x0
-                0x08000ac8                        . = ALIGN (0x4)
+.fini_array     0x08000a44        0x0
+                0x08000a44                        . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
                 [!provide]                        PROVIDE (__fini_array_end = .)
-                0x08000ac8                        . = ALIGN (0x4)
-                0x08000ac8                        _sidata = LOADADDR (.data)
+                0x08000a44                        . = ALIGN (0x4)
+                0x08000a44                        _sidata = LOADADDR (.data)
 
-.data           0x20000000      0x100 load address 0x08000ac8
+.data           0x20000000      0x100 load address 0x08000a44
                 0x20000000                        . = ALIGN (0x4)
                 0x20000000                        _sdata = .
  *(.data)
- .data          0x20000000      0x100 bin/test_uart.o
+ .data          0x20000000      0x100 bin/stm32_mon.o
  .data          0x20000100        0x0 bin/startup.o
  .data          0x20000100        0x0 bin/string.o
  .data          0x20000100        0x0 bin/constants.o
@@ -234,12 +229,12 @@ LOAD bin/ascii.o
  *(.RamFunc*)
                 0x20000100                        . = ALIGN (0x4)
                 0x20000100                        _edata = .
-                0x08000bc8                        _siccmram = LOADADDR (.ccmram)
+                0x08000b44                        _siccmram = LOADADDR (.ccmram)
 
-.igot.plt       0x20000100        0x0 load address 0x08000bc8
- .igot.plt      0x20000100        0x0 bin/test_uart.o
+.igot.plt       0x20000100        0x0 load address 0x08000b44
+ .igot.plt      0x20000100        0x0 bin/stm32_mon.o
 
-.ccmram         0x10000000        0x0 load address 0x08000bc8
+.ccmram         0x10000000        0x0 load address 0x08000b44
                 0x10000000                        . = ALIGN (0x4)
                 0x10000000                        _sccmram = .
  *(.ccmram)
@@ -252,7 +247,7 @@ LOAD bin/ascii.o
                 0x20000100                        _sbss = .
                 0x20000100                        __bss_start__ = _sbss
  *(.bss)
- .bss           0x20000100        0x0 bin/test_uart.o
+ .bss           0x20000100        0x0 bin/stm32_mon.o
  .bss           0x20000100        0x0 bin/startup.o
  .bss           0x20000100        0x0 bin/string.o
  .bss           0x20000100        0x0 bin/constants.o
@@ -278,7 +273,7 @@ LOAD bin/ascii.o
                 0x00000000       0x21
  *(.ARM.attributes)
  .ARM.attributes
-                0x00000000       0x21 bin/test_uart.o
+                0x00000000       0x21 bin/stm32_mon.o
  .ARM.attributes
                 0x00000021       0x21 bin/startup.o
  .ARM.attributes
@@ -287,30 +282,30 @@ LOAD bin/ascii.o
                 0x00000063       0x21 bin/constants.o
  .ARM.attributes
                 0x00000084       0x21 bin/ascii.o
-OUTPUT(bin/test_uart.elf elf32-littlearm)
+OUTPUT(bin/stm32_mon.elf elf32-littlearm)
 LOAD linker stubs
 
 .debug_line     0x00000000      0x2de
- .debug_line    0x00000000      0x19e bin/test_uart.o
+ .debug_line    0x00000000      0x19e bin/stm32_mon.o
  .debug_line    0x0000019e       0x69 bin/startup.o
  .debug_line    0x00000207       0x94 bin/string.o
  .debug_line    0x0000029b       0x43 bin/ascii.o
 
 .debug_info     0x00000000       0xa2
- .debug_info    0x00000000       0x26 bin/test_uart.o
+ .debug_info    0x00000000       0x26 bin/stm32_mon.o
  .debug_info    0x00000026       0x30 bin/startup.o
  .debug_info    0x00000056       0x26 bin/string.o
  .debug_info    0x0000007c       0x26 bin/ascii.o
 
 .debug_abbrev   0x00000000       0x59
- .debug_abbrev  0x00000000       0x14 bin/test_uart.o
+ .debug_abbrev  0x00000000       0x14 bin/stm32_mon.o
  .debug_abbrev  0x00000014       0x1d bin/startup.o
  .debug_abbrev  0x00000031       0x14 bin/string.o
  .debug_abbrev  0x00000045       0x14 bin/ascii.o
 
 .debug_aranges  0x00000000       0x88
  .debug_aranges
-                0x00000000       0x20 bin/test_uart.o
+                0x00000000       0x20 bin/stm32_mon.o
  .debug_aranges
                 0x00000020       0x28 bin/startup.o
  .debug_aranges
@@ -319,7 +314,7 @@ LOAD linker stubs
                 0x00000068       0x20 bin/ascii.o
 
 .debug_str      0x00000000       0x8d
- .debug_str     0x00000000       0x8d bin/test_uart.o
+ .debug_str     0x00000000       0x8d bin/stm32_mon.o
                                  0x58 (size before relaxing)
  .debug_str     0x0000008d       0x64 bin/startup.o
  .debug_str     0x0000008d       0x55 bin/string.o
